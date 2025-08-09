@@ -1,0 +1,365 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+
+export async function getStaticPaths() {
+  const speeches = await getCollection('speeches');
+  return speeches.map((speech) => ({
+    params: { slug: speech.slug },
+    props: speech,
+  }));
+}
+
+const speech = Astro.props;
+const { Content } = await speech.render();
+
+// Calculate reading time (rough estimate: 200 words per minute)
+const wordCount = speech.body.split(/\s+/).length;
+const readTime = Math.ceil(wordCount / 200);
+
+// Get other speeches for navigation (simplified for now)
+const allSpeeches = await getCollection('speeches');
+const currentIndex = allSpeeches.findIndex(s => s.slug === speech.slug);
+const prevSpeech = currentIndex > 0 ? allSpeeches[currentIndex - 1] : null;
+const nextSpeech = currentIndex < allSpeeches.length - 1 ? allSpeeches[currentIndex + 1] : null;
+---
+
+<Layout 
+  title={`${speech.data.author.name} - ${speech.data.title}`}
+  description={speech.data.excerpt}
+  author={speech.data.author.name}
+  publishedTime={speech.data.date.toISOString()}
+>
+  <Navigation />
+  
+  <main class="reading-container">
+    <a href="/" class="back-link">← Back to Voice from time</a>
+    
+    <article class="speech">
+      <div class="speech-meta">
+        <h1 class="author">{speech.data.author.name}</h1>
+        <p class="context">{speech.data.context}</p>
+        <div class="reading-info">
+          <span>{readTime} min read</span>
+          {speech.data.location && <span> • {speech.data.location}</span>}
+          {speech.data.occasion && <span> • {speech.data.occasion}</span>}
+        </div>
+      </div>
+      
+      <div class="speech-content" style={`--drop-cap-color: ${speech.data.drop_cap_color}`}>
+        <Content />
+      </div>
+
+      <div class="speech-actions">
+        <button onclick="shareContent()" class="action-btn">Share</button>
+        <button onclick="copyLink()" class="action-btn">Copy Link</button>
+        <button onclick="copyText()" class="action-btn">Copy Text</button>
+      </div>
+    </article>
+
+    <nav class="speech-nav">
+      {prevSpeech ? (
+        <a href={`/speech/${prevSpeech.slug}`} class="nav-link">← Previous speech</a>
+      ) : (
+        <span class="nav-link disabled">← Previous speech</span>
+      )}
+      
+      <div class="speech-info">
+        Speech {currentIndex + 1} of {allSpeeches.length}
+      </div>
+      
+      {nextSpeech ? (
+        <a href={`/speech/${nextSpeech.slug}`} class="nav-link">Next speech →</a>
+      ) : (
+        <span class="nav-link disabled">Next speech →</span>
+      )}
+    </nav>
+
+    <footer class="footer">
+      <p>Source: {speech.data.source}</p>
+      <p>All content is in the public domain</p>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .reading-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+  }
+
+  .reading-container::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    width: 3px;
+    height: 80px;
+    background: linear-gradient(180deg, var(--accent-primary) 0%, var(--accent-tertiary) 50%, transparent 100%);
+    opacity: 0.6;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--accent-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 4rem;
+    font-weight: 300;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--text-primary);
+  }
+
+  .speech {
+    margin-bottom: 6rem;
+  }
+
+  .speech-meta {
+    margin-bottom: 3rem;
+    text-align: left;
+  }
+
+  .author {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.01em;
+    font-variant: small-caps;
+  }
+
+  .context {
+    color: var(--accent-secondary);
+    font-size: 1rem;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  .reading-info {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 300;
+  }
+
+  .speech-content {
+    font-size: 1.3rem;
+    line-height: 1.75;
+    color: var(--text-primary);
+    position: relative;
+  }
+
+  .speech-content :global(p:first-of-type::first-letter) {
+    font-family: 'EB Garamond', serif;
+    font-size: 5.5rem;
+    line-height: 0.75;
+    float: left;
+    margin: 0.05rem 0.6rem 0.1rem 0;
+    color: var(--drop-cap-color);
+    font-weight: 600;
+  }
+
+  .speech-content :global(p) {
+    margin-bottom: 1.5rem;
+    text-indent: 1.5rem;
+  }
+
+  .speech-content :global(p:first-of-type) {
+    text-indent: 0;
+  }
+
+  .speech-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .speech-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .action-btn {
+    background: none;
+    border: 1px solid var(--text-light);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: var(--text-tertiary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .action-btn:hover {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+    background: rgba(212, 165, 116, 0.05);
+  }
+
+  .speech-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .nav-link {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 300;
+    transition: color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+  }
+
+  .nav-link.disabled {
+    color: var(--text-light);
+    pointer-events: none;
+  }
+
+  .speech-info {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-light);
+    font-size: 0.8rem;
+    font-weight: 300;
+    border-top: 1px solid var(--border-secondary);
+    margin-top: 4rem;
+  }
+
+  .footer p {
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .reading-container {
+      padding: 4rem 1.5rem 2rem;
+    }
+
+    .reading-container::before {
+      display: none;
+    }
+
+    .speech-content {
+      font-size: 1.1rem;
+    }
+
+    .speech-content :global(p:first-of-type::first-letter) {
+      font-size: 4.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .speech-nav {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .speech-actions {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Share functionality
+  async function shareContent() {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          url: window.location.href
+        });
+      } catch (err) {
+        copyLink();
+      }
+    } else {
+      copyLink();
+    }
+  }
+
+  // Copy link to clipboard
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast('Link copied to clipboard');
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      showToast('Link copied to clipboard');
+    }
+  }
+
+  // Copy text content
+  async function copyText() {
+    const speechContent = document.querySelector('.speech-content');
+    if (speechContent) {
+      const text = speechContent.textContent || speechContent.innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Speech text copied to clipboard');
+      } catch (err) {
+        console.error('Failed to copy text:', err);
+      }
+    }
+  }
+
+  // Simple toast notification
+  function showToast(message: string) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--text-primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.style.opacity = '1', 100);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => document.body.removeChild(toast), 300);
+    }, 2000);
+  }
+
+  // Make functions globally available
+  (window as any).shareContent = shareContent;
+  (window as any).copyLink = copyLink;
+  (window as any).copyText = copyText;
+</script>

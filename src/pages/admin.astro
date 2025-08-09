@@ -1,0 +1,23 @@
+---
+// Admin page for PagesCMS
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voice from time - Admin</title>
+  </head>
+  <body>
+    <!-- Include PagesCMS admin interface -->
+    <div id="pagescms-admin"></div>
+    <script type="module">
+      import { PagesCMS } from 'https://unpkg.com/@pages-cms/core/dist/index.js';
+      
+      const config = await import('../pagescms.config.js').then(m => m.default);
+      
+      const cms = new PagesCMS(config);
+      cms.init();
+    </script>
+  </body>
+</html>

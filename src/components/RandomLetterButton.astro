@@ -1,0 +1,135 @@
+---
+// Random Letter Button Component
+---
+
+<button class="random-letter-btn" onclick="getRandomLetter()">
+  <svg class="shuffle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polyline points="16,3 21,3 21,8"></polyline>
+    <line x1="4" y1="20" x2="21" y2="3"></line>
+    <polyline points="21,16 21,21 16,21"></polyline>
+    <line x1="15" y1="15" x2="21" y2="21"></line>
+    <line x1="4" y1="4" x2="9" y2="9"></line>
+  </svg>
+  <span>Surprise me</span>
+</button>
+
+<style>
+  .random-letter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--accent-secondary);
+    border: 1px solid var(--border-accent);
+    padding: 0.6rem 1rem;
+    border-radius: 25px;
+    font-family: 'Crimson Text', serif;
+    font-size: 0.8rem;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .random-letter-btn:hover {
+    background: var(--bg-accent);
+    border-color: var(--accent-secondary);
+    color: var(--text-primary);
+  }
+
+  .random-letter-btn:active {
+    transform: scale(0.98);
+  }
+
+  .random-letter-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--bg-accent), transparent);
+    transition: left 0.5s;
+  }
+
+  .random-letter-btn:hover::before {
+    left: 100%;
+  }
+
+  .shuffle-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .random-letter-btn:hover .shuffle-icon {
+    transform: rotate(180deg);
+  }
+
+  .random-letter-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .random-letter-btn:disabled:hover {
+    transform: none;
+    box-shadow: 0 2px 8px var(--drop-shadow);
+  }
+
+  .random-letter-btn:disabled::before {
+    display: none;
+  }
+</style>
+
+<script>
+  async function getRandomLetter() {
+    const button = document.querySelector('.random-letter-btn') as HTMLButtonElement;
+    if (!button) return;
+    
+    // Disable button and show loading state
+    button.disabled = true;
+    const originalText = button.querySelector('span')?.textContent;
+    const span = button.querySelector('span');
+    if (span) span.textContent = 'Finding...';
+    
+    try {
+      // Fetch all letters and speeches from the API
+      const response = await fetch('/api/random-content.json');
+      if (!response.ok) {
+        throw new Error('Failed to fetch content');
+      }
+      
+      const data = await response.json();
+      const allContent = data.content;
+      
+      if (allContent.length === 0) {
+        throw new Error('No content available');
+      }
+      
+      // Select a random item
+      const randomIndex = Math.floor(Math.random() * allContent.length);
+      const randomItem = allContent[randomIndex];
+      
+      // Navigate to the random letter/speech
+      window.location.href = `/${randomItem.collection}/${randomItem.slug}`;
+      
+    } catch (error) {
+      console.error('Error fetching random letter:', error);
+      
+      // Re-enable button and restore text
+      button.disabled = false;
+      if (span && originalText) span.textContent = originalText;
+      
+      // Show error feedback
+      if (span) {
+        span.textContent = 'Try again';
+        setTimeout(() => {
+          if (originalText) span.textContent = originalText;
+        }, 2000);
+      }
+    }
+  }
+
+  // Make function globally available
+  (window as any).getRandomLetter = getRandomLetter;
+</script>

@@ -1,0 +1,254 @@
+---
+// Navigation component for Paper Lanterns
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<nav class="top-nav">
+  <div class="nav-container">
+    <div class="nav-left">
+      <a href="/" class="logo">Paper Lanterns</a>
+      <div class="search-container">
+        <input 
+          type="search" 
+          placeholder="Search letters..." 
+          class="search-input"
+        />
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M21 21L16.65 16.65"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="/archive">Archive</a></li>
+        <li><a href="/collections">Collections</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+      <ThemeToggle />
+    </div>
+  </div>
+</nav>
+
+<style>
+  .top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    backdrop-filter: blur(20px);
+    padding: 1.5rem 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .logo {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    letter-spacing: -0.01em;
+  }
+
+  .logo:hover {
+    color: var(--accent-primary);
+  }
+
+  .search-container {
+    position: relative;
+  }
+
+  .search-input {
+    width: 160px;
+    padding: 0.6rem 0.9rem 0.6rem 2.1rem;
+    border: 1px solid var(--border-accent);
+    border-radius: 25px;
+    background: var(--bg-accent);
+    font-size: 0.8rem;
+    font-family: 'Crimson Text', serif;
+    font-weight: 300;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    width: 180px;
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
+    box-shadow: 0 2px 8px var(--drop-shadow);
+  }
+
+  .search-input::placeholder {
+    color: var(--accent-secondary);
+    font-style: italic;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-secondary);
+    pointer-events: none;
+    width: 14px;
+    height: 14px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    color: var(--text-tertiary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    font-family: 'Crimson Text', serif;
+    letter-spacing: 0.01em;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent-primary);
+    transition: width 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--text-primary);
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .nav-container {
+      padding: 0 1rem;
+    }
+
+    .nav-left {
+      gap: 1rem;
+    }
+
+    .search-input {
+      width: 120px;
+    }
+
+    .search-input:focus {
+      width: 140px;
+    }
+
+    .nav-links {
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .top-nav {
+      padding: 1rem 0;
+    }
+
+    .nav-container {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+
+    .nav-left {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .logo {
+      font-size: 1rem;
+    }
+
+    .search-container {
+      display: none;
+    }
+
+    .nav-right {
+      width: 100%;
+      justify-content: center;
+      gap: 1rem;
+    }
+    
+    .nav-links {
+      gap: 0.8rem;
+    }
+
+    .nav-links a {
+      font-size: 0.8rem;
+    }
+
+    .random-letter-btn {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.75rem;
+    }
+
+    .random-letter-btn span {
+      display: none;
+    }
+
+    .shuffle-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+</style>
+
+<script>
+  // Add search functionality
+  const searchInput = document.querySelector('.search-input') as HTMLInputElement;
+  
+  if (searchInput) {
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const query = encodeURIComponent(searchInput.value.trim());
+        if (query) {
+          window.location.href = `/search?q=${query}`;
+        }
+      }
+    });
+  }
+</script>

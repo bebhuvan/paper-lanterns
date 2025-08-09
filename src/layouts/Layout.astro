@@ -1,0 +1,383 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+}
+
+const { 
+  title, 
+  description = "A curated digital archive of historically significant letters and speeches in the public domain.", 
+  image = "/og-image.png",
+  author,
+  publishedTime,
+  modifiedTime
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteName = "Paper Lanterns";
+const siteUrl = Astro.site || "https://paperlanterns.com";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Critical theme initialization to prevent flicker -->
+    <script is:inline>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme') || 
+            (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          // Fallback to light mode if any error
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, siteUrl)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, siteUrl)} />
+    
+    <!-- Article Meta (for letter/speech pages) -->
+    {author && <meta property="article:author" content={author} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    
+    <!-- Theme and Colors -->
+    <meta name="theme-color" content="#fffef9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1815" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="light dark" />
+    
+    <!-- Preconnect and DNS prefetch for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts - optimized loading -->
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Resource hints for better performance -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    
+    <!-- Additional SEO meta tags -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="language" content="en" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": siteName,
+      "description": description,
+      "url": siteUrl,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${siteUrl}/search?q={search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
+    })} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    /* Light mode colors */
+    --bg-primary: #fffef9;
+    --bg-secondary: rgba(255, 254, 249, 0.95);
+    --bg-accent: rgba(255, 254, 249, 0.6);
+    --text-primary: #2a2a2a;
+    --text-secondary: #444;
+    --text-tertiary: #666;
+    --text-muted: #999;
+    --text-light: #ccc;
+    --border-primary: rgba(0,0,0,0.05);
+    --border-secondary: #f0ede8;
+    --border-accent: rgba(212, 165, 116, 0.15);
+    --accent-primary: #d4a574;
+    --accent-secondary: #8b7355;
+    --accent-tertiary: #c4a484;
+    --accent-gold: #f2cc8f;
+    --drop-shadow: rgba(212, 165, 116, 0.15);
+    --gradient-1: rgba(212,165,116,0.03);
+    --gradient-2: rgba(196,164,132,0.03);
+  }
+
+  [data-theme="dark"] {
+    /* Dark mode colors - carefully chosen for readability */
+    --bg-primary: #1a1815;
+    --bg-secondary: rgba(26, 24, 21, 0.95);
+    --bg-accent: rgba(32, 30, 26, 0.8);
+    --text-primary: #e8e2d5;
+    --text-secondary: #d4cfc3;
+    --text-tertiary: #b8b2a6;
+    --text-muted: #948e82;
+    --text-light: #6b655a;
+    --border-primary: rgba(255,255,255,0.08);
+    --border-secondary: #2d2a25;
+    --border-accent: rgba(212, 165, 116, 0.25);
+    --accent-primary: #daa76e;
+    --accent-secondary: #c4976a;
+    --accent-tertiary: #b08968;
+    --accent-gold: #e6c490;
+    --drop-shadow: rgba(212, 165, 116, 0.1);
+    --gradient-1: rgba(212,165,116,0.05);
+    --gradient-2: rgba(196,164,132,0.05);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Crimson Text', serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 80%, var(--gradient-1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, var(--gradient-2) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'EB Garamond', serif;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  /* Responsive Typography */
+  @media (max-width: 768px) {
+    body {
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      line-height: 1.3;
+    }
+    
+    h1 {
+      font-size: clamp(2rem, 8vw, 3rem);
+    }
+    
+    h2 {
+      font-size: clamp(1.5rem, 6vw, 2rem);
+    }
+    
+    h3 {
+      font-size: clamp(1.25rem, 5vw, 1.5rem);
+    }
+    
+    /* Better text contrast on mobile */
+    :root {
+      --text-primary: #1a1a1a;
+      --text-secondary: #333;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+    
+    /* Increase touch targets */
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Remove default link styles */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Focus styles for accessibility */
+  *:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+
+  /* Selection styles */
+  ::selection {
+    background: rgba(212, 165, 116, 0.2);
+    color: var(--text-primary);
+  }
+
+  /* Print styles */
+  @media print {
+    * {
+      -webkit-print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    body {
+      font-size: 12pt;
+      line-height: 1.4;
+      color: #000;
+      background: #fff;
+    }
+
+    body::before {
+      display: none;
+    }
+
+    .top-nav,
+    .back-link,
+    .letter-actions,
+    .speech-actions,
+    .letter-nav,
+    .speech-nav,
+    .random-letter-btn,
+    .search-container,
+    .nav-links,
+    .continue-reading,
+    .footer-actions {
+      display: none !important;
+    }
+
+    .reading-container {
+      padding: 1rem 0;
+      max-width: none;
+      margin: 0;
+    }
+
+    .container {
+      max-width: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .letter-content,
+    .speech-content {
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+
+    .letter-content :global(p),
+    .speech-content :global(p) {
+      margin-bottom: 1rem;
+      text-indent: 1.5rem;
+      orphans: 3;
+      widows: 3;
+    }
+
+    .letter-content :global(p:first-of-type),
+    .speech-content :global(p:first-of-type) {
+      text-indent: 0;
+    }
+
+    .letter-content :global(p:first-of-type::first-letter),
+    .speech-content :global(p:first-of-type::first-letter) {
+      font-size: 3rem;
+      line-height: 1;
+      float: left;
+      margin: 0.2rem 0.5rem 0 0;
+      color: #333;
+    }
+
+    .author,
+    .context {
+      color: #000;
+    }
+
+    .signature {
+      margin-top: 2rem;
+      color: #000;
+    }
+
+    .letter-meta,
+    .speech-meta {
+      margin-bottom: 2rem;
+      page-break-after: avoid;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #000;
+      page-break-after: avoid;
+    }
+
+    /* Ensure page breaks work well */
+    .letter,
+    .speech {
+      page-break-inside: avoid;
+    }
+
+    /* Print-specific footer */
+    .footer {
+      position: fixed;
+      bottom: 1cm;
+      left: 0;
+      right: 0;
+      font-size: 8pt;
+      color: #666;
+      text-align: center;
+      border-top: 1pt solid #ccc;
+      padding-top: 0.5rem;
+    }
+  }
+</style>

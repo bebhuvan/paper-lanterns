@@ -1,0 +1,437 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+
+export async function getStaticPaths() {
+  const collections = await getCollection('collections');
+  return collections.map((collection) => ({
+    params: { slug: collection.slug },
+    props: collection,
+  }));
+}
+
+const collection = Astro.props;
+const { Content } = await collection.render();
+
+// Get all letters and speeches that belong to this collection
+const letters = await getCollection('letters');
+const speeches = await getCollection('speeches');
+const allContent = [...letters, ...speeches];
+
+const collectionItems = allContent
+  .filter(item => item.data.collections?.includes(collection.slug))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const itemCount = collectionItems.length;
+---
+
+<Layout 
+  title={`${collection.data.name} - Voice from time`}
+  description={`Explore ${itemCount} letters and speeches in our ${collection.data.name} collection: ${collection.data.description}`}
+>
+  <Navigation />
+  
+  <main class="collection-container">
+    <div class="container">
+      <header class="collection-header">
+        <nav class="breadcrumb">
+          <a href="/">Home</a>
+          <span class="separator">→</span>
+          <a href="/collections">Collections</a>
+          <span class="separator">→</span>
+          <span class="current">{collection.data.name}</span>
+        </nav>
+        
+        <div class="collection-title-section">
+          <h1 class="collection-title" style={`color: ${collection.data.color}`}>
+            {collection.data.name}
+          </h1>
+          <p class="collection-subtitle">
+            {itemCount} {itemCount === 1 ? 'item' : 'items'} in this collection
+          </p>
+        </div>
+        
+        <div class="collection-description">
+          <Content />
+        </div>
+      </header>
+
+      {itemCount === 0 ? (
+        <div class="empty-collection">
+          <h2>Coming Soon</h2>
+          <p>We're currently curating letters and speeches for this collection. Check back soon!</p>
+          <div class="empty-actions">
+            <a href="/collections" class="secondary-button">View Other Collections</a>
+            <a href="/archive" class="secondary-button">Browse Archive</a>
+          </div>
+        </div>
+      ) : (
+        <section class="collection-content">
+          <div class="content-grid">
+            {collectionItems.map(item => (
+              <article class="content-item">
+                <div class="item-meta">
+                  <span class="item-type">{item.collection === 'letters' ? 'Letter' : 'Speech'}</span>
+                  <time class="item-date">
+                    {item.data.date.toLocaleDateString('en-US', { 
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric' 
+                    })}
+                  </time>
+                </div>
+                
+                <h3 class="item-title">
+                  <a href={`/${item.collection}/${item.slug}`}>
+                    {item.data.title}
+                  </a>
+                </h3>
+                
+                <div class="item-details">
+                  <span class="author-name">{item.data.author.name}</span>
+                  {item.collection === 'letters' && item.data.recipient && (
+                    <>
+                      <span class="separator">→</span>
+                      <span class="recipient">{item.data.recipient}</span>
+                    </>
+                  )}
+                </div>
+                
+                <p class="item-excerpt">{item.data.excerpt}</p>
+                
+                <div class="item-footer">
+                  {item.data.tags.length > 0 && (
+                    <div class="item-tags">
+                      {item.data.tags.slice(0, 3).map(tag => (
+                        <span class="tag">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <a href={`/${item.collection}/${item.slug}`} class="read-link">
+                    Read {item.collection === 'letters' ? 'letter' : 'speech'} →
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <footer class="collection-footer">
+        <div class="footer-actions">
+          <a href="/collections" class="footer-link">← Back to Collections</a>
+          <a href="/archive" class="footer-link">View Full Archive →</a>
+        </div>
+        <p class="footer-note">All content is in the public domain</p>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .collection-container {
+    padding: 6rem 0 4rem;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .collection-header {
+    margin-bottom: 4rem;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+  }
+
+  .breadcrumb a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--text-primary);
+  }
+
+  .separator {
+    color: var(--text-light);
+  }
+
+  .current {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .collection-title-section {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .collection-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+  }
+
+  .collection-subtitle {
+    color: var(--text-tertiary);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .collection-description {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .collection-description :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .empty-collection {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(212, 165, 116, 0.05);
+    border-radius: 12px;
+    margin-bottom: 4rem;
+  }
+
+  .empty-collection h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .empty-collection p {
+    color: var(--text-tertiary);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .empty-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .secondary-button {
+    background: transparent;
+    color: var(--text-tertiary);
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--text-light);
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .secondary-button:hover {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+    background: rgba(212, 165, 116, 0.05);
+  }
+
+  .content-grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .content-item {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .content-item:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  .item-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .item-type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: var(--bg-accent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .item-date {
+    font-size: 0.85rem;
+    color: var(--accent-secondary);
+  }
+
+  .item-title {
+    margin-bottom: 0.75rem;
+  }
+
+  .item-title a {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    line-height: 1.3;
+  }
+
+  .item-title a:hover {
+    color: var(--accent-primary);
+  }
+
+  .item-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .author-name {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .recipient {
+    color: var(--accent-secondary);
+    font-style: italic;
+  }
+
+  .item-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+
+  .item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .item-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    color: var(--accent-secondary);
+    background: rgba(139, 115, 85, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .read-link {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .read-link:hover {
+    opacity: 0.8;
+  }
+
+  .collection-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-secondary);
+  }
+
+  .footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .footer-link {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--text-primary);
+  }
+
+  .footer-note {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .collection-container {
+      padding: 4rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .collection-title {
+      font-size: 2.5rem;
+    }
+
+    .content-item {
+      padding: 1.5rem;
+    }
+
+    .item-footer {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .footer-actions {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .empty-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

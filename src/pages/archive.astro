@@ -1,0 +1,321 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+
+// Get all letters and speeches, sorted by date (newest first)
+const letters = await getCollection('letters');
+const speeches = await getCollection('speeches');
+const allContent = [
+  ...letters.map(item => ({ ...item, contentType: 'letter' })),
+  ...speeches.map(item => ({ ...item, contentType: 'speech' }))
+].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Group by year for better organization
+const contentByYear = allContent.reduce((acc, item) => {
+  const year = item.data.date.getFullYear();
+  if (!acc[year]) {
+    acc[year] = [];
+  }
+  acc[year].push(item);
+  return acc;
+}, {} as Record<number, typeof allContent>);
+
+const years = Object.keys(contentByYear).map(Number).sort((a, b) => b - a);
+---
+
+<Layout title="Archive - Voice from time" description="Browse our complete collection of historical letters and speeches, organized chronologically.">
+  <Navigation />
+  
+  <main class="archive-container">
+    <div class="container">
+      <header class="archive-header">
+        <h1 class="archive-title">Archive</h1>
+        <p class="archive-description">
+          Browse our complete collection of {allContent.length} letters and speeches, 
+          organized chronologically from {years[0]} to {years[years.length - 1]}.
+        </p>
+      </header>
+
+      <div class="content-stats">
+        <div class="stat">
+          <span class="stat-number">{letters.length}</span>
+          <span class="stat-label">Letters</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{speeches.length}</span>
+          <span class="stat-label">Speeches</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{years.length}</span>
+          <span class="stat-label">Years Covered</span>
+        </div>
+      </div>
+
+      {years.map(year => (
+        <section class="year-section">
+          <h2 class="year-title">{year}</h2>
+          <div class="year-content">
+            {contentByYear[year].map(item => (
+              <article class="content-item">
+                <div class="item-meta">
+                  <span class="item-type">{item.contentType === 'letter' ? 'Letter' : 'Speech'}</span>
+                  <time class="item-date">
+                    {item.data.date.toLocaleDateString('en-US', { 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  </time>
+                </div>
+                
+                <h3 class="item-title">
+                  <a href={`/${item.contentType}/${item.slug}`}>
+                    {item.data.title}
+                  </a>
+                </h3>
+                
+                <div class="item-details">
+                  <span class="author-name">{item.data.author.name}</span>
+                  {item.contentType === 'letter' && item.data.recipient && (
+                    <>
+                      <span class="separator">→</span>
+                      <span class="recipient">{item.data.recipient}</span>
+                    </>
+                  )}
+                </div>
+                
+                <p class="item-excerpt">{item.data.excerpt}</p>
+                
+                {item.data.tags.length > 0 && (
+                  <div class="item-tags">
+                    {item.data.tags.slice(0, 3).map(tag => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <footer class="archive-footer">
+        <p>All content is in the public domain</p>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .archive-container {
+    padding: 6rem 0 4rem;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .archive-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .archive-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .archive-description {
+    font-size: 1.1rem;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .content-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-number {
+    display: block;
+    font-family: 'EB Garamond', serif;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--accent-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .year-section {
+    margin-bottom: 4rem;
+  }
+
+  .year-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--accent-secondary);
+    margin-bottom: 2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-secondary);
+  }
+
+  .year-content {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .content-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--bg-accent);
+    position: relative;
+  }
+
+  .content-item:hover {
+    background: rgba(212, 165, 116, 0.02);
+    margin: 0 -1rem;
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+  }
+
+  .item-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .item-type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: var(--bg-accent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .item-date {
+    font-size: 0.85rem;
+    color: var(--accent-secondary);
+  }
+
+  .item-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .item-title a {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .item-title a:hover {
+    color: var(--accent-primary);
+  }
+
+  .item-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .author-name {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .separator {
+    color: var(--text-light);
+  }
+
+  .recipient {
+    color: var(--accent-secondary);
+    font-style: italic;
+  }
+
+  .item-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .item-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    color: var(--accent-secondary);
+    background: rgba(139, 115, 85, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .archive-footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-secondary);
+    color: var(--text-light);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .archive-container {
+      padding: 4rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .archive-title {
+      font-size: 2.5rem;
+    }
+
+    .content-stats {
+      gap: 2rem;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+    }
+
+    .content-item:hover {
+      margin: 0;
+      padding: 1.5rem 0;
+      background: none;
+    }
+  }
+</style>

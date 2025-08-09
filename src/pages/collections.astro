@@ -1,0 +1,241 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+
+// Get all collections
+const collectionsData = await getCollection('collections');
+
+// Get letters and speeches to count items in each collection
+const letters = await getCollection('letters');
+const speeches = await getCollection('speeches');
+const allContent = [...letters, ...speeches];
+
+// Count items in each collection and sort by count
+const collections = collectionsData.map(collection => {
+  const count = allContent.filter(item => 
+    item.data.collections?.includes(collection.slug)
+  ).length;
+  
+  return {
+    ...collection,
+    count
+  };
+}).sort((a, b) => b.count - a.count);
+---
+
+<Layout title="Collections - Voice from time" description="Explore curated thematic collections of letters and speeches organized by emotion, topic, and historical significance.">
+  <Navigation />
+  
+  <main class="collections-container">
+    <div class="container">
+      <header class="collections-header">
+        <h1 class="collections-title">Collections</h1>
+        <p class="collections-description">
+          Discover letters and speeches organized by theme, emotion, and historical significance. 
+          Each collection offers a unique lens through which to explore the human experience across time.
+        </p>
+      </header>
+
+      <div class="collections-grid">
+        {collections.map((collection, index) => (
+          <article class={`collection-card ${index === 0 ? 'featured' : ''}`}>
+            <div class="card-header" style={`--collection-color: ${collection.data.color}`}>
+              <h2 class="collection-name">{collection.data.name}</h2>
+              <span class="collection-count">
+                {collection.count} {collection.count === 1 ? 'item' : 'items'}
+              </span>
+            </div>
+            <p class="collection-description">
+              {collection.data.description}
+            </p>
+            <a href={`/collection/${collection.slug}`} class="collection-link">
+              Explore collection →
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <section class="coming-soon">
+        <h2 class="section-title">More Collections Coming Soon</h2>
+        <p class="section-description">
+          We're continuously curating new thematic collections. Future collections will include 
+          Philosophical Musings, Last Words, Political Correspondence, and Letters of Friendship.
+        </p>
+      </section>
+
+      <footer class="collections-footer">
+        <p>All content is in the public domain</p>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .collections-container {
+    padding: 6rem 0 4rem;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .collections-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .collections-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .collections-description {
+    font-size: 1.1rem;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .collections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .collection-card {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid var(--border-secondary);
+    transition: all 0.3s ease;
+  }
+
+  .collection-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--drop-shadow);
+  }
+
+  .collection-card.featured {
+    border-color: var(--accent-primary);
+    position: relative;
+  }
+
+  .collection-card.featured::before {
+    content: 'Featured';
+    position: absolute;
+    top: -10px;
+    left: 2rem;
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .card-header {
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--collection-color);
+    padding-left: 1rem;
+  }
+
+  .collection-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .collection-count {
+    font-size: 0.85rem;
+    color: var(--accent-secondary);
+    font-weight: 300;
+  }
+
+  .collection-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .collection-link {
+    color: var(--collection-color, #d4a574);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .collection-link:hover {
+    opacity: 0.8;
+  }
+
+  .coming-soon {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--bg-accent);
+    border-radius: 12px;
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .section-description {
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .collections-footer {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-secondary);
+    color: var(--text-light);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .collections-container {
+      padding: 4rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .collections-title {
+      font-size: 2.5rem;
+    }
+
+    .collections-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .collection-card {
+      padding: 1.5rem;
+    }
+
+    .coming-soon {
+      padding: 2rem 1rem;
+    }
+  }
+</style>

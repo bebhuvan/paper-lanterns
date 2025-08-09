@@ -1,0 +1,659 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+
+// Get all content for client-side search
+const letters = await getCollection('letters');
+const speeches = await getCollection('speeches');
+const allContent = [
+  ...letters.map(item => ({ ...item, contentType: 'letter' })),
+  ...speeches.map(item => ({ ...item, contentType: 'speech' }))
+];
+
+// Prepare search data for client-side use
+const searchData = allContent.map(item => ({
+  slug: item.slug,
+  contentType: item.contentType,
+  title: item.data.title,
+  author: item.data.author.name,
+  recipient: item.data.recipient || '',
+  context: item.data.context,
+  excerpt: item.data.excerpt,
+  body: item.body,
+  tags: item.data.tags || [],
+  collections: item.data.collections || [],
+  date: item.data.date.getTime()
+}));
+---
+
+<Layout 
+  title="Search - Paper Lanterns"
+  description="Search through our collection of historical letters and speeches."
+>
+  <Navigation />
+  
+  <main class="search-container">
+    <div class="container">
+      <header class="search-header">
+        <h1 class="search-title">Search</h1>
+        <p class="search-subtitle" id="search-subtitle" style="display: none;"></p>
+      </header>
+
+      <div class="search-form">
+        <form class="search-form-inner" id="search-form">
+          <div class="search-input-container">
+            <input 
+              type="search" 
+              name="q" 
+              id="search-input"
+              placeholder="Search letters, speeches, authors, or topics..."
+              class="search-input"
+              autofocus
+            />
+            <button type="submit" class="search-button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="M21 21L16.65 16.65"></path>
+              </svg>
+            </button>
+          </div>
+        </form>
+        
+        <div class="search-tips">
+          <p>Try searching for author names, topics like "love" or "science", or specific phrases.</p>
+        </div>
+      </div>
+
+      <section class="search-results" id="search-results" style="display: none;">
+        <div id="no-results" class="no-results" style="display: none;">
+          <h2>No results found</h2>
+          <p>Try searching with different keywords or browse our <a href="/collections">collections</a> and <a href="/archive">archive</a>.</p>
+        </div>
+        <div id="results-list" class="results-list"></div>
+      </section>
+
+      <section class="search-suggestions" id="search-suggestions">
+        <h2 class="suggestions-title">Popular Searches</h2>
+        <div class="suggestions-grid">
+          <button class="suggestion-tag" data-query="love">Love</button>
+          <button class="suggestion-tag" data-query="Virginia Woolf">Virginia Woolf</button>
+          <button class="suggestion-tag" data-query="science">Science</button>
+          <button class="suggestion-tag" data-query="war">War</button>
+          <button class="suggestion-tag" data-query="creativity">Creativity</button>
+          <button class="suggestion-tag" data-query="Lincoln">Lincoln</button>
+          <button class="suggestion-tag" data-query="friendship">Friendship</button>
+          <button class="suggestion-tag" data-query="art">Art</button>
+        </div>
+        
+        <div class="browse-alternatives">
+          <h3>Or browse by category:</h3>
+          <div class="browse-links">
+            <a href="/collections" class="browse-link">View all collections →</a>
+            <a href="/archive" class="browse-link">Browse chronologically →</a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="search-footer">
+        <p>All content is in the public domain</p>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .search-container {
+    padding: 6rem 0 4rem;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .search-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .search-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .search-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-tertiary);
+  }
+
+  .search-form {
+    margin-bottom: 3rem;
+  }
+
+  .search-form-inner {
+    width: 100%;
+  }
+
+  .search-input-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 1rem 3.5rem 1rem 1.5rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--border-secondary);
+    border-radius: 50px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  .search-input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--drop-shadow);
+  }
+
+  .search-button {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--accent-primary);
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .search-button:hover {
+    background: var(--accent-tertiary);
+  }
+
+  .search-tips {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .search-tips p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .search-results {
+    margin-bottom: 4rem;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--bg-accent);
+    border-radius: 12px;
+  }
+
+  .no-results h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .no-results p {
+    color: var(--text-tertiary);
+    line-height: 1.6;
+  }
+
+  .no-results a {
+    color: var(--accent-primary);
+    text-decoration: none;
+  }
+
+  .no-results a:hover {
+    text-decoration: underline;
+  }
+
+  .results-list {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .result-item {
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .result-item:hover {
+    background: var(--bg-accent);
+    margin: 0 -1rem;
+    padding: 2rem 1rem;
+    border-radius: 8px;
+  }
+
+  .result-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-type {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    background: var(--bg-accent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .result-date {
+    font-size: 0.85rem;
+    color: var(--accent-secondary);
+  }
+
+  .result-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .result-title a {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .result-title a:hover {
+    color: var(--accent-primary);
+  }
+
+  .result-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .author-name {
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .separator {
+    color: var(--text-light);
+  }
+
+  .recipient {
+    color: var(--accent-secondary);
+    font-style: italic;
+  }
+
+  .result-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .result-excerpt :global(mark) {
+    background: var(--accent-primary);
+    color: white;
+    padding: 0.1em 0.2em;
+    border-radius: 3px;
+  }
+
+  .result-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    color: var(--accent-secondary);
+    background: var(--bg-accent);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .search-suggestions {
+    text-align: center;
+  }
+
+  .suggestions-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .suggestions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .suggestion-tag {
+    padding: 0.5rem 1rem;
+    background: var(--bg-accent);
+    color: var(--text-tertiary);
+    text-decoration: none;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .suggestion-tag:hover {
+    background: var(--accent-primary);
+    color: white;
+  }
+
+  .browse-alternatives {
+    background: var(--bg-accent);
+    padding: 2rem;
+    border-radius: 12px;
+  }
+
+  .browse-alternatives h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .browse-links {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .browse-link {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .browse-link:hover {
+    text-decoration: underline;
+  }
+
+  .search-footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-secondary);
+    color: var(--text-light);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .search-container {
+      padding: 4rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .search-title {
+      font-size: 2.5rem;
+    }
+
+    .search-input {
+      font-size: 1rem;
+      padding: 0.875rem 3rem 0.875rem 1.25rem;
+    }
+
+    .result-item:hover {
+      margin: 0;
+      padding: 2rem 0;
+      background: none;
+    }
+
+    .browse-links {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .suggestions-grid {
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  // Search functionality
+  function performSearch(query) {
+    const searchTerm = query.toLowerCase().trim();
+    
+    if (!searchTerm) return [];
+
+    // Check if this is an era search
+    const eraMap = {
+      '20th-century': { start: 1900, end: 2000 },
+      '19th-century': { start: 1800, end: 1900 },
+      '18th-century-earlier': { start: 0, end: 1800 }
+    };
+    
+    const era = eraMap[searchTerm];
+    if (era) {
+      return window.searchData.filter(item => {
+        const year = new Date(item.date).getFullYear();
+        return year >= era.start && year < era.end;
+      }).sort((a, b) => b.date - a.date);
+    }
+
+    return window.searchData.filter(item => {
+      const searchableText = [
+        item.title,
+        item.author,
+        item.recipient,
+        item.context,
+        item.excerpt,
+        item.body,
+        ...item.tags,
+        ...item.collections
+      ].join(' ').toLowerCase();
+      
+      return searchableText.includes(searchTerm);
+    }).sort((a, b) => {
+      // Prioritize title matches, then author matches, then content matches
+      const aTitle = a.title.toLowerCase().includes(searchTerm);
+      const bTitle = b.title.toLowerCase().includes(searchTerm);
+      const aAuthor = a.author.toLowerCase().includes(searchTerm);
+      const bAuthor = b.author.toLowerCase().includes(searchTerm);
+      
+      if (aTitle && !bTitle) return -1;
+      if (bTitle && !aTitle) return 1;
+      if (aAuthor && !bAuthor) return -1;
+      if (bAuthor && !aAuthor) return 1;
+      
+      // Sort by date if equal relevance
+      return b.date - a.date;
+    });
+  }
+
+  // Highlight search terms
+  function highlightText(text, searchTerm, maxLength = 150) {
+    if (!searchTerm || !text) return text.substring(0, maxLength) + (text.length > maxLength ? '...' : '');
+    
+    const lowerText = text.toLowerCase();
+    const lowerTerm = searchTerm.toLowerCase();
+    const index = lowerText.indexOf(lowerTerm);
+    
+    if (index === -1) {
+      return text.substring(0, maxLength) + (text.length > maxLength ? '...' : '');
+    }
+    
+    // Try to center the match in the excerpt
+    const start = Math.max(0, index - Math.floor((maxLength - searchTerm.length) / 2));
+    const end = Math.min(text.length, start + maxLength);
+    
+    let excerpt = text.substring(start, end);
+    if (start > 0) excerpt = '...' + excerpt;
+    if (end < text.length) excerpt = excerpt + '...';
+    
+    // Highlight the search term
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return excerpt.replace(regex, '<mark>$1</mark>');
+  }
+
+  // Display results
+  function displayResults(results, query) {
+    const resultsSection = document.getElementById('search-results');
+    const resultsList = document.getElementById('results-list');
+    const noResults = document.getElementById('no-results');
+    const suggestions = document.getElementById('search-suggestions');
+    const subtitle = document.getElementById('search-subtitle');
+
+    // Smooth transition: set min-height to prevent layout shift
+    const container = document.querySelector('.search-container .container');
+    const currentHeight = container.offsetHeight;
+    container.style.minHeight = currentHeight + 'px';
+
+    if (results.length === 0) {
+      noResults.style.display = 'block';
+      resultsList.innerHTML = '';
+    } else {
+      noResults.style.display = 'none';
+      resultsList.innerHTML = results.map(item => `
+        <article class="result-item">
+          <div class="result-meta">
+            <span class="result-type">${item.contentType === 'letter' ? 'Letter' : 'Speech'}</span>
+            <time class="result-date">${new Date(item.date).getFullYear()}</time>
+          </div>
+          
+          <h3 class="result-title">
+            <a href="/${item.contentType}/${item.slug}">${item.title}</a>
+          </h3>
+          
+          <div class="result-details">
+            <span class="author-name">${item.author}</span>
+            ${item.contentType === 'letter' && item.recipient ? `
+              <span class="separator">→</span>
+              <span class="recipient">${item.recipient}</span>
+            ` : ''}
+          </div>
+          
+          <p class="result-excerpt">${highlightText(item.excerpt, query)}</p>
+          
+          ${item.tags.length > 0 ? `
+            <div class="result-tags">
+              ${item.tags.slice(0, 4).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+          ` : ''}
+        </article>
+      `).join('');
+    }
+
+    subtitle.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+    subtitle.style.display = 'block';
+    resultsSection.style.display = 'block';
+    suggestions.style.display = 'none';
+    
+    // Remove min-height after transition
+    setTimeout(() => {
+      container.style.minHeight = '';
+    }, 300);
+  }
+
+  // Handle search
+  function handleSearch(query) {
+    if (!query.trim()) {
+      const container = document.querySelector('.search-container .container');
+      const currentHeight = container.offsetHeight;
+      container.style.minHeight = currentHeight + 'px';
+      
+      document.getElementById('search-results').style.display = 'none';
+      document.getElementById('search-suggestions').style.display = 'block';
+      document.getElementById('search-subtitle').style.display = 'none';
+      
+      setTimeout(() => {
+        container.style.minHeight = '';
+      }, 300);
+      return;
+    }
+
+    const results = performSearch(query);
+    displayResults(results, query);
+    
+    // Update URL without page reload
+    const url = new URL(window.location);
+    url.searchParams.set('q', query);
+    window.history.pushState({}, '', url);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+    
+    // Check for query parameter on load
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialQuery = urlParams.get('q');
+    if (initialQuery) {
+      searchInput.value = initialQuery;
+      handleSearch(initialQuery);
+    } else {
+      searchInput.focus();
+    }
+
+    // Form submission
+    searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleSearch(searchInput.value);
+    });
+
+    // Real-time search (optional)
+    let searchTimeout;
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        handleSearch(e.target.value);
+      }, 300);
+    });
+
+    // Suggestion tags
+    document.querySelectorAll('.suggestion-tag').forEach(tag => {
+      tag.addEventListener('click', (e) => {
+        const query = e.target.getAttribute('data-query');
+        searchInput.value = query;
+        handleSearch(query);
+      });
+    });
+  });
+</script>
+
+<script define:vars={{searchData}}>
+  // Make search data available to the main script
+  window.searchData = searchData;
+</script>

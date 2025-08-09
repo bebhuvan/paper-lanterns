@@ -1,0 +1,99 @@
+---
+// Theme Toggle Component
+---
+
+<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+  <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+  <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border-accent);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-tertiary);
+    position: relative;
+  }
+
+  .theme-toggle:hover {
+    background: var(--bg-accent);
+    border-color: var(--accent-secondary);
+    color: var(--accent-primary);
+  }
+
+  .theme-toggle:active {
+    transform: scale(0.95);
+  }
+
+  .sun-icon, .moon-icon {
+    position: absolute;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+
+  .moon-icon {
+    opacity: 0;
+    transform: rotate(-90deg);
+  }
+
+  [data-theme="dark"] .sun-icon {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+
+  [data-theme="dark"] .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+
+  @media (max-width: 480px) {
+    .theme-toggle {
+      width: 34px;
+      height: 34px;
+    }
+
+    .sun-icon, .moon-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+</style>
+
+<script>
+  // Theme toggle functionality
+  const toggle = document.getElementById('theme-toggle');
+  
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+  }
+</script>
