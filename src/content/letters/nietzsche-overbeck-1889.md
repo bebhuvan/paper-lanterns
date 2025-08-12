@@ -1,56 +1,47 @@
 ---
-title: "I am dynamite"
+title: "The Crucified One"
 author:
   name: "Friedrich Nietzsche"
   birth_year: 1844
   death_year: 1900
-  bio: "German philosopher who challenged traditional morality and proclaimed the 'death of God'"
+  bio: "German philosopher whose radical critique of traditional values profoundly influenced modern thought"
 recipient: "Franz Overbeck"
 date: 1889-01-06
-context: "To Franz Overbeck, January 6, 1889"
+context: "Final letter before mental collapse, part of the 'Wahnbriefe' (Madness Letters)"
 location: "Turin, Italy"
-excerpt: "I am no man, I am dynamite. The revaluation of all values, this question mark so black, so huge that it casts shadows upon the man who puts it—such a destiny of a task compels one to run into the sun in order not to perish from cold."
-signature: "The Crucified, Nietzsche"
-source: "Nietzsche Archives, Weimar (Public Domain)"
-collections: ["philosophical-letters", "final-letters", "revolutionary-thought"]
-tags: ["philosophy", "will-to-power", "revaluation", "madness", "genius"]
+excerpt: "My dear friend Overbeck, I have just now had all anti-Semites shot. Dionysos."
+signature: "Dionysos (also: The Crucified One)"
+source: "The Nietzsche Channel Correspondence Archive, Public Domain"
+collections: ["philosophical-correspondence", "mental-illness", "german-philosophy"]
+tags: ["philosophy", "mental-breakdown", "friendship", "genius", "madness", "turin"]
 featured: true
-drop_cap_color: "#dc3545"
+drop_cap_color: "#4B0082"
 about:
-  context: "This was one of Nietzsche's final coherent letters before his mental breakdown in Turin. Written to his close friend Franz Overbeck, it captures both his philosophical intensity and his descent into madness."
-  significance: "This letter represents the climax of Nietzsche's philosophical journey, written at the moment when his revolutionary ideas reached their peak and his mind began to fracture under the weight of his own insights."
-  author_bio: "Friedrich Nietzsche (1844-1900) was a German philosopher whose radical critique of traditional values, religion, and morality profoundly influenced modern thought. His concepts of the Übermensch and 'will to power' remain controversial and influential."
-  recipient_info: "Franz Overbeck (1837-1905) was a German theologian and one of Nietzsche's closest friends. He was instrumental in caring for Nietzsche during his final years of mental illness."
+  context: "One of the famous 'Wahnbriefe' (Madness Letters) written during Nietzsche's mental collapse in Turin, January 1889. Overbeck received this and traveled immediately to rescue his friend."
+  significance: "These final letters mark the tragic end of one of philosophy's greatest minds, showing the thin line between genius and madness that fascinated Nietzsche himself."
+  author_bio: "Friedrich Nietzsche (1844-1900) was a German philosopher who proclaimed 'God is dead' and developed concepts like the Übermensch and eternal recurrence that revolutionized Western thought."
+  recipient_info: "Franz Overbeck (1837-1905) was a German theologian and one of Nietzsche's closest friends who remained loyal through his mental breakdown and cared for him in his final years."
   links:
-    - title: "Friedrich Nietzsche on Wikipedia"
-      url: "https://en.wikipedia.org/wiki/Friedrich_Nietzsche"
-      description: "Biography of the influential German philosopher"
-    - title: "Thus Spoke Zarathustra"
-      url: "https://en.wikipedia.org/wiki/Thus_Spoke_Zarathustra"
-      description: "Nietzsche's philosophical novel introducing the Übermensch"
-    - title: "Nietzsche Archives"
-      url: "https://www.klassik-stiftung.de/en/institutions/nietzsche-archive/"
-      description: "Archive preserving Nietzsche's manuscripts and letters"
+    - title: "The Nietzsche Channel"
+      url: "http://www.thenietzschechannel.com/correspondence/eng/nlett-1889.htm"
+      description: "Archive of Nietzsche's 1889 correspondence"
+    - title: "Nietzsche Correspondence Archive"
+      url: "https://en.wikisource.org/wiki/Selected_Letters_of_Friedrich_Nietzsche"
+      description: "Wikisource collection of Nietzsche letters"
 ---
 
-I am no man, I am dynamite. The revaluation of all values, this question mark so black, so huge that it casts shadows upon the man who puts it—such a destiny of a task compels one to run into the sun in order not to perish from cold.
+My dear friend Overbeck,
 
-My dear Franz, I write to you from Turin where the clarity of the Alpine air has brought me to the summit of my thinking. Here, in this city of palaces and shadows, I have finally understood what I was born to do: to be the philosopher with the hammer, to sound out the hollow idols of our age.
+I have just now had all anti-Semites shot.
 
-God is dead, and we have killed him! But do not mistake this for cause for mourning. The death of God is humanity's liberation—the moment when we cease to be children and become creators of our own values, our own meaning, our own destiny.
+Dionysos
 
-I have gazed into the abyss of nihilism that opens when all traditional values crumble, and I have not flinched. More than that—I have shown the way beyond nihilism to a new affirmation of life. The Übermensch I have proclaimed is not a superman but simply a human who has learned to say Yes to existence without the crutch of divine purpose.
+P.S. The world is transfigured, for God is on the earth. Do you not see how all the heavens rejoice? I have just now taken possession of my kingdom, am throwing the Pope into prison, and am having Wilhelm, Bismarck, and Stöcker shot.
 
-What is good? All that heightens the feeling of power, the will to power, power itself in man. What is bad? All that proceeds from weakness. The weak and ill-constituted shall perish: first principle of our philanthropy. And one shall help them to do so.
+Actually I would much rather be a Basel professor than God; but I have not dared to carry my private egoism so far as to omit for its sake the creation of the world. You see, one must make sacrifices however and wherever one lives.
 
-I know how these words sound to ears still poisoned by Christian morality. But I am beyond good and evil now, Franz. I have climbed to heights where the air is too thin for the lungs of the herd-men below.
+But I have reserved for myself a small student room, situated opposite the Palazzo Carignano (in which I was born as Vittorio Emanuele) which moreover allows me to hear the magnificent music below in the Galleria Subalpina.
 
-Every name in history is me! I am Caesar, I am Napoleon, I am Dionysus! The boundaries between self and world have dissolved. I have become the eternal recurrence itself—the eternal Yes-saying to life in all its terrible beauty.
+I am paying 25 francs including service.
 
-You will say I have gone mad, dear friend. Perhaps you are right. But what is madness but the price of seeing too clearly, of feeling too intensely, of thinking too deeply? I would rather be mad with truth than sane with lies.
-
-The revaluation of all values begins now. I am the first immoralist, the destroyer of two millennia of lies masquerading as virtue. After me, nothing will be the same. Philosophy will be divided into two epochs: before Nietzsche and after Nietzsche.
-
-Dance, Franz! Dance above the abyss! For we who create our own values are the most blessed of men, even if we are also the most cursed.
-
-The lightning illuminates everything for an instant, then leaves darkness. But in that instant, everything is revealed.
+The Crucified One

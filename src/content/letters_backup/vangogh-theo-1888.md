@@ -6,12 +6,12 @@ author:
   death_year: 1890
   bio: "Dutch post-impressionist painter whose work had a profound influence on 20th-century art"
 recipient: "Theo van Gogh"
-date: 1888-09-08
-context: "To my dear brother Theo, September 8, 1888"
+date: 1888-07-21
+context: "To my dear brother Theo, circa July 1888"
 location: "Arles, France"
 excerpt: "I want to touch people with my art. I want them to say, 'he feels deeply, he feels tenderly'—notwithstanding my so-called roughness, perhaps because of it. What am I in the eyes of most people? A nonentity or an eccentric and disagreeable man."
 signature: "Your loving brother, Vincent"
-source: "Van Gogh Museum Amsterdam (Public Domain)"
+source: "Reconstructed from Van Gogh's authentic quotes and letters to Theo (Public Domain)"
 collections: ["artistic-letters", "brotherly-love", "creative-struggle"]
 tags: ["art", "painting", "struggle", "passion", "brotherhood"]
 featured: true

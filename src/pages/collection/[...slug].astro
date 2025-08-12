@@ -83,7 +83,7 @@ const itemCount = collectionItems.length;
                 </div>
                 
                 <h3 class="item-title">
-                  <a href={`/${item.collection}/${item.slug}`}>
+                  <a href={`/${item.collection === 'letters' ? 'letter' : 'speech'}/${item.slug}`}>
                     {item.data.title}
                   </a>
                 </h3>
@@ -109,7 +109,7 @@ const itemCount = collectionItems.length;
                     </div>
                   )}
                   
-                  <a href={`/${item.collection}/${item.slug}`} class="read-link">
+                  <a href={`/${item.collection === 'letters' ? 'letter' : 'speech'}/${item.slug}`} class="read-link">
                     Read {item.collection === 'letters' ? 'letter' : 'speech'} →
                   </a>
                 </div>
@@ -407,14 +407,25 @@ const itemCount = collectionItems.length;
 
     .container {
       padding: 0 1rem;
+      max-width: 100%;
     }
 
     .collection-title {
       font-size: 2.5rem;
+      line-height: 1.2;
     }
 
     .content-item {
       padding: 1.5rem;
+    }
+
+    .item-title a {
+      font-size: 1.3rem;
+      line-height: 1.4;
+    }
+
+    .item-excerpt {
+      font-size: 0.95rem;
     }
 
     .item-footer {
@@ -432,6 +443,53 @@ const itemCount = collectionItems.length;
     .empty-actions {
       flex-direction: column;
       align-items: center;
+    }
+
+    .breadcrumb {
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .collection-container {
+      padding: 3rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 0.8rem;
+    }
+
+    .collection-title {
+      font-size: 2rem;
+      line-height: 1.1;
+    }
+
+    .collection-description {
+      font-size: 1rem;
+      padding: 0 0.5rem;
+    }
+
+    .content-item {
+      padding: 1.25rem;
+    }
+
+    .item-title a {
+      font-size: 1.2rem;
+    }
+
+    .item-details {
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .item-excerpt {
+      font-size: 0.9rem;
+    }
+
+    .breadcrumb {
+      margin-bottom: 1.5rem;
     }
   }
 </style>

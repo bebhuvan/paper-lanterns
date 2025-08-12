@@ -11,7 +11,7 @@ context: "Letter to fellow American writer about craft and the expatriate life i
 location: "Paris, France"
 excerpt: "The good parts of a book may be only something a writer is lucky enough to overhear or it may be the wreck of his whole damn life—and one is as good as the other."
 signature: "Ernest"
-source: "Hemingway Letters Collection, JFK Presidential Library (Public Domain)"
+source: "Reconstructed from authentic Hemingway-Fitzgerald correspondence and documented relationship (Public Domain)"
 collections: ["literary-correspondence", "american-writers", "paris-expatriates", "modernist-literature"]
 tags: ["writing", "literature", "paris", "friendship", "craft", "modernism"]
 featured: true

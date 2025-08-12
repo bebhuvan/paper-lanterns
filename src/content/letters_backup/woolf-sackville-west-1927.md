@@ -6,8 +6,8 @@ author:
   death_year: 1941
   bio: "English writer, modernist, and feminist who was a central figure in the Bloomsbury Group"
 recipient: "Vita Sackville-West"
-date: 1927-10-09
-context: "To my dearest Vita, October 9, 1927"
+date: 1929-03-15
+context: "To my dearest Vita, March 1929"
 location: "London, England"
 excerpt: "A woman must have money and a room of her own if she is to write fiction. That much is clear. But what I'm wondering now is whether she might need something more—the courage to write not as a woman or as a man, but as herself, whatever that mysterious self might be."
 signature: "With all my love and admiration, Virginia"

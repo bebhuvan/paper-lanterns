@@ -5,9 +5,9 @@ author:
   birth_year: 1863
   death_year: 1902
   bio: "Indian Hindu monk and philosopher who introduced Vedanta and Yoga to the Western world"
-recipient: "Swami Brahmananda"
-date: 1893-09-15
-context: "Letter to his brother monk after his historic speech at the World Parliament of Religions"
+recipient: "Alasinga Perumal"
+date: 1893-11-02
+context: "Letter to his devoted disciple from Chicago describing his famous speech"
 location: "Chicago, United States"
 excerpt: "I fervently hope that the bell that tolled this morning in honor of this convention may be the death-knell of all fanaticism, of all persecutions with the sword or with the pen."
 signature: "Your brother in service, Narendranath"
@@ -20,7 +20,7 @@ about:
   context: "Written after Vivekananda's historic address at the World Parliament of Religions in Chicago, where he introduced Hindu philosophy to the Western world and called for religious tolerance. His opening words 'Sisters and Brothers of America' brought a standing ovation."
   significance: "This letter captures the moment when Eastern spiritual thought entered mainstream Western consciousness. Vivekananda's message of universal religion and spiritual unity profoundly influenced interfaith dialogue and the global spiritual awakening of the 20th century."
   author_bio: "Swami Vivekananda (1863-1902) was a Hindu monk and philosopher who played a key role in introducing Vedanta and Yoga to the Western world. His teachings emphasized the unity of all religions and the divinity inherent in every human being."
-  recipient_info: "Swami Brahmananda was Vivekananda's spiritual brother and fellow disciple of Sri Ramakrishna. He later became the first president of the Ramakrishna Math and Mission."
+  recipient_info: "Alasinga Perumal was one of Vivekananda's devoted disciples from Madras who helped fund his journey to Chicago. Vivekananda wrote many letters to him describing his American experiences."
   links:
     - title: "Swami Vivekananda at Chicago"
       url: "https://www.britannica.com/biography/Vivekananda"

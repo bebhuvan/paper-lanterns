@@ -11,7 +11,7 @@ context: "Letter to his colleague announcing the discovery of inelastic scatteri
 location: "Calcutta, India"
 excerpt: "Light, when it passes through a transparent medium, emerges not only diminished in intensity but actually changed in character - this is the new radiation I have discovered."
 signature: "Your excited colleague, C.V. Raman"
-source: "Raman Research Papers, Indian Academy of Sciences (Public Domain)"
+source: "Reconstructed based on documented discovery of Raman effect on Feb 28, 1928 (Public Domain)"
 collections: ["scientific-correspondence", "nobel-prize-discoveries", "indian-science"]
 tags: ["physics", "light", "spectroscopy", "nobel-prize", "india", "discovery"]
 featured: true

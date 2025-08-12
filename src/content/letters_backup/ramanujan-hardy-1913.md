@@ -11,7 +11,7 @@ context: "Initial letter to Cambridge mathematician introducing his mathematical
 location: "Madras, India"
 excerpt: "I have not trodden through the conventional regular course which is followed in a University course, but I am striking out a new path for myself."
 signature: "I remain, Dear Sir, Yours truly, S. Ramanujan"
-source: "Hardy-Ramanujan Correspondence, Trinity College Cambridge (Public Domain)"
+source: "Based on authentic Ramanujan-Hardy correspondence from January 1913 (Public Domain)"
 collections: ["scientific-correspondence", "mathematical-genius", "cross-cultural-exchange"]
 tags: ["mathematics", "genius", "india", "cambridge", "number-theory", "intuition"]
 featured: true

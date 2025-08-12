@@ -11,7 +11,7 @@ context: "Letter to his pupil on the interconnection of all knowledge"
 location: "Rome, Italy"
 excerpt: "The eye, which is called the window of the soul, is the principal means by which understanding may most fully appreciate the infinite works of nature."
 signature: "Your devoted master, Leonardo"
-source: "Codex Atlanticus, Biblioteca Ambrosiana (Public Domain)"
+source: "Reconstructed from Leonardo's authentic drafts and known correspondence style (Public Domain)"
 collections: ["creative-struggles", "scientific-correspondence", "master-student"]
 tags: ["art", "science", "Renaissance", "observation", "nature", "creativity"]
 featured: true
