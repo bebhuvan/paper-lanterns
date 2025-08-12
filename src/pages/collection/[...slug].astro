@@ -14,13 +14,24 @@ export async function getStaticPaths() {
 const collection = Astro.props;
 const { Content } = await collection.render();
 
-// Get all letters and speeches that belong to this collection
+// Get all content types that belong to this collection
 const letters = await getCollection('letters');
 const speeches = await getCollection('speeches');
-const allContent = [...letters, ...speeches];
+const lectures = await getCollection('lectures');
+const essays = await getCollection('essays');
+const allContent = [...letters, ...speeches, ...lectures, ...essays];
 
 const collectionItems = allContent
   .filter(item => item.data.collections?.includes(collection.slug))
+  .map(item => {
+    // Determine content type based on which collection it came from
+    let contentType = 'letter'; // default
+    if (speeches.some(s => s.slug === item.slug)) contentType = 'speech';
+    else if (lectures.some(l => l.slug === item.slug)) contentType = 'lecture';
+    else if (essays.some(e => e.slug === item.slug)) contentType = 'essay';
+    
+    return { ...item, contentType };
+  })
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const itemCount = collectionItems.length;
@@ -60,7 +71,7 @@ const itemCount = collectionItems.length;
       {itemCount === 0 ? (
         <div class="empty-collection">
           <h2>Coming Soon</h2>
-          <p>We're currently curating letters and speeches for this collection. Check back soon!</p>
+          <p>We're currently curating letters, speeches, lectures, and essays for this collection. Check back soon!</p>
           <div class="empty-actions">
             <a href="/collections" class="secondary-button">View Other Collections</a>
             <a href="/archive" class="secondary-button">Browse Archive</a>
@@ -72,7 +83,7 @@ const itemCount = collectionItems.length;
             {collectionItems.map(item => (
               <article class="content-item">
                 <div class="item-meta">
-                  <span class="item-type">{item.collection === 'letters' ? 'Letter' : 'Speech'}</span>
+                  <span class="item-type">{item.contentType === 'letter' ? 'Letter' : item.contentType === 'speech' ? 'Speech' : item.contentType === 'lecture' ? 'Lecture' : 'Essay'}</span>
                   <time class="item-date">
                     {item.data.date.toLocaleDateString('en-US', { 
                       year: 'numeric',
@@ -83,14 +94,14 @@ const itemCount = collectionItems.length;
                 </div>
                 
                 <h3 class="item-title">
-                  <a href={`/${item.collection === 'letters' ? 'letter' : 'speech'}/${item.slug}`}>
+                  <a href={`/${item.contentType}/${item.slug}`}>
                     {item.data.title}
                   </a>
                 </h3>
                 
                 <div class="item-details">
                   <span class="author-name">{item.data.author.name}</span>
-                  {item.collection === 'letters' && item.data.recipient && (
+                  {item.contentType === 'letter' && item.data.recipient && (
                     <>
                       <span class="separator">→</span>
                       <span class="recipient">{item.data.recipient}</span>

@@ -41,3 +41,5 @@ At the moment your sympathisers in England are nervous and sometimes despondent.
 It is generally agreed that the objects of recovery are to increase the national income and to put more men to work. In the field of gold-standard countries, public works can be organized more quickly than any other form of loan expenditure, and from this point of view they are of the first importance.
 
 With regard to these, I should lay my emphasis on the increase of purchasing power resulting from governmental loan-expenditure—whether on public works or in any other way. It is true that loan-expenditure is only a temporary measure; but it may be an indispensable temporary measure during the transitional period.
+
+J. M. Keynes

@@ -6,7 +6,7 @@ author:
   death_year: 1946
   bio: "British economist whose theories fundamentally changed macroeconomic theory and government economic policies"
 recipient: "Ramsay MacDonald"
-date: 1931-09-30
+date: 1931-09-21
 context: "Letter to the Prime Minister during Britain's economic crisis, written just days before Britain abandoned the gold standard"
 location: "Cambridge, England"
 excerpt: "The choice is between a managed currency and the gold standard. I believe that a managed currency is inevitable and that the sooner we face this fact the better."
