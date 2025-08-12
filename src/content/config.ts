@@ -58,6 +58,42 @@ const speeches = defineCollection({
   }),
 });
 
+const lectures = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    author: z.object({
+      name: z.string(),
+      birth_year: z.number().optional(),
+      death_year: z.number().optional(),
+      bio: z.string().optional(),
+    }),
+    date: z.coerce.date(),
+    context: z.string(),
+    location: z.string().optional(),
+    institution: z.string().optional(),
+    series: z.string().optional(),
+    lecture_number: z.number().optional(),
+    excerpt: z.string(),
+    source: z.string(),
+    collections: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    featured: z.boolean().default(false),
+    drop_cap_color: z.string().default('#e07a5f'),
+    about: z.object({
+      context: z.string().optional(),
+      significance: z.string().optional(),
+      author_bio: z.string().optional(),
+      series_info: z.string().optional(),
+      links: z.array(z.object({
+        title: z.string(),
+        url: z.string().url(),
+        description: z.string().optional(),
+      })).default([]),
+    }).optional(),
+  }),
+});
+
 const collectionsContent = defineCollection({
   type: 'content',
   schema: z.object({
@@ -83,6 +119,7 @@ const lettersBackup = defineCollection({
 export const collections = {
   letters,
   speeches,
+  lectures,
   collections: collectionsContent,
   letters_backup: lettersBackup,
 };
