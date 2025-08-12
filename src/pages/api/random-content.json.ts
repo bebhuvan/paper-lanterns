@@ -3,9 +3,10 @@ import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async () => {
   try {
-    // Get all letters and speeches
+    // Get all letters, speeches, and lectures
     const letters = await getCollection('letters');
     const speeches = await getCollection('speeches');
+    const lectures = await getCollection('lectures');
     
     // Combine and map to simple objects for the API
     const allContent = [
@@ -19,6 +20,13 @@ export const GET: APIRoute = async () => {
       ...speeches.map(item => ({
         slug: item.slug,
         collection: 'speech', // Use singular route name
+        title: item.data.title,
+        author: item.data.author.name,
+        date: item.data.date.toISOString(),
+      })),
+      ...lectures.map(item => ({
+        slug: item.slug,
+        collection: 'lecture', // Use singular route name
         title: item.data.title,
         author: item.data.author.name,
         date: item.data.date.toISOString(),

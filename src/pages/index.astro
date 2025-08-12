@@ -3,27 +3,35 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 
-// Get featured letters and speeches from content collections
+// Get featured letters, speeches, and lectures from content collections
 const allLetters = await getCollection('letters');
 const allSpeeches = await getCollection('speeches');
+const allLectures = await getCollection('lectures');
 const allContent = [
   ...allLetters.map(item => ({ ...item, contentType: 'letter' })),
-  ...allSpeeches.map(item => ({ ...item, contentType: 'speech' }))
+  ...allSpeeches.map(item => ({ ...item, contentType: 'speech' })),
+  ...allLectures.map(item => ({ ...item, contentType: 'lecture' }))
 ];
 
-// Get featured content (mix of letters and speeches)
-const featuredContent = allContent
-  .filter(item => item.data.featured)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 6);
+// Get featured content with diversity across content types
+const featuredLetters = allLetters.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'letter' }));
+const featuredSpeeches = allSpeeches.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'speech' }));
+const featuredLectures = allLectures.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'lecture' }));
 
-// If we don't have enough featured, supplement with most recent
+// Take the best from each type, then sort by date
+const diverseFeatured = [
+  ...featuredLectures.slice(0, 2),  // Up to 2 lectures
+  ...featuredLetters.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 3),  // Up to 3 letters
+  ...featuredSpeeches.slice(0, 1)   // Up to 1 speech
+].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// If we need more content, add non-featured items
 const additionalContent = allContent
   .filter(item => !item.data.featured)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, Math.max(0, 6 - featuredContent.length));
+  .slice(0, Math.max(0, 6 - diverseFeatured.length));
 
-const displayContent = [...featuredContent, ...additionalContent].slice(0, 6);
+const displayContent = [...diverseFeatured, ...additionalContent].slice(0, 6);
 
 // Group content by era for browsing
 const eras = [
@@ -69,6 +77,10 @@ allContent.forEach(item => {
             <span class="stat-label">Speeches</span>
           </div>
           <div class="stat-item">
+            <span class="stat-number">{allLectures.length}</span>
+            <span class="stat-label">Lectures</span>
+          </div>
+          <div class="stat-item">
             <span class="stat-number">{eras.filter(e => e.items.length > 0).length}</span>
             <span class="stat-label">Eras</span>
           </div>
@@ -102,11 +114,11 @@ allContent.forEach(item => {
       </section>
 
       <section class="featured-content">
-        <h2 class="section-title">Featured Letters & Speeches</h2>
+        <h2 class="section-title">Featured Content</h2>
         {displayContent.map((item, index) => (
           <article class="content-preview" data-number={String(index + 1).padStart(2, '0')}>
             <div class="content-meta">
-              <span class="content-type">{item.contentType === 'letter' ? 'Letter' : 'Speech'}</span>
+              <span class="content-type">{item.contentType === 'letter' ? 'Letter' : item.contentType === 'speech' ? 'Speech' : 'Lecture'}</span>
               <a href={`/${item.contentType}/${item.slug}`} class="author-name">{item.data.author.name}</a>
               <div class="content-context">{item.data.context}</div>
             </div>
