@@ -68,8 +68,21 @@ const collectionsContent = defineCollection({
   }),
 });
 
+// Define letters_backup as a collection but mark it as draft/ignored
+// This prevents the deprecation warning about auto-generated collections
+const lettersBackup = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    // Minimal schema just to satisfy the collection requirement
+    // These files are backups and not used in the site
+    draft: z.boolean().default(true),
+  }).passthrough(), // Allow additional fields without validation
+});
+
 export const collections = {
   letters,
   speeches,
   collections: collectionsContent,
+  letters_backup: lettersBackup,
 };
