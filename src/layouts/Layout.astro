@@ -225,10 +225,16 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
       font-size: clamp(1.25rem, 5vw, 1.5rem);
     }
     
-    /* Better text contrast on mobile */
-    :root {
+    /* Better text contrast on mobile - light mode only */
+    :root:not([data-theme="dark"]) {
       --text-primary: #1a1a1a;
       --text-secondary: #333;
+    }
+    
+    /* Ensure dark mode text remains visible on mobile */
+    [data-theme="dark"] {
+      --text-primary: #f0ead9;
+      --text-secondary: #e0dbc8;
     }
   }
 
