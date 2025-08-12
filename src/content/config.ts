@@ -94,6 +94,41 @@ const lectures = defineCollection({
   }),
 });
 
+const essays = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    author: z.object({
+      name: z.string(),
+      birth_year: z.number().optional(),
+      death_year: z.number().optional(),
+      bio: z.string().optional(),
+    }),
+    date: z.coerce.date(),
+    context: z.string(),
+    publication: z.string().optional(), // Where it was first published
+    journal: z.string().optional(), // Journal or magazine name
+    essay_collection: z.string().optional(), // If part of a book collection
+    excerpt: z.string(),
+    source: z.string(),
+    collections: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    featured: z.boolean().default(false),
+    drop_cap_color: z.string().default('#e07a5f'),
+    about: z.object({
+      context: z.string().optional(),
+      significance: z.string().optional(),
+      author_bio: z.string().optional(),
+      publication_info: z.string().optional(),
+      links: z.array(z.object({
+        title: z.string(),
+        url: z.string().url(),
+        description: z.string().optional(),
+      })).default([]),
+    }).optional(),
+  }),
+});
+
 const collectionsContent = defineCollection({
   type: 'content',
   schema: z.object({
@@ -120,6 +155,7 @@ export const collections = {
   letters,
   speeches,
   lectures,
+  essays,
   collections: collectionsContent,
   letters_backup: lettersBackup,
 };
