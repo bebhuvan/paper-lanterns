@@ -3,25 +3,29 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 
-// Get featured letters, speeches, and lectures from content collections
+// Get featured letters, speeches, lectures, and essays from content collections
 const allLetters = await getCollection('letters');
 const allSpeeches = await getCollection('speeches');
 const allLectures = await getCollection('lectures');
+const allEssays = await getCollection('essays');
 const allContent = [
   ...allLetters.map(item => ({ ...item, contentType: 'letter' })),
   ...allSpeeches.map(item => ({ ...item, contentType: 'speech' })),
-  ...allLectures.map(item => ({ ...item, contentType: 'lecture' }))
+  ...allLectures.map(item => ({ ...item, contentType: 'lecture' })),
+  ...allEssays.map(item => ({ ...item, contentType: 'essay' }))
 ];
 
 // Get featured content with diversity across content types
 const featuredLetters = allLetters.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'letter' }));
 const featuredSpeeches = allSpeeches.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'speech' }));
 const featuredLectures = allLectures.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'lecture' }));
+const featuredEssays = allEssays.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'essay' }));
 
 // Take the best from each type, then sort by date
 const diverseFeatured = [
   ...featuredLectures.slice(0, 2),  // Up to 2 lectures
-  ...featuredLetters.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 3),  // Up to 3 letters
+  ...featuredEssays.slice(0, 2),   // Up to 2 essays
+  ...featuredLetters.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2),  // Up to 2 letters
   ...featuredSpeeches.slice(0, 1)   // Up to 1 speech
 ].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
@@ -81,6 +85,10 @@ allContent.forEach(item => {
             <span class="stat-label">Lectures</span>
           </div>
           <div class="stat-item">
+            <span class="stat-number">{allEssays.length}</span>
+            <span class="stat-label">Essays</span>
+          </div>
+          <div class="stat-item">
             <span class="stat-number">{eras.filter(e => e.items.length > 0).length}</span>
             <span class="stat-label">Eras</span>
           </div>
@@ -118,7 +126,7 @@ allContent.forEach(item => {
         {displayContent.map((item, index) => (
           <article class="content-preview" data-number={String(index + 1).padStart(2, '0')}>
             <div class="content-meta">
-              <span class="content-type">{item.contentType === 'letter' ? 'Letter' : item.contentType === 'speech' ? 'Speech' : 'Lecture'}</span>
+              <span class="content-type">{item.contentType === 'letter' ? 'Letter' : item.contentType === 'speech' ? 'Speech' : item.contentType === 'lecture' ? 'Lecture' : 'Essay'}</span>
               <a href={`/${item.contentType}/${item.slug}`} class="author-name">{item.data.author.name}</a>
               <div class="content-context">{item.data.context}</div>
             </div>
