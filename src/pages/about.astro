@@ -20,7 +20,7 @@ import Navigation from '../components/Navigation.astro';
 
       <div class="about-content">
         <section class="mission-section">
-          <h2 class="section-title">Our Mission</h2>
+          <h2 class="section-title">My Vision</h2>
           <div class="section-content">
             <p>
               Before the age of instant communication, every written word carried weight. Letters were deliberate, 
@@ -29,9 +29,11 @@ import Navigation from '../components/Navigation.astro';
               of those who came before us.
             </p>
             <p>
-              Voice from time is dedicated to preserving and presenting these remarkable documents as they deserve 
-              to be seen: as works of art, windows into the soul, and bridges across time. We believe that in an 
-              age of fleeting messages, these enduring words remind us of the power of thoughtful communication.
+              There's something magical about these letters. They are frozen in time yet some continue to travel 
+              through time and violently awaken the fullness of human capabilities, while others lie neglected, 
+              waiting for someone to rediscover them. Voice from Time is dedicated to preserving and presenting 
+              these remarkable documents as they deserve to be seen: as works of art, windows into the soul, 
+              and bridges across time.
             </p>
           </div>
         </section>
@@ -56,7 +58,7 @@ import Navigation from '../components/Navigation.astro';
                 <strong>Public domain status</strong> — All content is completely free of copyright restrictions
               </li>
               <li>
-                <strong>Authenticity</strong> — Verified historical documents with reliable provenance
+                <strong>Authenticity</strong> — Rigorously verified historical documents with reliable provenance
               </li>
             </ul>
           </div>
@@ -66,13 +68,13 @@ import Navigation from '../components/Navigation.astro';
           <h2 class="section-title">Our Approach</h2>
           <div class="section-content">
             <p>
-              We treat each document as a precious artifact, presenting it with the respect and attention it deserves. 
-              Our design philosophy emphasizes:
+              I treat each document as a precious artifact, presenting it with the respect and attention it deserves. 
+              My design philosophy emphasizes:
             </p>
             <div class="approach-grid">
               <div class="approach-item">
                 <h3>Typography as Art</h3>
-                <p>Every letter begins with a beautiful drop cap, and we use premium typography to honor the written word.</p>
+                <p>Every letter begins with a beautiful drop cap, and I use premium typography to honor the written word.</p>
               </div>
               <div class="approach-item">
                 <h3>Breathing Room</h3>
@@ -80,7 +82,7 @@ import Navigation from '../components/Navigation.astro';
               </div>
               <div class="approach-item">
                 <h3>Historical Context</h3>
-                <p>We provide just enough background to understand the circumstances without overwhelming the content.</p>
+                <p>I provide just enough background to understand the circumstances without overwhelming the content.</p>
               </div>
               <div class="approach-item">
                 <h3>Accessibility</h3>
@@ -113,40 +115,29 @@ import Navigation from '../components/Navigation.astro';
         </section>
 
         <section class="team-section">
-          <h2 class="section-title">Behind the Project</h2>
+          <h2 class="section-title">Behind the Page</h2>
           <div class="section-content">
             <p>
-              Voice from time was created by a team of historians, designers, and technologists who share a 
-              passion for preserving human expression. We believe that these letters and speeches contain 
-              timeless wisdom and beauty that should be accessible to everyone.
+              Hi, my name is Bhuvan and I'm utterly fascinated by all the treasures available in the public domain. 
+              I'm working on a larger project to curate and catalog all the Indian works in the public domain, but 
+              I also wanted to collect and publish all the letters in the public domain separately, inspired by the 
+              work of Shaun Usher at <a href="https://news.lettersofnote.com" target="_blank" rel="noopener">Letters of Note</a>.
             </p>
             <p>
-              Our editorial team includes PhD historians who verify the authenticity and provide context for 
-              each document. Our design team works to present each letter as beautifully as possible, while 
-              our developers ensure the site is fast, accessible, and preserved for future generations.
+              Each letter in this collection has been carefully verified for authenticity and historical accuracy. 
+              I believe that these letters and speeches contain timeless wisdom and beauty that should be accessible 
+              to everyone, preserved for future generations to discover and rediscover.
+            </p>
+            <p>
+              You can find me on <a href="https://x.com/bebhuvan" target="_blank" rel="noopener">Twitter</a> and 
+              <a href="https://www.linkedin.com/in/bebhuvan/" target="_blank" rel="noopener">LinkedIn</a>. If you know 
+              of a remarkable public domain letter that deserves preservation and presentation, or if you have 
+              corrections or additional context for existing content, I'd love to hear from you.
             </p>
           </div>
         </section>
 
-        <section class="contribute-section">
-          <h2 class="section-title">Contribute to Our Mission</h2>
-          <div class="section-content">
-            <p>
-              We're always looking for remarkable letters and speeches that meet our curation standards. 
-              If you know of a public domain document that deserves preservation and presentation, we'd 
-              love to hear from you.
-            </p>
-            <p>
-              We also welcome corrections, additional context, or improved citations for existing content. 
-              Our goal is to be the most accurate and comprehensive collection of its kind.
-            </p>
-            <div class="contact-info">
-              <a href="mailto:hello@voicefromtime.com" class="contact-link">
-                Get in touch →
-              </a>
-            </div>
-          </div>
-        </section>
+
       </div>
 
       <footer class="about-footer">
@@ -318,6 +309,18 @@ import Navigation from '../components/Navigation.astro';
 
   .contact-link:hover {
     opacity: 0.8;
+  }
+
+  .section-content a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s ease;
+  }
+
+  .section-content a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
   }
 
   .about-footer {
