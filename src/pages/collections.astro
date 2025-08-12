@@ -6,10 +6,12 @@ import Navigation from '../components/Navigation.astro';
 // Get all collections
 const collectionsData = await getCollection('collections');
 
-// Get letters and speeches to count items in each collection
+// Get all content types to count items in each collection
 const letters = await getCollection('letters');
 const speeches = await getCollection('speeches');
-const allContent = [...letters, ...speeches];
+const lectures = await getCollection('lectures');
+const essays = await getCollection('essays');
+const allContent = [...letters, ...speeches, ...lectures, ...essays];
 
 // Count items in each collection and sort by count
 const collections = collectionsData.map(collection => {
@@ -37,7 +39,28 @@ const collections = collectionsData.map(collection => {
         </p>
       </header>
 
-      <div class="collections-grid">
+      <div class="collections-filters">
+        <div class="filter-group">
+          <label for="sort-select" class="filter-label">Sort by:</label>
+          <select id="sort-select" class="filter-select">
+            <option value="count">Most items</option>
+            <option value="name">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="size-filter" class="filter-label">Collection size:</label>
+          <select id="size-filter" class="filter-select">
+            <option value="all">All sizes</option>
+            <option value="large">10+ items</option>
+            <option value="medium">5-9 items</option>
+            <option value="small">1-4 items</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="collections-grid" id="collections-grid">
         {collections.map((collection, index) => (
           <article class={`collection-card ${index === 0 ? 'featured' : ''}`}>
             <div class="card-header" style={`--collection-color: ${collection.data.color}`}>
@@ -102,6 +125,48 @@ const collections = collectionsData.map(collection => {
     line-height: 1.6;
     max-width: 700px;
     margin: 0 auto;
+  }
+
+  .collections-filters {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--bg-accent);
+    border-radius: 12px;
+    border: 1px solid var(--border-accent);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-secondary);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
   }
 
   .collections-grid {
@@ -214,7 +279,7 @@ const collections = collectionsData.map(collection => {
 
   @media (max-width: 768px) {
     .collections-container {
-      padding: 4rem 0 2rem;
+      padding: 8rem 0 2rem;
     }
 
     .container {
@@ -223,6 +288,18 @@ const collections = collectionsData.map(collection => {
 
     .collections-title {
       font-size: 2.5rem;
+    }
+
+    .collections-filters {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .filter-group {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .collections-grid {
@@ -238,4 +315,99 @@ const collections = collectionsData.map(collection => {
       padding: 2rem 1rem;
     }
   }
+
+  @media (max-width: 480px) {
+    .collections-container {
+      padding: 7rem 0 2rem;
+    }
+
+    .collections-title {
+      font-size: 2rem;
+    }
+
+    .collections-description {
+      font-size: 1rem;
+    }
+  }
 </style>
+
+<script>
+  // Collections data for filtering
+  const collectionsData = Array.from(document.querySelectorAll('.collection-card')).map((card, index) => {
+    const nameElement = card.querySelector('.collection-name');
+    const countElement = card.querySelector('.collection-count');
+    const name = nameElement?.textContent || '';
+    const countText = countElement?.textContent || '0 items';
+    const count = parseInt(countText.match(/\d+/)?.[0] || '0');
+    
+    return {
+      element: card,
+      name,
+      count,
+      index,
+      originalIndex: index
+    };
+  });
+
+  // Filter and sort functions
+  function filterAndSort() {
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+    const sizeFilter = document.getElementById('size-filter') as HTMLSelectElement;
+    const grid = document.getElementById('collections-grid');
+    
+    if (!sortSelect || !sizeFilter || !grid) return;
+
+    let filteredData = [...collectionsData];
+
+    // Apply size filter
+    const sizeValue = sizeFilter.value;
+    if (sizeValue !== 'all') {
+      filteredData = filteredData.filter(item => {
+        switch (sizeValue) {
+          case 'large': return item.count >= 10;
+          case 'medium': return item.count >= 5 && item.count <= 9;
+          case 'small': return item.count >= 1 && item.count <= 4;
+          default: return true;
+        }
+      });
+    }
+
+    // Apply sort
+    const sortValue = sortSelect.value;
+    filteredData.sort((a, b) => {
+      switch (sortValue) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        case 'count':
+        default:
+          return b.count - a.count;
+      }
+    });
+
+    // Clear and repopulate grid
+    grid.innerHTML = '';
+    filteredData.forEach((item, index) => {
+      // Update featured class based on new position
+      const wasFeatured = item.element.classList.contains('featured');
+      item.element.classList.remove('featured');
+      
+      // First item in filtered/sorted list becomes featured
+      if (index === 0) {
+        item.element.classList.add('featured');
+      }
+      
+      grid.appendChild(item.element);
+    });
+  }
+
+  // Add event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    const sortSelect = document.getElementById('sort-select');
+    const sizeFilter = document.getElementById('size-filter');
+    
+    sortSelect?.addEventListener('change', filterAndSort);
+    sizeFilter?.addEventListener('change', filterAndSort);
+  });
+</script>
