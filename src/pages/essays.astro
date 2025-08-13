@@ -3,156 +3,200 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 
+// Get all essays, sorted by date (newest first)
 const essays = await getCollection('essays');
 const sortedEssays = essays.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-// Group by author
+// Group essays by author for better organization
 const essaysByAuthor = sortedEssays.reduce((acc, essay) => {
-  const author = essay.data.author.name;
-  if (!acc[author]) {
-    acc[author] = [];
+  const authorName = essay.data.author.name;
+  if (!acc[authorName]) {
+    acc[authorName] = [];
   }
-  acc[author].push(essay);
+  acc[authorName].push(essay);
   return acc;
 }, {} as Record<string, typeof essays>);
 
 const authors = Object.keys(essaysByAuthor).sort();
+
+// Get unique years for filtering
+const years = [...new Set(sortedEssays.map(essay => essay.data.date.getFullYear()))].sort((a, b) => b - a);
 ---
 
-<Layout title="Essays - Voice from Time" description="Explore thoughtful essays on philosophy, culture, politics, and society from history's great thinkers.">
+<Layout title="Essays - Paper Lanterns">
   <Navigation />
   
-  <main class="essays-container">
+  <main>
     <div class="container">
       <header class="essays-header">
         <h1 class="essays-title">Essays</h1>
         <p class="essays-description">
-          Thoughtful reflections on philosophy, culture, politics, and the human condition from history's great minds. 
-          These essays offer timeless insights that remain relevant across generations.
+          {essays.length > 0 ? (
+            `Explore ${essays.length} thoughtful essays from history's greatest minds, spanning ${years[years.length - 1]} to ${years[0]}.`
+          ) : (
+            "We're currently curating authentic essays from verified historical sources."
+          )}
         </p>
       </header>
 
-      <div class="essays-stats">
-        <div class="stat">
-          <span class="stat-number">{essays.length}</span>
-          <span class="stat-label">Essays</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{authors.length}</span>
-          <span class="stat-label">Authors</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{new Set(essays.map(e => e.data.date.getFullYear())).size}</span>
-          <span class="stat-label">Years Covered</span>
-        </div>
-      </div>
-
-      <div class="essays-filters">
-        <div class="filter-group">
-          <label for="author-filter" class="filter-label">Author:</label>
-          <select id="author-filter" class="filter-select">
-            <option value="all">All Authors</option>
-            {authors.map(author => (
-              <option value={author}>{author}</option>
-            ))}
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label for="year-filter" class="filter-label">Year:</label>
-          <select id="year-filter" class="filter-select">
-            <option value="all">All Years</option>
-            {[...new Set(essays.map(e => e.data.date.getFullYear()))].sort((a, b) => b - a).map(year => (
-              <option value={year}>{year}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div class="essays-grid" id="essays-grid">
-        {sortedEssays.map(essay => (
-          <article class="essay-card" data-author={essay.data.author.name} data-year={essay.data.date.getFullYear()}>
-            <div class="essay-meta">
-              <time class="essay-date">
-                {essay.data.date.toLocaleDateString('en-US', { 
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
-              <span class="essay-author">{essay.data.author.name}</span>
+      {essays.length > 0 ? (
+        <>
+          <div class="essays-filters">
+            <div class="filter-group">
+              <label for="author-filter" class="filter-label">Author:</label>
+              <select id="author-filter" class="filter-select">
+                <option value="all">All Authors</option>
+                {authors.map(author => (
+                  <option value={author}>{author}</option>
+                ))}
+              </select>
             </div>
             
-            <h2 class="essay-title">
-              <a href={`/essay/${essay.slug}`}>
-                {essay.data.title}
-              </a>
-            </h2>
-            
-            <p class="essay-excerpt">{essay.data.excerpt}</p>
-            
-            {essay.data.journal && (
-              <p class="essay-publication">
-                Published in <em>{essay.data.journal}</em>
-              </p>
-            )}
-            
-            {essay.data.tags.length > 0 && (
-              <div class="essay-tags">
-                {essay.data.tags.slice(0, 4).map(tag => (
-                  <span class="tag">{tag}</span>
+            <div class="filter-group">
+              <label for="year-filter" class="filter-label">Year:</label>
+              <select id="year-filter" class="filter-select">
+                <option value="all">All Years</option>
+                {years.map(year => (
+                  <option value={year.toString()}>{year}</option>
                 ))}
-              </div>
-            )}
-          </article>
-        ))}
-      </div>
+              </select>
+            </div>
+          </div>
 
-      <footer class="essays-footer">
-        <p>All essays are in the public domain</p>
-      </footer>
+          <div class="essays-stats">
+            <div class="stat">
+              <span class="stat-number">{essays.length}</span>
+              <span class="stat-label">Total Essays</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">{authors.length}</span>
+              <span class="stat-label">Authors</span>
+            </div>
+            <div class="stat">
+              <span class="stat-number">{years.length}</span>
+              <span class="stat-label">Years Covered</span>
+            </div>
+          </div>
+
+          <div class="essays-grid" id="essays-grid">
+            {sortedEssays.map(essay => (
+              <article class="essay-card" data-author={essay.data.author.name} data-year={essay.data.date.getFullYear().toString()}>
+                <div class="essay-meta">
+                  <time class="essay-date">
+                    {essay.data.date.toLocaleDateString('en-US', { 
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </time>
+                  <span class="essay-author">{essay.data.author.name}</span>
+                </div>
+                
+                <h2 class="essay-title">
+                  <a href={`/essay/${essay.slug}`}>{essay.data.title}</a>
+                </h2>
+                
+                <p class="essay-context">{essay.data.context}</p>
+                
+                {essay.data.excerpt && (
+                  <blockquote class="essay-excerpt">
+                    "{essay.data.excerpt}"
+                  </blockquote>
+                )}
+                
+                <div class="essay-tags">
+                  {essay.data.tags.slice(0, 3).map(tag => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div class="empty-essays">
+          <div class="empty-icon">📚</div>
+          <h2>Coming Soon</h2>
+          <p>
+            We're working to add authentic, verified essays from historical sources. 
+            Our focus is on ensuring every essay can be traced to reliable public domain sources 
+            like Wikisource, Project Gutenberg, and national archives.
+          </p>
+          <div class="empty-actions">
+            <a href="/letters" class="primary-button">Browse Letters</a>
+            <a href="/speeches" class="secondary-button">View Speeches</a>
+            <a href="/lectures" class="secondary-button">Read Lectures</a>
+          </div>
+        </div>
+      )}
     </div>
   </main>
 </Layout>
 
 <style>
-  .essays-container {
-    padding: 6rem 0 4rem;
-    min-height: 100vh;
-  }
-
   .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
   }
 
   .essays-header {
     text-align: center;
-    margin-bottom: 3rem;
+    padding: 8rem 0 4rem;
   }
 
   .essays-title {
     font-family: 'EB Garamond', serif;
-    font-size: 3rem;
+    font-size: clamp(3rem, 8vw, 5rem);
     font-weight: 500;
     color: var(--text-primary);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
   }
 
   .essays-description {
     font-size: 1.1rem;
-    color: var(--text-tertiary);
     line-height: 1.6;
-    max-width: 700px;
+    color: var(--text-secondary);
+    max-width: 600px;
     margin: 0 auto;
+  }
+
+  .essays-filters {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .filter-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .filter-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-secondary);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    min-width: 150px;
   }
 
   .essays-stats {
     display: flex;
     justify-content: center;
     gap: 3rem;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
     padding: 2rem 0;
     border-top: 1px solid var(--border-secondary);
     border-bottom: 1px solid var(--border-secondary);
@@ -165,59 +209,17 @@ const authors = Object.keys(essaysByAuthor).sort();
   .stat-number {
     display: block;
     font-family: 'EB Garamond', serif;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 500;
     color: var(--accent-primary);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
   }
 
   .stat-label {
     font-size: 0.9rem;
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .essays-filters {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
-    padding: 1.5rem;
-    background: var(--bg-accent);
-    border-radius: 12px;
-    border: 1px solid var(--border-accent);
-  }
-
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .filter-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .filter-select {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-secondary);
-    border-radius: 8px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-
-  .filter-select:focus {
-    outline: none;
-    border-color: var(--accent-primary);
+    letter-spacing: 0.1em;
   }
 
   .essays-grid {
@@ -229,15 +231,17 @@ const authors = Object.keys(essaysByAuthor).sort();
 
   .essay-card {
     background: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
     border-radius: 12px;
     padding: 2rem;
-    border: 1px solid var(--border-secondary);
     transition: all 0.3s ease;
+    position: relative;
   }
 
   .essay-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 25px var(--drop-shadow);
+    border-color: var(--accent-primary);
   }
 
   .essay-meta {
@@ -245,7 +249,7 @@ const authors = Object.keys(essaysByAuthor).sort();
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
   }
 
@@ -259,15 +263,16 @@ const authors = Object.keys(essaysByAuthor).sort();
   }
 
   .essay-title {
-    margin-bottom: 1rem;
-  }
-
-  .essay-title a {
     font-family: 'EB Garamond', serif;
     font-size: 1.4rem;
     font-weight: 500;
-    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .essay-title a {
     text-decoration: none;
+    color: var(--text-primary);
     transition: color 0.2s ease;
   }
 
@@ -275,64 +280,121 @@ const authors = Object.keys(essaysByAuthor).sort();
     color: var(--accent-primary);
   }
 
-  .essay-excerpt {
+  .essay-context {
     color: var(--text-secondary);
-    line-height: 1.6;
     margin-bottom: 1rem;
+    line-height: 1.5;
   }
 
-  .essay-publication {
-    font-size: 0.9rem;
-    color: var(--text-tertiary);
-    margin-bottom: 1rem;
+  .essay-excerpt {
     font-style: italic;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--accent-primary);
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
   }
 
   .essay-tags {
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
   }
 
   .tag {
-    font-size: 0.75rem;
-    color: var(--accent-secondary);
-    background: rgba(139, 115, 85, 0.1);
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
+    background: var(--bg-accent);
+    color: var(--text-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    border: 1px solid var(--border-accent);
   }
 
-  .essays-footer {
+  .empty-essays {
     text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border-secondary);
-    color: var(--text-light);
-    font-size: 0.85rem;
+    padding: 4rem 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    opacity: 0.6;
+  }
+
+  .empty-essays h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .empty-essays p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .empty-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .primary-button, .secondary-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .primary-button {
+    background: var(--accent-primary);
+    color: white;
+    border: 1px solid var(--accent-primary);
+  }
+
+  .primary-button:hover {
+    background: var(--accent-tertiary);
+    border-color: var(--accent-tertiary);
+  }
+
+  .secondary-button {
+    background: var(--bg-accent);
+    color: var(--text-primary);
+    border: 1px solid var(--border-accent);
+  }
+
+  .secondary-button:hover {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
   }
 
   @media (max-width: 768px) {
-    .essays-container {
-      padding: 4rem 0 2rem;
-    }
-
     .container {
       padding: 0 1rem;
     }
 
-    .essays-title {
-      font-size: 2.5rem;
+    .essays-header {
+      padding: 6rem 0 3rem;
     }
 
     .essays-filters {
       flex-direction: column;
+      align-items: center;
       gap: 1rem;
-      padding: 1rem;
     }
 
-    .filter-group {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+    .essays-stats {
+      gap: 2rem;
+      flex-wrap: wrap;
     }
 
     .essays-grid {
@@ -340,43 +402,48 @@ const authors = Object.keys(essaysByAuthor).sort();
       gap: 1.5rem;
     }
 
-    .essays-stats {
-      gap: 1.5rem;
-      flex-wrap: wrap;
+    .essay-card {
+      padding: 1.5rem;
     }
 
-    .stat-number {
-      font-size: 1.5rem;
+    .empty-actions {
+      flex-direction: column;
+      align-items: center;
     }
   }
 </style>
 
 <script>
-  // Essay filtering functionality
-  document.addEventListener('DOMContentLoaded', () => {
+  function filterEssays() {
     const authorFilter = document.getElementById('author-filter') as HTMLSelectElement;
     const yearFilter = document.getElementById('year-filter') as HTMLSelectElement;
-    const essayCards = document.querySelectorAll('.essay-card');
+    const essays = document.querySelectorAll('.essay-card');
+    
+    if (!authorFilter || !yearFilter) return;
+    
+    const selectedAuthor = authorFilter.value;
+    const selectedYear = yearFilter.value;
+    
+    essays.forEach((essay) => {
+      const essayElement = essay as HTMLElement;
+      const essayAuthor = essayElement.dataset.author;
+      const essayYear = essayElement.dataset.year;
+      
+      const authorMatch = selectedAuthor === 'all' || essayAuthor === selectedAuthor;
+      const yearMatch = selectedYear === 'all' || essayYear === selectedYear;
+      
+      if (authorMatch && yearMatch) {
+        essayElement.style.display = 'block';
+      } else {
+        essayElement.style.display = 'none';
+      }
+    });
+  }
 
-    function filterEssays() {
-      const selectedAuthor = authorFilter.value;
-      const selectedYear = yearFilter.value;
-
-      essayCards.forEach(card => {
-        const cardAuthor = (card as HTMLElement).dataset.author;
-        const cardYear = (card as HTMLElement).dataset.year;
-
-        const authorMatch = selectedAuthor === 'all' || cardAuthor === selectedAuthor;
-        const yearMatch = selectedYear === 'all' || cardYear === selectedYear;
-
-        if (authorMatch && yearMatch) {
-          (card as HTMLElement).style.display = 'block';
-        } else {
-          (card as HTMLElement).style.display = 'none';
-        }
-      });
-    }
-
+  document.addEventListener('DOMContentLoaded', () => {
+    const authorFilter = document.getElementById('author-filter');
+    const yearFilter = document.getElementById('year-filter');
+    
     authorFilter?.addEventListener('change', filterEssays);
     yearFilter?.addEventListener('change', filterEssays);
   });
