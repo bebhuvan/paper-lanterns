@@ -11,7 +11,7 @@ context: "Letter to Queen Elizabeth's chief advisor outlining his intellectual a
 location: "London, England"
 excerpt: "I have taken all knowledge to be my province; and if I could purge it of two sorts of rovers — whereof the one with frivolous disputations, confutations, and verbosities; the other with blind experiments, and auricular traditions and impostures — hath committed so many spoils, I hope I should bring in industrious observations, grounded conclusions, and profitable inventions and discoveries."
 signature: "Your Lordship's most bounden, Francis Bacon"
-source: "The Letters and the Life of Francis Bacon, James Spedding (ed.) - Public Domain"
+source: "The Letters and the Life of Francis Bacon, James Spedding (ed.) - Internet Archive, Public Domain"
 collections: ["renaissance-letters", "scientific-correspondence", "elizabethan-court"]
 tags: ["renaissance", "natural-philosophy", "scientific-method", "knowledge", "patronage", "elizabethan-era"]
 featured: true
@@ -22,6 +22,9 @@ about:
   author_bio: "Francis Bacon (1561-1626) was an English philosopher, statesman, and scientist who is considered the father of empiricism and the scientific method. His works laid the foundation for the Scientific Revolution and modern experimental science."
   recipient_info: "William Cecil, 1st Baron Burghley (1520-1598) was Queen Elizabeth I's chief advisor and one of the most powerful men in England. He was known for his intelligence, political acumen, and patronage of learning and the arts."
   links:
+    - title: "Letters and Life of Francis Bacon - Internet Archive"
+      url: "https://archive.org/stream/lettersandlifef08bacogoog/lettersandlifef08bacogoog_djvu.txt"
+      description: "Complete text of Spedding's edition on Internet Archive"
     - title: "The Letters and the Life of Francis Bacon"
       url: "https://www.google.co.in/books/edition/The_Letters_and_the_Life_of_Francis_Baco/DeI3AQAAMAAJ?hl=en"
       description: "Complete collection of Bacon's correspondence edited by James Spedding"
