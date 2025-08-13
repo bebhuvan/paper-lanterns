@@ -11,7 +11,7 @@ context: "Open letter published in The New York Times offering economic advice f
 location: "Cambridge, England"
 excerpt: "You have made yourself the trustee for those in every country who seek to mend the evils of our condition by reasoned experiment within the framework of the existing social system."
 signature: "J. M. Keynes"
-source: "The New York Times December 31, 1933, Public Domain"
+source: "The New York Times December 31, 1933, verified by UK National Archives, Public Domain"
 collections: ["economic-letters", "depression-era", "policy-advice"]
 tags: ["economics", "great-depression", "government-spending", "monetary-policy", "recovery"]
 featured: true
@@ -22,6 +22,9 @@ about:
   author_bio: "John Maynard Keynes (1883-1946) was a British economist whose revolutionary theories about government intervention in markets became the foundation of modern macroeconomics."
   recipient_info: "Franklin D. Roosevelt (1882-1945) was the 32nd President, leading America through the Great Depression and World War II with unprecedented government programs."
   links:
+    - title: "UK National Archives - Original Document"
+      url: "https://www.nationalarchives.gov.uk/education/resources/thirties-britain/keynes-economy/"
+      description: "Verified historical source and educational context"
     - title: "EBSCO Research Analysis"
       url: "https://www.ebsco.com/research-starters/history/analysis-john-maynard-keynes-open-letter-president-roosevelt"
       description: "Scholarly analysis of the letter's economic impact"

@@ -1,0 +1,438 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+
+const lectures = await getCollection('lectures');
+const sortedLectures = lectures.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Group by author
+const lecturesByAuthor = sortedLectures.reduce((acc, lecture) => {
+  const author = lecture.data.author.name;
+  if (!acc[author]) {
+    acc[author] = [];
+  }
+  acc[author].push(lecture);
+  return acc;
+}, {} as Record<string, typeof lectures>);
+
+const authors = Object.keys(lecturesByAuthor).sort();
+---
+
+<Layout title="Lectures - Voice from Time" description="Academic lectures and scholarly addresses that advanced human knowledge and understanding across disciplines.">
+  <Navigation />
+  
+  <main class="lectures-container">
+    <div class="container">
+      <header class="lectures-header">
+        <h1 class="lectures-title">Lectures</h1>
+        <p class="lectures-description">
+          Scholarly addresses and academic lectures that advanced human knowledge across philosophy, science, 
+          literature, and social thought. These intellectual presentations shaped minds and influenced generations of thinkers.
+        </p>
+      </header>
+
+      <div class="lectures-stats">
+        <div class="stat">
+          <span class="stat-number">{lectures.length}</span>
+          <span class="stat-label">Lectures</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{authors.length}</span>
+          <span class="stat-label">Scholars</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{new Set(lectures.map(l => l.data.date.getFullYear())).size}</span>
+          <span class="stat-label">Years Covered</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{new Set(lectures.map(l => l.data.institution)).size}</span>
+          <span class="stat-label">Institutions</span>
+        </div>
+      </div>
+
+      <div class="lectures-filters">
+        <div class="filter-group">
+          <label for="author-filter" class="filter-label">Scholar:</label>
+          <select id="author-filter" class="filter-select">
+            <option value="all">All Scholars</option>
+            {authors.map(author => (
+              <option value={author}>{author}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="year-filter" class="filter-label">Year:</label>
+          <select id="year-filter" class="filter-select">
+            <option value="all">All Years</option>
+            {[...new Set(lectures.map(l => l.data.date.getFullYear()))].sort((a, b) => b - a).map(year => (
+              <option value={year}>{year}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div class="lectures-grid" id="lectures-grid">
+        {sortedLectures.map(lecture => (
+          <article class="lecture-card" data-author={lecture.data.author.name} data-year={lecture.data.date.getFullYear()}>
+            <div class="lecture-meta">
+              <time class="lecture-date">
+                {lecture.data.date.toLocaleDateString('en-US', { 
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+              <span class="lecture-author">{lecture.data.author.name}</span>
+            </div>
+            
+            <h2 class="lecture-title">
+              <a href={`/lecture/${lecture.slug}`}>
+                {lecture.data.title}
+              </a>
+            </h2>
+            
+            <p class="lecture-excerpt">{lecture.data.excerpt}</p>
+            
+            <div class="lecture-details">
+              {lecture.data.institution && (
+                <span class="lecture-institution">🏛️ {lecture.data.institution}</span>
+              )}
+              {lecture.data.location && (
+                <span class="lecture-location">📍 {lecture.data.location}</span>
+              )}
+              {lecture.data.series && (
+                <span class="lecture-series">📚 {lecture.data.series}</span>
+              )}
+            </div>
+            
+            {lecture.data.tags.length > 0 && (
+              <div class="lecture-tags">
+                {lecture.data.tags.slice(0, 4).map(tag => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+
+      <section class="coming-soon">
+        <h2 class="section-title">More Academic Lectures Coming Soon</h2>
+        <p class="section-description">
+          We're continuously adding more influential academic lectures and scholarly addresses. Future additions will include 
+          lectures by Einstein, Marie Curie, John Dewey, and other pioneering thinkers who shaped modern knowledge.
+        </p>
+      </section>
+
+      <footer class="lectures-footer">
+        <p>All lectures are in the public domain</p>
+      </footer>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .lectures-container {
+    padding: 6rem 0 4rem;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .lectures-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .lectures-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .lectures-description {
+    font-size: 1.1rem;
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .lectures-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-number {
+    display: block;
+    font-family: 'EB Garamond', serif;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--accent-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .lectures-filters {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: var(--bg-accent);
+    border-radius: 12px;
+    border: 1px solid var(--border-accent);
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-secondary);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+  }
+
+  .lectures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .lecture-card {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid var(--border-secondary);
+    transition: all 0.3s ease;
+  }
+
+  .lecture-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--drop-shadow);
+  }
+
+  .lecture-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .lecture-date {
+    color: var(--accent-secondary);
+  }
+
+  .lecture-author {
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .lecture-title {
+    margin-bottom: 1rem;
+  }
+
+  .lecture-title a {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .lecture-title a:hover {
+    color: var(--accent-primary);
+  }
+
+  .lecture-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .lecture-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+  }
+
+  .lecture-institution,
+  .lecture-location,
+  .lecture-series {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .lecture-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    color: var(--accent-secondary);
+    background: rgba(139, 115, 85, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .coming-soon {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--bg-accent);
+    border-radius: 12px;
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .section-description {
+    color: var(--text-tertiary);
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .lectures-footer {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-secondary);
+    color: var(--text-light);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .lectures-container {
+      padding: 4rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .lectures-title {
+      font-size: 2.5rem;
+    }
+
+    .lectures-filters {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .filter-group {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lectures-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .lectures-stats {
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+    }
+
+    .coming-soon {
+      padding: 2rem 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Lecture filtering functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const authorFilter = document.getElementById('author-filter') as HTMLSelectElement;
+    const yearFilter = document.getElementById('year-filter') as HTMLSelectElement;
+    const lectureCards = document.querySelectorAll('.lecture-card');
+
+    function filterLectures() {
+      const selectedAuthor = authorFilter.value;
+      const selectedYear = yearFilter.value;
+
+      lectureCards.forEach(card => {
+        const cardAuthor = (card as HTMLElement).dataset.author;
+        const cardYear = (card as HTMLElement).dataset.year;
+
+        const authorMatch = selectedAuthor === 'all' || cardAuthor === selectedAuthor;
+        const yearMatch = selectedYear === 'all' || cardYear === selectedYear;
+
+        if (authorMatch && yearMatch) {
+          (card as HTMLElement).style.display = 'block';
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    }
+
+    authorFilter?.addEventListener('change', filterLectures);
+    yearFilter?.addEventListener('change', filterLectures);
+  });
+</script>

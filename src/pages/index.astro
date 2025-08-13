@@ -72,26 +72,26 @@ allContent.forEach(item => {
 
       <section class="browse-options">
         <div class="stats-overview">
-          <div class="stat-item">
+          <a href="/archive?filter=letter" class="stat-item stat-link">
             <span class="stat-number">{allLetters.length}</span>
             <span class="stat-label">Letters</span>
-          </div>
-          <div class="stat-item">
+          </a>
+          <a href="/speeches" class="stat-item stat-link">
             <span class="stat-number">{allSpeeches.length}</span>
             <span class="stat-label">Speeches</span>
-          </div>
-          <div class="stat-item">
+          </a>
+          <a href="/lectures" class="stat-item stat-link">
             <span class="stat-number">{allLectures.length}</span>
             <span class="stat-label">Lectures</span>
-          </div>
-          <div class="stat-item">
+          </a>
+          <a href="/essays" class="stat-item stat-link">
             <span class="stat-number">{allEssays.length}</span>
             <span class="stat-label">Essays</span>
-          </div>
-          <div class="stat-item">
+          </a>
+          <a href="/archive" class="stat-item stat-link">
             <span class="stat-number">{eras.filter(e => e.items.length > 0).length}</span>
             <span class="stat-label">Eras</span>
-          </div>
+          </a>
         </div>
 
         <div class="browse-by-era">
@@ -103,6 +103,47 @@ allContent.forEach(item => {
                 <span class="era-count">{era.items.length}</span>
               </a>
             ))}
+          </div>
+        </div>
+
+        <div class="browse-by-type">
+          <h3>Browse by Type</h3>
+          <div class="type-cards">
+            <a href="/letters" class="type-card">
+              <div class="type-icon">📝</div>
+              <div class="type-info">
+                <span class="type-name">Letters</span>
+                <span class="type-count">{allLetters.length} items</span>
+              </div>
+              <div class="type-description">Personal correspondence and intimate exchanges</div>
+            </a>
+            
+            <a href="/essays" class="type-card">
+              <div class="type-icon">📚</div>
+              <div class="type-info">
+                <span class="type-name">Essays</span>
+                <span class="type-count">{allEssays.length} items</span>
+              </div>
+              <div class="type-description">Thoughtful reflections on life and society</div>
+            </a>
+            
+            <a href="/speeches" class="type-card">
+              <div class="type-icon">🎤</div>
+              <div class="type-info">
+                <span class="type-name">Speeches</span>
+                <span class="type-count">{allSpeeches.length} items</span>
+              </div>
+              <div class="type-description">Historic orations that moved nations</div>
+            </a>
+            
+            <a href="/lectures" class="type-card">
+              <div class="type-icon">🏛️</div>
+              <div class="type-info">
+                <span class="type-name">Lectures</span>
+                <span class="type-count">{allLectures.length} items</span>
+              </div>
+              <div class="type-description">Academic addresses advancing knowledge</div>
+            </a>
           </div>
         </div>
 
@@ -229,18 +270,42 @@ allContent.forEach(item => {
     gap: 0.5rem;
   }
 
+  .stat-link {
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+  }
+
+  .stat-link:hover {
+    background: var(--bg-accent);
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+  }
+
   .stat-number {
     font-family: 'EB Garamond', serif;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 500;
     color: var(--accent-primary);
+    transition: color 0.2s ease;
+  }
+
+  .stat-link:hover .stat-number {
+    color: var(--accent-tertiary);
   }
 
   .stat-label {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    transition: color 0.2s ease;
+  }
+
+  .stat-link:hover .stat-label {
+    color: var(--text-secondary);
   }
 
   .browse-by-era h3 {
@@ -285,6 +350,93 @@ allContent.forEach(item => {
   .era-count {
     font-size: 0.75rem;
     color: var(--accent-secondary);
+  }
+
+  .browse-by-type {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  .browse-by-type h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .type-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .type-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .type-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--drop-shadow);
+    border-color: var(--accent-primary);
+  }
+
+  .type-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .type-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .type-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .type-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+  }
+
+  .type-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .type-count {
+    font-size: 0.8rem;
+    color: var(--accent-secondary);
+    font-weight: 500;
+  }
+
+  .type-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
   }
 
   .random-section {
@@ -507,28 +659,70 @@ allContent.forEach(item => {
 
   @media (max-width: 768px) {
     .container {
-      padding: 4rem 2rem 2rem;
-      max-width: 500px;
+      padding: 4rem 1.5rem 2rem;
+      max-width: 100%;
     }
 
     .header {
-      padding: 12rem 0 6rem;
+      padding: 8rem 0 6rem;
     }
 
     .site-title {
       font-size: clamp(3rem, 15vw, 5rem);
     }
 
+    .hero-text {
+      font-size: 1.1rem;
+      line-height: 1.7;
+    }
+
+    .intro-text {
+      font-size: 1rem;
+    }
+
     .stats-overview {
-      gap: 2rem;
-      flex-direction: column;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .stat-item {
-      flex-direction: row;
-      justify-content: space-between;
-      max-width: 200px;
-      margin: 0 auto;
+      flex-direction: column;
+      min-width: 80px;
+    }
+
+    .stat-number {
+      font-size: 1.8rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+    }
+
+    .browse-by-type h3 {
+      font-size: 1.3rem;
+    }
+
+    .type-cards {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .type-card {
+      padding: 1.25rem;
+    }
+
+    .type-name {
+      font-size: 1.2rem;
+    }
+
+    .type-count {
+      font-size: 0.85rem;
+    }
+
+    .type-description {
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
 
     .era-links {
@@ -540,7 +734,29 @@ allContent.forEach(item => {
       min-width: auto;
       flex-direction: row;
       justify-content: space-between;
-      padding: 0.75rem 1rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .era-name {
+      font-size: 1rem;
+    }
+
+    .era-count {
+      font-size: 0.8rem;
+    }
+
+    .random-letter-btn-large {
+      font-size: 1.1rem;
+      padding: 1.25rem 2.5rem;
+    }
+
+    .random-description {
+      font-size: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
     }
 
     .featured-content {
@@ -551,9 +767,22 @@ allContent.forEach(item => {
       display: none;
     }
 
+    .content-excerpt {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
     .content-excerpt::first-letter {
-      font-size: 6rem;
-      margin: 0.1rem 1rem 0.3rem 0;
+      font-size: 5rem;
+      margin: 0.1rem 0.8rem 0.2rem 0;
+    }
+
+    .content-meta {
+      font-size: 0.9rem;
+    }
+
+    .continue-reading a {
+      font-size: 0.95rem;
     }
   }
 </style>
