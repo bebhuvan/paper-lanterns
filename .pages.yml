@@ -4,7 +4,7 @@ media:
 
 content:
   - name: letters
-    label: Letters
+    label: 📜 Letters
     type: collection
     path: src/content/letters
     fields:
@@ -131,7 +131,7 @@ content:
         hint: "Full text of the letter"
 
   - name: speeches
-    label: Speeches
+    label: 🎤 Speeches
     type: collection
     path: src/content/speeches
     fields:
@@ -207,7 +207,7 @@ content:
         required: true
 
   - name: garden
-    label: Garden
+    label: 🌱 Garden
     type: collection
     path: src/content/garden
     fields:
@@ -225,14 +225,14 @@ content:
           labels: ["💭 Thoughts", "🔗 Links", "💬 Quotes", "📝 Notes"]
         default: thoughts
       - name: date
-        type: datetime
+        type: date
         label: Date
         required: true
       - name: content
-        type: text
+        type: markdown
         label: Content
         required: true
-        hint: "The main content of this entry"
+        hint: "The main content of this entry (supports rich text formatting)"
       - name: tags
         type: array
         label: Tags
@@ -269,6 +269,7 @@ content:
       - name: link
         type: object
         label: Link Details
+        hint: "Optional - only fill if this is a link-type post"
         condition:
           field: type
           value: links
@@ -276,19 +277,17 @@ content:
           - name: title
             type: string
             label: Link Title
-            required: true
           - name: url
             type: string
             label: URL
-            required: true
           - name: domain
             type: string
             label: Domain
             hint: "e.g., example.com (auto-extracted from URL)"
           - name: preview
-            type: text
+            type: markdown
             label: Preview
-            hint: "Brief description of the link (optional)"
+            hint: "Brief description of the link (supports basic formatting)"
       - name: private
         type: boolean
         label: Private
@@ -296,7 +295,7 @@ content:
         hint: "Keep this entry private (not displayed publicly)"
 
   - name: essays
-    label: Essays
+    label: 📚 Essays
     type: collection
     path: src/content/essays
     fields:
@@ -366,7 +365,7 @@ content:
         required: true
 
   - name: lectures
-    label: Lectures
+    label: 🎓 Lectures
     type: collection
     path: src/content/lectures
     fields:
@@ -479,7 +478,7 @@ content:
         required: true
 
   - name: collections
-    label: Collections
+    label: 🗂️ Collections
     type: collection
     path: src/content/collections
     fields:
