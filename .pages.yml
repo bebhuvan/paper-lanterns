@@ -509,10 +509,10 @@ content:
         required: true
         help: Choose the type of content you're sharing
       - name: date
-        type: datetime
-        label: 📅 Date & Time
+        type: date
+        label: 📅 Date
         required: true
-        default: now
+        default: today
         help: When this was posted
       - name: content
         type: rich-text
