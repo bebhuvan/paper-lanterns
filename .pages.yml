@@ -84,16 +84,8 @@ content:
         type: select
         label: Drop Cap Color
         options:
-          - value: "#e07a5f"
-            label: "Coral"
-          - value: "#81b29a"
-            label: "Sage Green"
-          - value: "#f2cc8f"
-            label: "Golden Yellow"
-          - value: "#9381c2"
-            label: "Lavender"
-          - value: "#f07167"
-            label: "Soft Red"
+          values: ["#e07a5f", "#81b29a", "#f2cc8f", "#9381c2", "#f07167"]
+          labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red"]
         default: "#e07a5f"
       - name: about
         type: object
@@ -206,16 +198,8 @@ content:
         type: select
         label: Drop Cap Color
         options:
-          - value: "#e07a5f"
-            label: "Coral"
-          - value: "#81b29a"
-            label: "Sage Green"
-          - value: "#f2cc8f"
-            label: "Golden Yellow"
-          - value: "#9381c2"
-            label: "Lavender"
-          - value: "#f07167"
-            label: "Soft Red"
+          values: ["#e07a5f", "#81b29a", "#f2cc8f", "#9381c2", "#f07167"]
+          labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red"]
         default: "#e07a5f"
       - name: body
         type: markdown
@@ -237,14 +221,8 @@ content:
         label: Type
         required: true
         options:
-          - value: thoughts
-            label: "💭 Thoughts"
-          - value: links
-            label: "🔗 Links"
-          - value: quotes
-            label: "💬 Quotes"
-          - value: notes
-            label: "📝 Notes"
+          values: [thoughts, links, quotes, notes]
+          labels: ["💭 Thoughts", "🔗 Links", "💬 Quotes", "📝 Notes"]
         default: thoughts
       - name: date
         type: datetime
@@ -379,18 +357,8 @@ content:
         type: select
         label: Drop Cap Color
         options:
-          - value: "#e07a5f"
-            label: "Coral"
-          - value: "#81b29a"
-            label: "Sage Green"
-          - value: "#f2cc8f"
-            label: "Golden Yellow"
-          - value: "#9381c2"
-            label: "Lavender"
-          - value: "#f07167"
-            label: "Soft Red"
-          - value: "#8B4513"
-            label: "Saddle Brown"
+          values: ["#e07a5f", "#81b29a", "#f2cc8f", "#9381c2", "#f07167", "#8B4513"]
+          labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red", "Saddle Brown"]
         default: "#e07a5f"
       - name: body
         type: markdown
@@ -469,18 +437,8 @@ content:
         type: select
         label: Drop Cap Color
         options:
-          - value: "#e07a5f"
-            label: "Coral"
-          - value: "#81b29a"
-            label: "Sage Green"
-          - value: "#f2cc8f"
-            label: "Golden Yellow"
-          - value: "#9381c2"
-            label: "Lavender"
-          - value: "#f07167"
-            label: "Soft Red"
-          - value: "#9370DB"
-            label: "Medium Purple"
+          values: ["#e07a5f", "#81b29a", "#f2cc8f", "#9381c2", "#f07167", "#9370DB"]
+          labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red", "Medium Purple"]
         default: "#e07a5f"
       - name: about
         type: object
