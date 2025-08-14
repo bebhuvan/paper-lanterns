@@ -32,11 +32,13 @@ content:
     path: src/content/letters
     format: frontmatter
     extension: md
+    filename: "{slug}"
     view:
+      primary: title
       sort: date
-      reverse: true
-      search: [title, author.name, recipient, excerpt]
+      order: desc
       layout: list
+      fields: [title, recipient, date]
     fields:
       - name: title
         type: string
@@ -166,6 +168,7 @@ content:
     path: src/content/speeches
     format: frontmatter
     extension: md
+    filename: "{slug}"
     view:
       sort: date
       reverse: true
@@ -264,6 +267,7 @@ content:
     path: src/content/lectures
     format: frontmatter
     extension: md
+    filename: "{slug}"
     view:
       sort: date
       reverse: true
@@ -378,6 +382,7 @@ content:
     path: src/content/essays
     format: frontmatter
     extension: md
+    filename: "{slug}"
     fields:
       - name: title
         type: string
@@ -484,6 +489,7 @@ content:
     path: src/content/garden
     format: frontmatter
     extension: md
+    filename: "{year}-{month}-{day}-{slug}"
     view:
       sort: date
       reverse: true
