@@ -106,18 +106,14 @@ content:
         required: true
         help: Where this letter was sourced from (archive, collection, etc.)
       - name: collections
-        type: list
+        type: string
         label: 🗂️ Collections
-        field:
-          type: string
-        default: []
+        list: true
         help: Thematic collections this letter belongs to (e.g., Correspondence, Political Letters, Personal Letters)
       - name: tags
-        type: list
+        type: string
         label: 🏷️ Tags
-        field:
-          type: string
-        default: []
+        list: true
         help: Keywords for search and categorization
       - name: featured
         type: boolean
@@ -238,18 +234,14 @@ content:
         required: true
         help: Archive, collection, or original source
       - name: collections
-        type: list
+        type: string
         label: 🗂️ Collections
-        field:
-          type: string
-        default: []
+        list: true
         help: Thematic collections this speech belongs to (e.g., Presidential Speeches, Civil Rights, Wartime Addresses)
       - name: tags
-        type: list
+        type: string
         label: 🏷️ Tags
-        field:
-          type: string
-        default: []
+        list: true
         help: Keywords for search and categorization
       - name: featured
         type: boolean
@@ -503,10 +495,11 @@ content:
         type: select
         label: 📂 Post Type
         options:
-          - thoughts
-          - links
-          - quotes
-          - notes
+          values:
+            - thoughts
+            - links
+            - quotes
+            - notes
         required: true
         help: Choose the type of content you're sharing
       - name: date
@@ -524,11 +517,9 @@ content:
           extensions: [jpg, jpeg, png, gif, webp]
         help: Main content of your post (supports rich formatting)
       - name: tags
-        type: list
+        type: string
         label: 🏷️ Tags
-        field:
-          type: string
-        default: []
+        list: true
         help: Topics and themes for categorization (add custom tags)
       - name: featured
         type: boolean
@@ -587,12 +578,13 @@ content:
         type: select
         label: 🎭 Mood/Tone
         options:
-          - curious
-          - reflective
-          - excited
-          - thoughtful
-          - nostalgic
-          - analytical
+          values:
+            - curious
+            - reflective
+            - excited
+            - thoughtful
+            - nostalgic
+            - analytical
         help: Optional mood indicator for the post
 
   # Collections Metadata
