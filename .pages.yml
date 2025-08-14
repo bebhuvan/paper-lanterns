@@ -587,6 +587,10 @@ content:
             - nostalgic
             - analytical
         help: Optional mood indicator for the post
+      - name: body
+        type: rich-text
+        label: 📝 Full Content (Body)
+        help: Extended content that goes in the markdown body (optional)
 
   # Collections Metadata
   - name: collections_meta
