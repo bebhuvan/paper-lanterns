@@ -31,7 +31,6 @@ content:
     label: 📜 Historical Letters
     path: src/content/letters
     format: md
-    filename: "{slug}.md"
     view:
       primary: title
       sort: date
@@ -166,7 +165,6 @@ content:
     label: 🎤 Historical Speeches
     path: src/content/speeches
     format: md
-    filename: "{slug}.md"
     view:
       sort: date
       reverse: true
@@ -264,7 +262,6 @@ content:
     label: 🎓 Academic Lectures
     path: src/content/lectures
     format: md
-    filename: "{slug}.md"
     view:
       sort: date
       reverse: true
@@ -378,7 +375,6 @@ content:
     label: 📚 Historical Essays
     path: src/content/essays
     format: md
-    filename: "{slug}.md"
     fields:
       - name: title
         type: string
@@ -484,7 +480,6 @@ content:
     label: 🌱 Garden Posts
     path: src/content/garden
     format: md
-    filename: "{year}-{month}-{day}-{slug}.md"
     view:
       sort: date
       reverse: true
@@ -599,7 +594,6 @@ content:
     label: Collection Metadata
     path: src/content/collections
     format: md
-    filename: "{slug}.md"
     fields:
       - name: name
         type: string
