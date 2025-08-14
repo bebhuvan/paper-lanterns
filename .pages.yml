@@ -109,18 +109,9 @@ content:
         type: list
         label: 🗂️ Collections
         field:
-          type: select
-          options:
-            - "Correspondence"
-            - "Political Letters"
-            - "Personal Letters"
-            - "Literary Letters"
-            - "Scientific Letters"
-            - "Love Letters"
-            - "War Letters"
-            - "Featured"
+          type: string
         default: []
-        help: Thematic collections this letter belongs to
+        help: Thematic collections this letter belongs to (e.g., Correspondence, Political Letters, Personal Letters)
       - name: tags
         type: list
         label: 🏷️ Tags
@@ -225,20 +216,9 @@ content:
         label: 🌍 Location Delivered
         help: Venue, city, or event location
       - name: occasion
-        type: select
+        type: string
         label: 🏛️ Occasion/Event
-        options:
-          - "Political Rally"
-          - "Congressional Address"
-          - "University Commencement"
-          - "Memorial Service"
-          - "Conference"
-          - "Convention"
-          - "Protest/Demonstration"
-          - "Award Ceremony"
-          - "Religious Service"
-          - "Other"
-        help: Type of event where speech was delivered
+        help: Type of event where speech was delivered (e.g., Political Rally, Congressional Address, University Commencement)
       - name: context
         type: rich-text
         label: 📖 Historical Context
@@ -261,18 +241,9 @@ content:
         type: list
         label: 🗂️ Collections
         field:
-          type: select
-          options:
-            - "Presidential Speeches"
-            - "Civil Rights"
-            - "Wartime Addresses"
-            - "Academic Lectures"
-            - "Religious Sermons"
-            - "Political Oratory"
-            - "Inaugural Addresses"
-            - "Featured"
+          type: string
         default: []
-        help: Thematic collections this speech belongs to
+        help: Thematic collections this speech belongs to (e.g., Presidential Speeches, Civil Rights, Wartime Addresses)
       - name: tags
         type: list
         label: 🏷️ Tags
@@ -532,14 +503,10 @@ content:
         type: select
         label: 📂 Post Type
         options:
-          - value: thoughts
-            label: 💭 Thoughts
-          - value: links
-            label: 🔗 Links
-          - value: quotes
-            label: 💬 Quotes
-          - value: notes
-            label: 📋 Notes
+          - thoughts
+          - links
+          - quotes
+          - notes
         required: true
         help: Choose the type of content you're sharing
       - name: date
@@ -560,26 +527,9 @@ content:
         type: list
         label: 🏷️ Tags
         field:
-          type: select
-          options:
-            - books
-            - history
-            - philosophy
-            - science
-            - art
-            - literature
-            - politics
-            - culture
-            - discovery
-            - reflection
-            - reading
-            - research
-            - archive
-            - curiosity
-            - wisdom
-            - insight
+          type: string
         default: []
-        help: Topics and themes for categorization
+        help: Topics and themes for categorization (add custom tags)
       - name: featured
         type: boolean
         label: ⭐ Featured Post
@@ -637,18 +587,12 @@ content:
         type: select
         label: 🎭 Mood/Tone
         options:
-          - value: curious
-            label: 🤔 Curious
-          - value: reflective
-            label: 🤲 Reflective
-          - value: excited
-            label: ✨ Excited
-          - value: thoughtful
-            label: 💭 Thoughtful
-          - value: nostalgic
-            label: 🕰️ Nostalgic
-          - value: analytical
-            label: 🔬 Analytical
+          - curious
+          - reflective
+          - excited
+          - thoughtful
+          - nostalgic
+          - analytical
         help: Optional mood indicator for the post
 
   # Collections Metadata
@@ -675,25 +619,3 @@ content:
         default: "#d4a574"
         help: Hex color code for collection theming
 
-# View configuration
-view:
-  garden:
-    sort: date
-    reverse: true
-    fields: [title, type, date, featured]
-  letters:
-    sort: date
-    reverse: true
-    fields: [title, author.name, recipient, date, featured]
-  speeches:
-    sort: date
-    reverse: true
-    fields: [title, author.name, date, featured]
-  lectures:
-    sort: date
-    reverse: true
-    fields: [title, author.name, institution, date, featured]
-  essays:
-    sort: date
-    reverse: true
-    fields: [title, author.name, publication, date, featured]
