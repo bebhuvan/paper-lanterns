@@ -30,7 +30,8 @@ content:
     type: collection
     label: 📜 Historical Letters
     path: src/content/letters
-    format: md
+    format: frontmatter
+    extension: md
     view:
       sort: date
       reverse: true
@@ -163,7 +164,8 @@ content:
     type: collection
     label: 🎤 Historical Speeches
     path: src/content/speeches
-    format: md
+    format: frontmatter
+    extension: md
     view:
       sort: date
       reverse: true
@@ -260,7 +262,8 @@ content:
     type: collection
     label: 🎓 Academic Lectures
     path: src/content/lectures
-    format: md
+    format: frontmatter
+    extension: md
     view:
       sort: date
       reverse: true
@@ -371,9 +374,10 @@ content:
   # Essays Collection
   - name: essays
     type: collection
-    label: Historical Essays
+    label: 📚 Historical Essays
     path: src/content/essays
-    format: md
+    format: frontmatter
+    extension: md
     fields:
       - name: title
         type: string
@@ -478,7 +482,8 @@ content:
     type: collection
     label: 🌱 Garden Posts
     path: src/content/garden
-    format: md
+    format: frontmatter
+    extension: md
     view:
       sort: date
       reverse: true
