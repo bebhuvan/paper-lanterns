@@ -9,9 +9,9 @@ recipient: "His Brothers"
 date: 1802-10-06
 context: "The Heiligenstadt Testament, October 6, 1802"
 location: "Heiligenstadt, Austria"
-excerpt: "It was impossible for me to leave the world before I had brought forth all that I felt called upon to bring forth. Oh, you men who think or say that I am malevolent, stubborn, or misanthropic, how greatly do you wrong me."
+excerpt: "O you men who think or say that I am malevolent, stubborn or misanthropic, how greatly do you wrong me, you do not know the secret causes of my seeming."
 signature: "Ludwig van Beethoven"
-source: "Beethoven House Bonn (Public Domain)"
+source: "Wikisource - Heiligenstadt Testament, Public Domain"
 collections: ["artistic-letters", "personal-testament", "overcoming-adversity"]
 tags: ["music", "deafness", "despair", "transcendence", "art"]
 featured: true
@@ -22,6 +22,9 @@ about:
   author_bio: "Ludwig van Beethoven (1770-1827) was a German composer whose works represent the pinnacle of the Classical period and the beginning of Romantic music. Despite progressive hearing loss, he composed some of history's greatest musical masterpieces."
   recipient_info: "This testament was addressed to Beethoven's brothers Carl and Johann, though it was never delivered to them. It was discovered after his death and provides insight into his most private thoughts and struggles."
   links:
+    - title: "Heiligenstadt Testament - Wikisource"
+      url: "https://en.wikisource.org/wiki/Heiligenstadt_Testament"
+      description: "Original source text of Beethoven's testament"
     - title: "Ludwig van Beethoven on Wikipedia"
       url: "https://en.wikipedia.org/wiki/Ludwig_van_Beethoven"
       description: "Complete biography of the Classical/Romantic composer"
@@ -33,36 +36,18 @@ about:
       description: "Museum at Beethoven's birthplace in Germany"
 ---
 
-It was impossible for me to leave the world before I had brought forth all that I felt called upon to bring forth. Oh, you men who think or say that I am malevolent, stubborn, or misanthropic, how greatly do you wrong me.
+For my brothers Carl and [Johann] Beethoven.
 
-For my brothers Carl and Johann van Beethoven, though these words may reach you only after my death—I write to you from the depths of my despair, yet also from the heights of my resolve.
+O you men who think or say that I am malevolent, stubborn or misanthropic, how greatly do you wrong me, you do not know the secret causes of my seeming, from childhood my heart and mind were disposed to the gentle feelings of good will, I was even ever eager to accomplish great deeds, but reflect now that for six years I have been a hopeless case, aggravated by senseless physicians, cheated year after year in the hope of improvement, finally compelled to face the prospect of a lasting malady (whose cure will take years or, perhaps, be impossible), born with an ardent and lively temperament, even susceptible to the diversions of society, I was compelled early to isolate myself, to live in loneliness, when I at times tried to forget all this, O how harshly was I repulsed by the doubly sad experience of my bad hearing, and yet it was impossible for me to say to men speak louder, shout, for I am deaf.
 
-You do not know the secret fire that has been consuming me for years. What appears to you as anger, as withdrawal from society, as the peculiar behavior of an eccentric musician, is in truth the agony of a man who lives for sound yet finds himself increasingly cut off from the world of hearing.
+Ah how could I possibly admit such an infirmity in the one sense which should have been more perfect in me than in others, a sense which I once possessed in highest perfection, a perfection such as few surely in my profession enjoy or have enjoyed — O I cannot do it, therefore forgive me when you see me draw back when I would gladly mingle with you, my misfortune is doubly painful because it must lead to my being misunderstood, for me there can be no recreations in society of my fellows, refined intercourse, mutual exchange of thought, only just as little as the greatest needs command may I mix with society, I must live like an exile, if I approach near to people a hot terror seizes upon me, a fear that I may be subjected to the danger of letting my condition be observed — thus it has been during the last half year which I spent in the country, commanded by my intelligent physician to spare my hearing as much as possible, in this almost meeting my present natural disposition, although I sometimes ran counter to it yielding to my inclination for society, but what a humiliation when one stood beside me and heard a flute in the distance and I heard nothing, or someone heard the shepherd singing and again I heard nothing.
 
-My deafness grows worse each day. In company, I must stand close to hear the orchestra; I cannot hear the high notes of instruments or voices. What torture when someone standing next to me hears a flute in the distance and I hear nothing, or when someone mentions hearing a shepherd singing, and again I hear nothing.
+Such incidents brought me to the verge of despair, but little more and I would have put an end to my life — only Art it was that withheld me, ah it seemed impossible to leave the world until I had produced all that I felt called upon me to produce, and so I endured this wretched existence — truly wretched, an excitable body which a sudden change can throw from the best into the worst state — Patience — it is said that I must now choose for my guide, I have done so, I hope my determination will remain firm to endure until it please the inexorable parcae to break the thread, perhaps I shall get better, perhaps not, I am prepared.
 
-Such incidents brought me close to despair. Little more and I would have put an end to my life. Only art, only my music, held me back. Oh, it seemed impossible to leave the world before I had produced all that I felt called upon to produce.
+Forced already in my 28th year to become a philosopher, O it is not easy, less easy for the artist than for anyone else — Divine One thou lookest into my inmost soul, thou knowest it, thou knowest that love of man and desire to do good live therein. O men, when some day you read these words, reflect that you did me wrong and let the unfortunate one comfort himself and find one of his kind who despite all obstacles of nature yet did all that was in his power to be accepted among worthy artists and men.
 
-But what humiliation when someone stood next to me and heard a flute in the distance and I heard nothing, or when someone mentioned hearing a shepherd sing and again I heard nothing. Such experiences almost drove me to despair; at times it was impossible for me to conceive that I could live as an artist.
+You my brothers Carl and [Johann] as soon as I am dead if Dr. Schmid is still alive ask him in my name to describe my malady and attach this document to the history of my illness so that so far as possible at least the world may become reconciled with me after my death. At the same time I declare you two to be the heirs to my small fortune (if so it can be called), divide it fairly, bear with and help each other, what injury you have done me you know was long ago forgiven. To you brother Carl I give special thanks for the attachment you have displayed towards me of late. It is my wish that your lives be better and freer from care than I have had, recommend virtue to your children, it alone can give happiness, not money, I speak from experience, it was virtue that upheld me in misery, to it next to my art I owe the fact that I did not end my life with suicide. — Farewell and love each other — I thank all my friends, particularly Prince Lichnowsky and Professor Schmid — I desire that the instruments from Prince L. be preserved by one of you but let no quarrel result from this, so soon as they can serve you better purpose sell them, how glad will I be if I can still be helpful to you in my grave — with joy I hasten towards death — if it comes before I shall have had an opportunity to show all my artistic capacities it will still come too early for me despite my hard fate and I shall probably wish it had come later — but even then I am satisfied, will it not free me from my state of endless suffering? Come when thou will I shall meet thee bravely. — Farewell and do not wholly forget me when I am dead, I deserve this of you in having often in life thought of you how to make you happy, be so —
 
-Yet it has been impossible for me to leave this world before I have produced all that I felt called upon to produce. And so I have endured this wretched existence—wretched indeed, with a body so sensitive that any fairly sudden change can plunge me from the best into the worst state.
+Ludwig van Beethoven
 
-Patience—that is what I must choose for my guide. I have done so. I hope my resolve will remain firm until it pleases the inexorable Parcae to break the thread. Perhaps things will improve, perhaps not; I am prepared for anything.
-
-Already at twenty-eight I was forced to become a philosopher. This is not easy; for an artist it is harder than for anyone else. Divine One, you see into my heart, you know it, you know that love for mankind and a desire to do good dwell there.
-
-Oh you men who consider me hostile, stubborn, or misanthropic, how you wrong me! You do not know the secret reason for what appears to you as such. From childhood, my heart and mind were inclined toward benevolence. I was always ready to perform great deeds.
-
-But consider that for six years now I have been afflicted with an incurable condition, made worse by incompetent doctors. Year after year I have been deceived by the hope of improvement, and finally I have been forced to accept the prospect of a permanent infirmity.
-
-Born with a passionate and excitable temperament, sensitive to the diversions of society, I was forced early to isolate myself and live in loneliness. If I occasionally tried to ignore all this, how harshly I was reminded by the doubly sad experience of my bad hearing!
-
-But what a humiliation for me when someone standing next to me heard a flute in the distance and I heard nothing, or when someone heard a shepherd singing and again I heard nothing. Such experiences brought me to the verge of despair; it would have taken little more for me to end my life.
-
-Only art held me back. It seemed impossible to leave the world before I had brought forth everything I felt called upon to bring forth. And so I endured this wretched existence.
-
-Forgive me if you see me withdraw when I would gladly mingle with you. My misfortune is doubly painful because it leads to my being misunderstood. Recreation in human company, refined conversation, mutual outpourings of thoughts are denied to me.
-
-But it was impossible for me to say to people: speak louder, shout, because I am deaf. How could I admit to a weakness in the one sense that should be perfect in me to a higher degree than in others—a sense I once possessed in the greatest perfection?
-
-Oh Divine One, you look down upon my innermost soul, you understand, you know that therein dwells the love of mankind and the desire to do good.
+Heiligenstadt October 6 1802

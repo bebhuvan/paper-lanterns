@@ -1,0 +1,699 @@
+# PagesCMS Configuration for Paper Lanterns
+# https://pagescms.org/docs/configuration/
+
+# Global settings
+settings:
+  hide_settings: false
+
+# Media configuration with comprehensive file support
+media:
+  - name: images
+    input: public/images
+    output: /images
+    extensions: [jpg, jpeg, png, gif, webp, svg, avif]
+    categories: [images]
+  - name: documents
+    input: public/documents
+    output: /documents
+    extensions: [pdf, doc, docx, txt, rtf, odt]
+    categories: [documents]
+  - name: archives
+    input: public/archives
+    output: /archives
+    extensions: [zip, tar, gz, rar]
+    categories: [archives]
+
+# Content collections
+content:
+  # Letters Collection
+  - name: letters
+    type: collection
+    label: 📜 Historical Letters
+    path: src/content/letters
+    format: md
+    view:
+      sort: date
+      reverse: true
+      search: [title, author.name, recipient, excerpt]
+      layout: list
+    fields:
+      - name: title
+        type: string
+        label: Letter Title
+        required: true
+        help: Descriptive title for the letter
+      - name: author
+        type: object
+        label: 👤 Author Information
+        required: true
+        fields:
+          - name: name
+            type: string
+            label: Author Name
+            required: true
+            help: Full name of the letter writer
+          - name: birth_year
+            type: number
+            label: Birth Year
+            min: 1
+            max: 2024
+          - name: death_year
+            type: number
+            label: Death Year
+            min: 1
+            max: 2024
+          - name: bio
+            type: rich-text
+            label: Author Biography
+            options:
+              path: images/authors
+              extensions: [jpg, jpeg, png, webp]
+            help: Brief biographical information about the author
+      - name: recipient
+        type: string
+        label: 📧 Recipient
+        required: true
+        help: Person or organization receiving the letter
+      - name: date
+        type: date
+        label: 📅 Date Written
+        required: true
+        help: Date when the letter was written
+      - name: location
+        type: string
+        label: 🌍 Location Written
+        help: City, country, or specific place where letter was written
+      - name: context
+        type: rich-text
+        label: 📖 Historical Context
+        required: true
+        options:
+          path: images/context
+          extensions: [jpg, jpeg, png, webp]
+        help: Historical background and significance
+      - name: excerpt
+        type: text
+        label: ✨ Brief Excerpt
+        required: true
+        help: Compelling excerpt to display in previews (2-3 sentences)
+      - name: signature
+        type: string
+        label: ✍️ Letter Signature
+        help: How the letter was signed off
+      - name: source
+        type: string
+        label: 📚 Source Attribution
+        required: true
+        help: Where this letter was sourced from (archive, collection, etc.)
+      - name: collections
+        type: list
+        label: 🗂️ Collections
+        field:
+          type: select
+          options:
+            - "Correspondence"
+            - "Political Letters"
+            - "Personal Letters"
+            - "Literary Letters"
+            - "Scientific Letters"
+            - "Love Letters"
+            - "War Letters"
+            - "Featured"
+        default: []
+        help: Thematic collections this letter belongs to
+      - name: tags
+        type: list
+        label: 🏷️ Tags
+        field:
+          type: string
+        default: []
+        help: Keywords for search and categorization
+      - name: featured
+        type: boolean
+        label: ⭐ Featured Letter
+        default: false
+        help: Display prominently on homepage
+      - name: drop_cap_color
+        type: string
+        label: 🎨 Drop Cap Color
+        default: "#e07a5f"
+        pattern: "^#[0-9A-Fa-f]{6}$"
+        help: Hex color code for the decorative first letter
+      - name: about
+        type: object
+        label: About Section
+        fields:
+          - name: context
+            type: text
+            label: Additional Context
+          - name: significance
+            type: text
+            label: Historical Significance
+          - name: author_bio
+            type: text
+            label: Extended Author Bio
+          - name: recipient_info
+            type: text
+            label: Recipient Information
+          - name: links
+            type: list
+            label: Related Links
+            field:
+              type: object
+              fields:
+                - name: title
+                  type: string
+                  label: Link Title
+                - name: url
+                  type: string
+                  label: URL
+                - name: description
+                  type: string
+                  label: Link Description
+
+  # Speeches Collection
+  - name: speeches
+    type: collection
+    label: 🎤 Historical Speeches
+    path: src/content/speeches
+    format: md
+    view:
+      sort: date
+      reverse: true
+      search: [title, author.name, excerpt, occasion]
+      layout: list
+    fields:
+      - name: title
+        type: string
+        label: 📢 Speech Title
+        required: true
+        help: Full title of the speech
+      - name: author
+        type: object
+        label: 👤 Speaker Information
+        required: true
+        fields:
+          - name: name
+            type: string
+            label: Speaker Name
+            required: true
+            help: Full name of the speaker
+          - name: birth_year
+            type: number
+            label: Birth Year
+            min: 1
+            max: 2024
+          - name: death_year
+            type: number
+            label: Death Year
+            min: 1
+            max: 2024
+          - name: bio
+            type: rich-text
+            label: Speaker Biography
+            options:
+              path: images/speakers
+              extensions: [jpg, jpeg, png, webp]
+            help: Brief biographical information about the speaker
+      - name: date
+        type: date
+        label: 📅 Date Delivered
+        required: true
+        help: Date when the speech was given
+      - name: location
+        type: string
+        label: 🌍 Location Delivered
+        help: Venue, city, or event location
+      - name: occasion
+        type: select
+        label: 🏛️ Occasion/Event
+        options:
+          - "Political Rally"
+          - "Congressional Address"
+          - "University Commencement"
+          - "Memorial Service"
+          - "Conference"
+          - "Convention"
+          - "Protest/Demonstration"
+          - "Award Ceremony"
+          - "Religious Service"
+          - "Other"
+        help: Type of event where speech was delivered
+      - name: context
+        type: rich-text
+        label: 📖 Historical Context
+        required: true
+        options:
+          path: images/context
+          extensions: [jpg, jpeg, png, webp]
+        help: Historical background and significance
+      - name: excerpt
+        type: text
+        label: ✨ Brief Excerpt
+        required: true
+        help: Compelling excerpt to display in previews
+      - name: source
+        type: string
+        label: 📚 Source Attribution
+        required: true
+        help: Archive, collection, or original source
+      - name: collections
+        type: list
+        label: 🗂️ Collections
+        field:
+          type: select
+          options:
+            - "Presidential Speeches"
+            - "Civil Rights"
+            - "Wartime Addresses"
+            - "Academic Lectures"
+            - "Religious Sermons"
+            - "Political Oratory"
+            - "Inaugural Addresses"
+            - "Featured"
+        default: []
+        help: Thematic collections this speech belongs to
+      - name: tags
+        type: list
+        label: 🏷️ Tags
+        field:
+          type: string
+        default: []
+        help: Keywords for search and categorization
+      - name: featured
+        type: boolean
+        label: ⭐ Featured Speech
+        default: false
+        help: Display prominently on homepage
+      - name: drop_cap_color
+        type: string
+        label: 🎨 Drop Cap Color
+        default: "#e07a5f"
+        pattern: "^#[0-9A-Fa-f]{6}$"
+        help: Hex color code for the decorative first letter
+
+  # Lectures Collection
+  - name: lectures
+    type: collection
+    label: 🎓 Academic Lectures
+    path: src/content/lectures
+    format: md
+    view:
+      sort: date
+      reverse: true
+      search: [title, author.name, excerpt, institution]
+      layout: list
+    fields:
+      - name: title
+        type: string
+        label: Lecture Title
+        required: true
+      - name: author
+        type: object
+        label: Lecturer Information
+        fields:
+          - name: name
+            type: string
+            label: Lecturer Name
+            required: true
+          - name: birth_year
+            type: number
+            label: Birth Year
+          - name: death_year
+            type: number
+            label: Death Year
+          - name: bio
+            type: text
+            label: Brief Biography
+      - name: date
+        type: date
+        label: Date Delivered
+        required: true
+      - name: location
+        type: string
+        label: Location Delivered
+      - name: institution
+        type: string
+        label: Institution
+      - name: series
+        type: string
+        label: Lecture Series
+      - name: lecture_number
+        type: number
+        label: Lecture Number
+      - name: context
+        type: text
+        label: Academic Context
+        required: true
+      - name: excerpt
+        type: text
+        label: Brief Excerpt
+        required: true
+      - name: source
+        type: string
+        label: Source Attribution
+        required: true
+      - name: collections
+        type: list
+        label: Collections
+        field:
+          type: string
+        default: []
+      - name: tags
+        type: list
+        label: Tags
+        field:
+          type: string
+        default: []
+      - name: featured
+        type: boolean
+        label: Featured Lecture
+        default: false
+      - name: drop_cap_color
+        type: string
+        label: Drop Cap Color
+        default: "#e07a5f"
+      - name: about
+        type: object
+        label: About Section
+        fields:
+          - name: context
+            type: text
+            label: Additional Context
+          - name: significance
+            type: text
+            label: Academic Significance
+          - name: author_bio
+            type: text
+            label: Extended Author Bio
+          - name: series_info
+            type: text
+            label: Series Information
+          - name: links
+            type: list
+            label: Related Links
+            field:
+              type: object
+              fields:
+                - name: title
+                  type: string
+                  label: Link Title
+                - name: url
+                  type: string
+                  label: URL
+                - name: description
+                  type: string
+                  label: Link Description
+
+  # Essays Collection
+  - name: essays
+    type: collection
+    label: Historical Essays
+    path: src/content/essays
+    format: md
+    fields:
+      - name: title
+        type: string
+        label: Essay Title
+        required: true
+      - name: author
+        type: object
+        label: Author Information
+        fields:
+          - name: name
+            type: string
+            label: Author Name
+            required: true
+          - name: birth_year
+            type: number
+            label: Birth Year
+          - name: death_year
+            type: number
+            label: Death Year
+          - name: bio
+            type: text
+            label: Brief Biography
+      - name: date
+        type: date
+        label: Date Written/Published
+        required: true
+      - name: publication
+        type: string
+        label: Original Publication
+      - name: journal
+        type: string
+        label: Journal/Magazine
+      - name: essay_collection
+        type: string
+        label: Essay Collection Book
+      - name: context
+        type: text
+        label: Historical Context
+        required: true
+      - name: excerpt
+        type: text
+        label: Brief Excerpt
+        required: true
+      - name: source
+        type: string
+        label: Source Attribution
+        required: true
+      - name: collections
+        type: list
+        label: Collections
+        field:
+          type: string
+        default: []
+      - name: tags
+        type: list
+        label: Tags
+        field:
+          type: string
+        default: []
+      - name: featured
+        type: boolean
+        label: Featured Essay
+        default: false
+      - name: drop_cap_color
+        type: string
+        label: Drop Cap Color
+        default: "#e07a5f"
+      - name: about
+        type: object
+        label: About Section
+        fields:
+          - name: context
+            type: text
+            label: Additional Context
+          - name: significance
+            type: text
+            label: Literary Significance
+          - name: author_bio
+            type: text
+            label: Extended Author Bio
+          - name: publication_info
+            type: text
+            label: Publication Information
+          - name: links
+            type: list
+            label: Related Links
+            field:
+              type: object
+              fields:
+                - name: title
+                  type: string
+                  label: Link Title
+                - name: url
+                  type: string
+                  label: URL
+                - name: description
+                  type: string
+                  label: Link Description
+
+  # Garden Collection (Microblog)
+  - name: garden
+    type: collection
+    label: 🌱 Garden Posts
+    path: src/content/garden
+    format: md
+    view:
+      sort: date
+      reverse: true
+      search: [title, content, tags]
+      layout: list
+      fields: [title, type, date, featured, private]
+    fields:
+      - name: title
+        type: string
+        label: 📝 Post Title
+        required: true
+        help: Catchy title for your garden post
+      - name: type
+        type: select
+        label: 📂 Post Type
+        options:
+          - value: thoughts
+            label: 💭 Thoughts
+          - value: links
+            label: 🔗 Links
+          - value: quotes
+            label: 💬 Quotes
+          - value: notes
+            label: 📋 Notes
+        required: true
+        help: Choose the type of content you're sharing
+      - name: date
+        type: datetime
+        label: 📅 Date & Time
+        required: true
+        default: now
+        help: When this was posted
+      - name: content
+        type: rich-text
+        label: ✍️ Post Content
+        required: true
+        options:
+          path: images/garden
+          extensions: [jpg, jpeg, png, gif, webp]
+        help: Main content of your post (supports rich formatting)
+      - name: tags
+        type: list
+        label: 🏷️ Tags
+        field:
+          type: select
+          options:
+            - books
+            - history
+            - philosophy
+            - science
+            - art
+            - literature
+            - politics
+            - culture
+            - discovery
+            - reflection
+            - reading
+            - research
+            - archive
+            - curiosity
+            - wisdom
+            - insight
+        default: []
+        help: Topics and themes for categorization
+      - name: featured
+        type: boolean
+        label: ⭐ Featured Post
+        default: false
+        help: Highlight this post on the garden homepage
+      - name: private
+        type: boolean
+        label: 🔒 Private Post
+        default: false
+        help: Private posts won't be displayed publicly
+      - name: attribution
+        type: string
+        label: 👤 Attribution
+        help: For quotes - who said/wrote this?
+      - name: author
+        type: string
+        label: ✍️ Original Author
+        help: For quotes - the original author
+      - name: source
+        type: string
+        label: 📚 Source
+        help: Book, speech, letter, etc. where quote originated
+      - name: link
+        type: object
+        label: 🌐 External Link
+        help: For link-type posts - add external reference
+        fields:
+          - name: title
+            type: string
+            label: Link Title
+            required: true
+            help: Title of the linked content
+          - name: url
+            type: string
+            label: URL
+            required: true
+            pattern: "^https?://.+"
+            help: Full URL starting with http:// or https://
+          - name: domain
+            type: string
+            label: Domain
+            help: e.g., "example.com" - will auto-populate from URL
+          - name: preview
+            type: rich-text
+            label: Link Preview
+            options:
+              path: images/links
+              extensions: [jpg, jpeg, png, webp]
+            help: Brief description or excerpt from the linked content
+      - name: image
+        type: image
+        label: 🖼️ Featured Image
+        help: Optional image to accompany the post
+      - name: mood
+        type: select
+        label: 🎭 Mood/Tone
+        options:
+          - value: curious
+            label: 🤔 Curious
+          - value: reflective
+            label: 🤲 Reflective
+          - value: excited
+            label: ✨ Excited
+          - value: thoughtful
+            label: 💭 Thoughtful
+          - value: nostalgic
+            label: 🕰️ Nostalgic
+          - value: analytical
+            label: 🔬 Analytical
+        help: Optional mood indicator for the post
+
+  # Collections Metadata
+  - name: collections_meta
+    type: collection
+    label: Collection Metadata
+    path: src/content/collections
+    format: md
+    fields:
+      - name: name
+        type: string
+        label: Collection Name
+        required: true
+      - name: description
+        type: text
+        label: Collection Description
+        required: true
+      - name: featured_image
+        type: image
+        label: Featured Image
+      - name: color
+        type: string
+        label: Theme Color
+        default: "#d4a574"
+        help: Hex color code for collection theming
+
+# View configuration
+view:
+  garden:
+    sort: date
+    reverse: true
+    fields: [title, type, date, featured]
+  letters:
+    sort: date
+    reverse: true
+    fields: [title, author.name, recipient, date, featured]
+  speeches:
+    sort: date
+    reverse: true
+    fields: [title, author.name, date, featured]
+  lectures:
+    sort: date
+    reverse: true
+    fields: [title, author.name, institution, date, featured]
+  essays:
+    sort: date
+    reverse: true
+    fields: [title, author.name, publication, date, featured]

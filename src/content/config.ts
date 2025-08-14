@@ -139,6 +139,31 @@ const collectionsContent = defineCollection({
   }),
 });
 
+const garden = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    type: z.enum(['thoughts', 'links', 'quotes', 'notes']),
+    date: z.coerce.date(),
+    content: z.string(),
+    tags: z.array(z.string()).default([]),
+    featured: z.boolean().default(false),
+    // For quote type posts
+    attribution: z.string().optional(),
+    author: z.string().optional(),
+    source: z.string().optional(),
+    // For link type posts
+    link: z.object({
+      title: z.string(),
+      url: z.string().url(),
+      domain: z.string(),
+      preview: z.string().optional(),
+    }).optional(),
+    // For private notes (not displayed publicly)
+    private: z.boolean().default(false),
+  }),
+});
+
 // Define letters_backup as a collection but mark it as draft/ignored
 // This prevents the deprecation warning about auto-generated collections
 const lettersBackup = defineCollection({
@@ -157,5 +182,6 @@ export const collections = {
   lectures,
   essays,
   collections: collectionsContent,
+  garden,
   letters_backup: lettersBackup,
 };

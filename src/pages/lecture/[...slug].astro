@@ -292,6 +292,9 @@ const relatedContent = [...relatedByAuthor, ...relatedByTags].slice(0, 4);
     line-height: 1.75;
     color: var(--text-primary);
     position: relative;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
   }
 
   .lecture-content :global(p:first-of-type::first-letter) {

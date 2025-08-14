@@ -660,12 +660,12 @@ allContent.forEach(item => {
 
   @media (max-width: 768px) {
     .container {
-      padding: 4rem 1.5rem 2rem;
+      padding: 5rem 1.5rem 2rem; /* More top padding for fixed nav */
       max-width: 100%;
     }
 
     .header {
-      padding: 8rem 0 6rem;
+      padding: 6rem 0 4rem; /* Reduced for mobile screens */
     }
 
     .site-title {
@@ -673,8 +673,9 @@ allContent.forEach(item => {
     }
 
     .hero-text {
-      font-size: 1.1rem;
-      line-height: 1.7;
+      font-size: 1.15rem; /* Slightly larger for readability */
+      line-height: 1.75;
+      padding: 0 0.5rem; /* Add some padding */
     }
 
     .intro-text {
@@ -710,7 +711,8 @@ allContent.forEach(item => {
     }
 
     .type-card {
-      padding: 1.25rem;
+      padding: 1.5rem; /* More padding for touch */
+      min-height: 120px; /* Ensure minimum height */
     }
 
     .type-name {
@@ -735,7 +737,8 @@ allContent.forEach(item => {
       min-width: auto;
       flex-direction: row;
       justify-content: space-between;
-      padding: 1rem 1.25rem;
+      padding: 1.25rem 1.5rem; /* More padding for touch targets */
+      min-height: 56px; /* Ensure good touch target size */
     }
 
     .era-name {
