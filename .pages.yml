@@ -30,9 +30,8 @@ content:
     type: collection
     label: 📜 Historical Letters
     path: src/content/letters
-    format: frontmatter
-    extension: md
-    filename: "{slug}"
+    format: md
+    filename: "{slug}.md"
     view:
       primary: title
       sort: date
@@ -166,9 +165,8 @@ content:
     type: collection
     label: 🎤 Historical Speeches
     path: src/content/speeches
-    format: frontmatter
-    extension: md
-    filename: "{slug}"
+    format: md
+    filename: "{slug}.md"
     view:
       sort: date
       reverse: true
@@ -265,9 +263,8 @@ content:
     type: collection
     label: 🎓 Academic Lectures
     path: src/content/lectures
-    format: frontmatter
-    extension: md
-    filename: "{slug}"
+    format: md
+    filename: "{slug}.md"
     view:
       sort: date
       reverse: true
@@ -380,9 +377,8 @@ content:
     type: collection
     label: 📚 Historical Essays
     path: src/content/essays
-    format: frontmatter
-    extension: md
-    filename: "{slug}"
+    format: md
+    filename: "{slug}.md"
     fields:
       - name: title
         type: string
@@ -487,9 +483,8 @@ content:
     type: collection
     label: 🌱 Garden Posts
     path: src/content/garden
-    format: frontmatter
-    extension: md
-    filename: "{year}-{month}-{day}-{slug}"
+    format: md
+    filename: "{year}-{month}-{day}-{slug}.md"
     view:
       sort: date
       reverse: true
@@ -604,6 +599,7 @@ content:
     label: Collection Metadata
     path: src/content/collections
     format: md
+    filename: "{slug}.md"
     fields:
       - name: name
         type: string
