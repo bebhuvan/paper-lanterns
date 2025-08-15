@@ -55,6 +55,22 @@ const speeches = defineCollection({
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     drop_cap_color: z.string().default('#e07a5f'),
+    video: z.object({
+      youtube_id: z.string(),
+      title: z.string(),
+      description: z.string().optional(),
+    }).optional(),
+    about: z.object({
+      context: z.string().optional(),
+      significance: z.string().optional(),
+      author_bio: z.string().optional(),
+      occasion_info: z.string().optional(),
+      links: z.array(z.object({
+        title: z.string(),
+        url: z.string().url(),
+        description: z.string().optional(),
+      })).default([]),
+    }).optional(),
   }),
 });
 

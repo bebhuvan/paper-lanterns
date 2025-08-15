@@ -47,6 +47,24 @@ const nextSpeech = currentIndex < allSpeeches.length - 1 ? allSpeeches[currentIn
         </div>
       </div>
       
+      {speech.data.video && speech.data.video.youtube_id && (
+        <div class="video-section">
+          <h3 class="video-title">Watch the Historic Speech</h3>
+          <div class="video-container">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${speech.data.video.youtube_id}?rel=0&modestbranding=1`}
+              title={speech.data.video.title || "Speech Video"}
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          {speech.data.video.description && (
+            <p class="video-description">{speech.data.video.description}</p>
+          )}
+        </div>
+      )}
+
       <div class="speech-content" style={`--drop-cap-color: ${speech.data.drop_cap_color}`}>
         <Content />
       </div>
@@ -240,6 +258,51 @@ const nextSpeech = currentIndex < allSpeeches.length - 1 ? allSpeeches[currentIn
 
   .speech-content :global(p:last-child) {
     margin-bottom: 0;
+  }
+
+  .video-section {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .video-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px var(--drop-shadow);
+  }
+
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .video-description {
+    margin-top: 1rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-style: italic;
+    line-height: 1.5;
   }
 
   .about-section {
