@@ -15,6 +15,18 @@ collections: ["independence-speeches", "political-speeches", "indian-freedom-mov
 tags: ["independence", "freedom", "democracy", "India", "destiny", "responsibility", "nation-building"]
 featured: true
 drop_cap_color: "#f2cc8f"
+about:
+  context: "This speech was delivered by Jawaharlal Nehru on the eve of India's independence, at the stroke of midnight on August 14-15, 1947. It marked the end of nearly 200 years of British colonial rule and the birth of the world's largest democracy. The speech was delivered to the Constituent Assembly of India in New Delhi, as the Indian flag was hoisted for the first time as a free nation."
+  significance: "Considered one of the greatest speeches of the 20th century, 'A Tryst With Destiny' captured the hopes and aspirations of a newly independent India. The speech set the tone for India's approach to governance, emphasizing service to the people, ending poverty and inequality, and India's role in the global community. Its poetic language and philosophical depth made it an enduring symbol of India's independence struggle."
+  author_bio: "Jawaharlal Nehru (1889-1964) was India's first Prime Minister and a central figure in the Indian independence movement. Educated at Harrow and Cambridge, he was deeply influenced by Gandhi's philosophy of non-violence. Nehru served as Prime Minister from 1947 until his death in 1964, shaping modern India's democratic institutions, foreign policy of non-alignment, and commitment to secularism and socialism."
+  occasion_info: "The speech was delivered at a special midnight session of the Constituent Assembly, timed to coincide with India's independence at the stroke of midnight. This dramatic timing was chosen to mark the transition from colonial rule to freedom, as Nehru famously said, 'when the world sleeps, India will awake to life and freedom.'"
+  links:
+    - title: "Original text on Wikisource"
+      url: "https://en.wikisource.org/wiki/A_Tryst_With_Destiny"
+      description: "Complete text of the speech as preserved in the public domain"
+    - title: "Audio recording (Nehru Memorial)"
+      url: "https://www.nehrumemorial.nic.in/"
+      description: "Historical archives with recordings and documents"
 ---
 
 Long years ago we made a tryst with destiny, and now the time comes when we shall redeem our pledge, not wholly or in full measure, but very substantially. At the stroke of the midnight hour, when the world sleeps, India will awake to life and freedom. A moment comes, which comes but rarely in history, when we step out from the old to the new, when an age ends, and when the soul of a nation, long suppressed, finds utterance. It is fitting that at this solemn moment we take the pledge of dedication to the service of India and her people and to the still larger cause of humanity.
