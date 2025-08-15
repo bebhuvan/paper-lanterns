@@ -93,33 +93,21 @@ content:
         collapsed: true
         fields:
           - name: context
-            type: markdown
+            type: rich-text
             label: Historical Context
             hint: "Background about when/why this was written"
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: significance
-            type: markdown
+            type: rich-text
             label: Significance
             hint: "Why this letter is important"
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: author_bio
-            type: markdown
+            type: rich-text
             label: About the Author
             hint: "Biographical information"
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: recipient_info
-            type: markdown
+            type: rich-text
             label: About the Recipient
             hint: "Information about who received this"
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: links
             type: array
             label: Additional Resources
@@ -137,13 +125,10 @@ content:
                   type: string
                   label: Description
       - name: body
-        type: markdown
+        type: rich-text
         label: Letter Content
         required: true
         hint: "Full text of the letter"
-        editor:
-          preview: true
-          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: speeches
     label: 🎤 Speeches
@@ -217,12 +202,9 @@ content:
           labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red"]
         default: "#e07a5f"
       - name: body
-        type: markdown
+        type: rich-text
         label: Speech Content
         required: true
-        editor:
-          preview: true
-          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: garden
     label: 🌱 Garden
@@ -247,13 +229,10 @@ content:
         label: Date
         required: true
       - name: content
-        type: markdown
+        type: rich-text
         label: Content
         required: false
         hint: "The main content of this entry (supports rich text formatting)"
-        editor:
-          preview: true
-          buttons: ["bold", "italic", "code", "link", "heading-one", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table", "strikethrough"]
       - name: description
         type: string
         label: Description
@@ -314,7 +293,7 @@ content:
             required: false
             hint: "e.g., example.com (auto-extracted from URL)"
           - name: preview
-            type: markdown
+            type: rich-text
             label: Preview
             required: false
             hint: "Brief description of the link (supports basic formatting)"
@@ -390,12 +369,9 @@ content:
           labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red", "Saddle Brown"]
         default: "#e07a5f"
       - name: body
-        type: markdown
+        type: rich-text
         label: Essay Content
         required: true
-        editor:
-          preview: true
-          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: lectures
     label: 🎓 Lectures
@@ -478,29 +454,17 @@ content:
         collapsed: true
         fields:
           - name: context
-            type: markdown
+            type: rich-text
             label: Historical Context
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: significance
-            type: markdown
+            type: rich-text
             label: Significance
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: author_bio
-            type: markdown
+            type: rich-text
             label: About the Author
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: series_info
-            type: markdown
+            type: rich-text
             label: Series Information
-            editor:
-              preview: true
-              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: links
             type: array
             label: Additional Resources
@@ -518,12 +482,9 @@ content:
                   type: string
                   label: Description
       - name: body
-        type: markdown
+        type: rich-text
         label: Lecture Content
         required: true
-        editor:
-          preview: true
-          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: collections
     label: 🗂️ Collections
@@ -548,9 +509,6 @@ content:
         label: Theme Color
         default: "#d4a574"
       - name: body
-        type: markdown
+        type: rich-text
         label: Collection Description
         hint: "Extended description (optional)"
-        editor:
-          preview: true
-          buttons: ["bold", "italic", "code", "link", "quote", "unordered-list", "ordered-list", "image"]

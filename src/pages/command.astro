@@ -1,5 +1,5 @@
 ---
-// Command center page for PagesCMS
+// Command center page for PagesCMS - Redirects to Pages CMS app
 ---
 
 <html lang="en">
@@ -7,17 +7,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Paper Lanterns - Command Center</title>
+    <meta http-equiv="refresh" content="0; url=https://app.pagescms.org" />
   </head>
   <body>
-    <!-- Include PagesCMS admin interface -->
-    <div id="pagescms-admin"></div>
-    <script type="module">
-      import { PagesCMS } from 'https://unpkg.com/@pages-cms/core/dist/index.js';
-      
-      const config = await import('../pagescms.config.js').then(m => m.default);
-      
-      const cms = new PagesCMS(config);
-      cms.init();
-    </script>
+    <div style="padding: 2rem; font-family: system-ui, sans-serif; text-align: center;">
+      <h1>Redirecting to Pages CMS Command Center...</h1>
+      <p>If you are not redirected automatically, <a href="https://app.pagescms.org">click here</a>.</p>
+      <p style="margin-top: 2rem; color: #666;">
+        Pages CMS is a git-based CMS. Make sure you're signed in with GitHub and have access to the repository.
+      </p>
+      <div style="margin-top: 3rem; padding: 2rem; background: #f5f5f5; border-radius: 8px;">
+        <h2>How to use Pages CMS:</h2>
+        <ol style="text-align: left; max-width: 600px; margin: 0 auto;">
+          <li>Sign in with your GitHub account at <a href="https://app.pagescms.org">app.pagescms.org</a></li>
+          <li>Select the <strong>bebhuvan/paper-lanterns</strong> repository</li>
+          <li>Pages CMS will read the <code>.pages.yml</code> configuration</li>
+          <li>You can now edit content with rich text editing!</li>
+        </ol>
+      </div>
+    </div>
   </body>
 </html>
