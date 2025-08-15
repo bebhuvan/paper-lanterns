@@ -4,15 +4,32 @@ author:
   name: "Helen Keller"
   birth_year: 1880
   death_year: 1968
-  description: "American author, disability rights advocate, political activist and lecturer. She was the first deaf-blind person to earn a Bachelor of Arts degree and became a world-renowned speaker and author."
+  bio: "American author, disability rights advocate, political activist and lecturer. She was the first deaf-blind person to earn a Bachelor of Arts degree and became a world-renowned speaker and author."
+recipient: "Alexander Graham Bell"
 date: 1900-03-09
+location: "Cambridge, Massachusetts"
+context: "Written from Cambridge on March 9, 1900, this letter from 19-year-old Helen Keller to Alexander Graham Bell reveals their warm friendship and her intellectual development during her studies at Radcliffe College."
+excerpt: "I was perfectly delighted to receive your letter and to be able to read it myself. It seemed almost as if you clasped my hand in yours and spoke to me in the old, dear way."
+source: "Library of Congress, Alexander Graham Bell Family Papers"
+collections: ["personal-correspondence", "educational-journey"]
 tags: ["Alexander Graham Bell", "braille", "education", "literature", "friendship", "correspondence", "Cambridge", "South African War", "Boer War", "classical studies"]
 featured: true
-excerpt: "I was perfectly delighted to receive your letter and to be able to read it myself. It seemed almost as if you clasped my hand in yours and spoke to me in the old, dear way."
-context: "Written from Cambridge on March 9, 1900, this letter from 19-year-old Helen Keller to Alexander Graham Bell reveals their warm friendship and her intellectual development. Keller discusses her studies at Radcliffe College, her reading of classical literature, and her evolving views on the South African War. The letter demonstrates Bell's efforts to learn braille to communicate directly with Keller."
-source: "Library of Congress, Alexander Graham Bell Family Papers"
-source_url: "https://www.loc.gov/item/magbell.12400307/"
 drop_cap_color: "#4169E1"
+about:
+  context: "This letter was written in March 1900, when Helen Keller was 19 years old and studying at Radcliffe College (then called the Harvard Annex for women). She had been deaf and blind since the age of 19 months, and her relationship with Alexander Graham Bell had been crucial to her education and development. Bell had been instrumental in connecting her family with Anne Sullivan, who became Keller's teacher and companion."
+  significance: "This letter demonstrates the remarkable intellectual development of Helen Keller and her ability to engage with complex political and literary topics despite her disabilities. Her discussion of classical literature, contemporary politics (including the South African War), and her personal growth shows how she had overcome the limitations that society expected from someone with her disabilities. The letter also reveals Bell's commitment to learning braille to communicate directly with Keller, showing their deep mutual respect and friendship."
+  author_bio: "Helen Keller (1880-1968) became deaf and blind at 19 months old due to an illness, possibly scarlet fever or meningitis. With the help of her teacher Anne Sullivan, she learned to communicate and became the first deaf-blind person to earn a Bachelor of Arts degree. She became a world-renowned author, political activist, and lecturer, advocating for disability rights, women's suffrage, labor rights, and world peace. She authored 14 books and numerous articles."
+  recipient_info: "Alexander Graham Bell (1847-1922) was a Scottish-born American inventor, scientist, and engineer, best known for inventing the telephone. He was also a teacher of the deaf and a strong advocate for deaf education. His work with the deaf community brought him into contact with Helen Keller's family, and he played a crucial role in arranging for Anne Sullivan to become Keller's teacher. Bell remained a lifelong friend and mentor to Keller."
+  links:
+    - title: "Original letter at Library of Congress"
+      url: "https://www.loc.gov/item/magbell.12400307/"
+      description: "Complete text as preserved in the Alexander Graham Bell Family Papers"
+    - title: "Helen Keller - Wikipedia"
+      url: "https://en.wikipedia.org/wiki/Helen_Keller"
+      description: "Comprehensive biographical information about Helen Keller"
+    - title: "Alexander Graham Bell - Wikipedia"
+      url: "https://en.wikipedia.org/wiki/Alexander_Graham_Bell"
+      description: "Biographical information about the inventor and educator"
 ---
 
 138 Brattle Street  

@@ -4,15 +4,32 @@ author:
   name: "Lajpat Rai"
   birth_year: 1865
   death_year: 1928
-  description: "Indian independence activist, author and politician who played a pivotal role in the Indian independence movement. Known as 'Punjab Kesari' (Lion of Punjab), he was one of the Lal Bal Pal triumvirate of nationalist leaders."
+  bio: "Indian independence activist, author and politician who played a pivotal role in the Indian independence movement. Known as 'Punjab Kesari' (Lion of Punjab), he was one of the Lal Bal Pal triumvirate of nationalist leaders."
+recipient: "Edwin Samuel Montagu"
 date: 1917-09-15
+location: "New York, USA"
+context: "Written from New York on September 15, 1917, this open letter addresses Edwin Samuel Montagu upon his appointment as Secretary of State for India. Lajpat Rai critiques the existing colonial administration and advocates for fiscal autonomy and democratic reforms."
+excerpt: "Permit me to congratulate you most heartily on your appointment to the high office you now hold which makes you virtually the Supreme ruler of the teeming millions of India."
+source: "Library of Congress"
+collections: ["political-correspondence", "independence-movement"]
 tags: ["Montagu", "Secretary of State", "self-government", "fiscal autonomy", "Indian Civil Service", "bureaucracy", "Mesopotamia", "Morley", "political reform", "colonial administration"]
 featured: true
-excerpt: "Permit me to congratulate you most heartily on your appointment to the high office you now hold which makes you virtually the Supreme ruler of the teeming millions of India."
-context: "Written from New York on September 15, 1917, this open letter addresses Edwin Samuel Montagu upon his appointment as Secretary of State for India. Lajpat Rai critiques the existing colonial administration and advocates for fiscal autonomy and democratic reforms. The letter provides crucial insights into Indian nationalist thinking during World War I and the lead-up to the Montagu-Chelmsford Reforms."
-source: "Library of Congress"
-source_url: "https://www.loc.gov/item/18010390/"
 drop_cap_color: "#8B0000"
+about:
+  context: "This open letter was written in September 1917, when Edwin Samuel Montagu had just been appointed as Secretary of State for India. Lajpat Rai was in exile in the United States following his deportation from India in 1907 under Lord Morley's administration. The letter was written during World War I, when Indian nationalist demands for self-government were intensifying, leading up to the Montagu-Chelmsford Reforms of 1919."
+  significance: "This letter represents a crucial document in the Indian independence movement, offering a sophisticated critique of British colonial administration from a moderate nationalist perspective. Lajpat Rai's detailed analysis of the Government of India's structure, fiscal policies, and military expenditure provides valuable insights into Indian nationalist thinking during WWI. The letter's call for fiscal autonomy and responsible government helped shape the discourse around the Montagu-Chelmsford Reforms."
+  author_bio: "Lajpat Rai (1865-1928), known as 'Punjab Kesari' (Lion of Punjab), was a prominent leader of the Indian independence movement. Along with Bal Gangadhar Tilak and Bipin Chandra Pal, he formed the famous 'Lal Bal Pal' triumvirate of nationalist leaders. A lawyer, author, and social reformer, he was deported to Burma in 1907-1908 and later spent several years in the United States. He died in 1928 from injuries sustained during a protest against the Simon Commission."
+  recipient_info: "Edwin Samuel Montagu (1879-1924) served as Secretary of State for India from 1917-1922. A Liberal politician, he was instrumental in introducing the Government of India Act 1919, which implemented the Montagu-Chelmsford Reforms. These reforms introduced the system of 'dyarchy' in provincial governments, marking the first significant step toward Indian self-government within the British Empire."
+  links:
+    - title: "Original document at Library of Congress"
+      url: "https://www.loc.gov/item/18010390/"
+      description: "Complete text as preserved in the Library of Congress archives"
+    - title: "Lala Lajpat Rai - Wikipedia"
+      url: "https://en.wikipedia.org/wiki/Lala_Lajpat_Rai"
+      description: "Biographical information about the 'Lion of Punjab'"
+    - title: "Montagu-Chelmsford Reforms - Wikipedia"
+      url: "https://en.wikipedia.org/wiki/Government_of_India_Act_1919"
+      description: "Historical context about the reforms this letter influenced"
 ---
 
 **TO THE RIGHT HONORABLE MR. EDWIN SAMUEL MONTAGU**  

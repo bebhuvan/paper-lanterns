@@ -96,18 +96,30 @@ content:
             type: markdown
             label: Historical Context
             hint: "Background about when/why this was written"
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: significance
             type: markdown
             label: Significance
             hint: "Why this letter is important"
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: author_bio
             type: markdown
             label: About the Author
             hint: "Biographical information"
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: recipient_info
             type: markdown
             label: About the Recipient
             hint: "Information about who received this"
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: links
             type: array
             label: Additional Resources
@@ -129,6 +141,9 @@ content:
         label: Letter Content
         required: true
         hint: "Full text of the letter"
+        editor:
+          preview: true
+          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
 
   - name: speeches
     label: 🎤 Speeches
@@ -205,6 +220,9 @@ content:
         type: markdown
         label: Speech Content
         required: true
+        editor:
+          preview: true
+          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
 
   - name: garden
     label: 🌱 Garden
@@ -231,8 +249,16 @@ content:
       - name: content
         type: markdown
         label: Content
-        required: true
+        required: false
         hint: "The main content of this entry (supports rich text formatting)"
+        editor:
+          preview: true
+          buttons: ["bold", "italic", "code", "link", "heading-one", "heading-two", "quote", "unordered-list", "ordered-list"]
+      - name: description
+        type: string
+        label: Description
+        required: false
+        hint: "Optional short description or summary"
       - name: tags
         type: array
         label: Tags
@@ -277,16 +303,20 @@ content:
           - name: title
             type: string
             label: Link Title
+            required: false
           - name: url
             type: string
             label: URL
+            required: false
           - name: domain
             type: string
             label: Domain
+            required: false
             hint: "e.g., example.com (auto-extracted from URL)"
           - name: preview
             type: markdown
             label: Preview
+            required: false
             hint: "Brief description of the link (supports basic formatting)"
       - name: private
         type: boolean
@@ -363,6 +393,9 @@ content:
         type: markdown
         label: Essay Content
         required: true
+        editor:
+          preview: true
+          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
 
   - name: lectures
     label: 🎓 Lectures
@@ -447,15 +480,27 @@ content:
           - name: context
             type: markdown
             label: Historical Context
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: significance
             type: markdown
             label: Significance
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: author_bio
             type: markdown
             label: About the Author
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: series_info
             type: markdown
             label: Series Information
+            editor:
+              preview: true
+              buttons: ["bold", "italic", "link", "quote"]
           - name: links
             type: array
             label: Additional Resources
@@ -476,6 +521,9 @@ content:
         type: markdown
         label: Lecture Content
         required: true
+        editor:
+          preview: true
+          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
 
   - name: collections
     label: 🗂️ Collections
@@ -503,3 +551,6 @@ content:
         type: markdown
         label: Collection Description
         hint: "Extended description (optional)"
+        editor:
+          preview: true
+          buttons: ["bold", "italic", "link", "quote", "unordered-list"]

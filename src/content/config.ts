@@ -161,20 +161,23 @@ const garden = defineCollection({
     title: z.string(),
     type: z.enum(['thoughts', 'links', 'quotes', 'notes']),
     date: z.coerce.date(),
-    content: z.string(),
+    content: z.string().optional(), // Make content optional since some posts might be just links or quotes
     tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     // For quote type posts
     attribution: z.string().optional(),
     author: z.string().optional(),
     source: z.string().optional(),
-    // For link type posts
+    // For link type posts - all fields optional to prevent build failures
     link: z.object({
-      title: z.string(),
-      url: z.string().url(),
-      domain: z.string(),
+      title: z.string().optional(),
+      url: z.string().url().optional(),
+      domain: z.string().optional(),
       preview: z.string().optional(),
     }).optional(),
+    // Additional fields for flexibility
+    description: z.string().optional(),
+    excerpt: z.string().optional(),
     // For private notes (not displayed publicly)
     private: z.boolean().default(false),
   }),

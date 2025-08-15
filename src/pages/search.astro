@@ -65,15 +65,16 @@ const searchData = allContent.map(item => ({
         </div>
       </div>
 
-      <section class="search-results" id="search-results" style="display: none;">
-        <div id="no-results" class="no-results" style="display: none;">
-          <h2>No results found</h2>
-          <p>Try searching with different keywords or browse our <a href="/collections">collections</a> and <a href="/archive">archive</a>.</p>
-        </div>
-        <div id="results-list" class="results-list"></div>
-      </section>
+      <div class="content-container">
+        <section class="search-results hidden" id="search-results">
+          <div id="no-results" class="no-results" style="display: none;">
+            <h2>No results found</h2>
+            <p>Try searching with different keywords or browse our <a href="/collections">collections</a> and <a href="/archive">archive</a>.</p>
+          </div>
+          <div id="results-list" class="results-list"></div>
+        </section>
 
-      <section class="search-suggestions" id="search-suggestions">
+        <section class="search-suggestions visible" id="search-suggestions">
         <h2 class="suggestions-title">Popular Searches</h2>
         <div class="suggestions-grid">
           <button class="suggestion-tag" data-query="love">Love</button>
@@ -93,7 +94,8 @@ const searchData = allContent.map(item => ({
             <a href="/archive" class="browse-link">Browse chronologically →</a>
           </div>
         </div>
-      </section>
+        </section>
+      </div>
 
       <footer class="search-footer">
         <p>All content is in the public domain</p>
@@ -202,6 +204,8 @@ const searchData = allContent.map(item => ({
 
   .search-results {
     margin-bottom: 4rem;
+    transition: opacity 0.2s ease;
+    opacity: 1;
   }
 
   .no-results {
@@ -339,6 +343,44 @@ const searchData = allContent.map(item => ({
 
   .search-suggestions {
     text-align: center;
+    transition: opacity 0.2s ease;
+    opacity: 1;
+  }
+
+  .container {
+    transition: min-height 0.2s ease;
+  }
+
+  .content-container {
+    position: relative;
+    /* Fixed height to prevent layout shifts */
+    height: 600px;
+    overflow: hidden;
+  }
+
+  .search-results,
+  .search-suggestions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+
+  .search-results.hidden,
+  .search-suggestions.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+  }
+
+  .search-results.visible,
+  .search-suggestions.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   .suggestions-title {
@@ -430,6 +472,10 @@ const searchData = allContent.map(item => ({
     .search-input {
       font-size: 1rem;
       padding: 0.875rem 3rem 0.875rem 1.25rem;
+    }
+
+    .content-container {
+      height: 500px; /* Slightly reduced height on mobile */
     }
 
     .result-item:hover {
@@ -527,7 +573,7 @@ const searchData = allContent.map(item => ({
     return excerpt.replace(regex, '<mark>$1</mark>');
   }
 
-  // Display results
+  // Display results with smooth transitions
   function displayResults(results, query) {
     const resultsSection = document.getElementById('search-results');
     const resultsList = document.getElementById('results-list');
@@ -535,11 +581,11 @@ const searchData = allContent.map(item => ({
     const suggestions = document.getElementById('search-suggestions');
     const subtitle = document.getElementById('search-subtitle');
 
-    // Smooth transition: set min-height to prevent layout shift
-    const container = document.querySelector('.search-container .container');
-    const currentHeight = container.offsetHeight;
-    container.style.minHeight = currentHeight + 'px';
-
+    // Hide suggestions first
+    suggestions.classList.remove('visible');
+    suggestions.classList.add('hidden');
+    
+    // Update content
     if (results.length === 0) {
       noResults.style.display = 'block';
       resultsList.innerHTML = '';
@@ -577,29 +623,30 @@ const searchData = allContent.map(item => ({
 
     subtitle.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
     subtitle.style.display = 'block';
-    resultsSection.style.display = 'block';
-    suggestions.style.display = 'none';
     
-    // Remove min-height after transition
+    // Show results with smooth transition
     setTimeout(() => {
-      container.style.minHeight = '';
-    }, 300);
+      resultsSection.classList.remove('hidden');
+      resultsSection.classList.add('visible');
+    }, 150);
   }
 
-  // Handle search
+  // Handle search with smooth transitions using classes
   function handleSearch(query) {
     if (!query.trim()) {
-      const container = document.querySelector('.search-container .container');
-      const currentHeight = container.offsetHeight;
-      container.style.minHeight = currentHeight + 'px';
+      const resultsSection = document.getElementById('search-results');
+      const suggestions = document.getElementById('search-suggestions');
+      const subtitle = document.getElementById('search-subtitle');
       
-      document.getElementById('search-results').style.display = 'none';
-      document.getElementById('search-suggestions').style.display = 'block';
-      document.getElementById('search-subtitle').style.display = 'none';
+      // Hide results and show suggestions
+      resultsSection.classList.remove('visible');
+      resultsSection.classList.add('hidden');
+      subtitle.style.display = 'none';
       
       setTimeout(() => {
-        container.style.minHeight = '';
-      }, 300);
+        suggestions.classList.remove('hidden');
+        suggestions.classList.add('visible');
+      }, 100);
       return;
     }
 
@@ -633,13 +680,13 @@ const searchData = allContent.map(item => ({
       handleSearch(searchInput.value);
     });
 
-    // Real-time search (optional)
+    // Real-time search with reduced debounce for smoother UX
     let searchTimeout;
     searchInput.addEventListener('input', (e) => {
       clearTimeout(searchTimeout);
       searchTimeout = setTimeout(() => {
         handleSearch(e.target.value);
-      }, 300);
+      }, 200);
     });
 
     // Suggestion tags

@@ -49,21 +49,17 @@ const collections = collectionsData.map(collection => {
         </p>
       </header>
 
-      <div class="collections-filters">
-        <div class="filter-group">
-          <label for="content-type-filter" class="filter-label">Show collections with:</label>
-          <select id="content-type-filter" class="filter-select">
-            <option value="all">All Content Types</option>
-            <option value="letter">Letters</option>
-            <option value="speech">Speeches</option>
-            <option value="lecture">Lectures</option>
-          </select>
-        </div>
+      <div class="content-types-info">
+        <p class="content-info">
+          Our collections span <strong>letters</strong>, <strong>speeches</strong>, <strong>essays</strong>, and <strong>lectures</strong> 
+          from history's most fascinating figures. Each collection is curated around themes that reveal 
+          the timeless human experiences that connect us across centuries.
+        </p>
       </div>
 
-      <div class="collections-grid" id="collections-grid">
+      <div class="collections-grid">
         {collections.map((collection, index) => (
-          <article class={`collection-card ${index === 0 ? 'featured' : ''}`} data-content-types={collection.contentTypes.join(',')}>
+          <article class={`collection-card ${index === 0 ? 'featured' : ''}`}>
             <div class="card-header" style={`--collection-color: ${collection.data.color}`}>
               <h2 class="collection-name">{collection.data.name}</h2>
               <span class="collection-count">
@@ -80,12 +76,26 @@ const collections = collectionsData.map(collection => {
         ))}
       </div>
 
-      <section class="coming-soon">
-        <h2 class="section-title">More Collections Coming Soon</h2>
-        <p class="section-description">
-          We're continuously curating new thematic collections. Future collections will include 
-          Philosophical Musings, Last Words, Political Correspondence, and Letters of Friendship.
-        </p>
+      <section class="browse-types">
+        <h2 class="section-title">Browse by Content Type</h2>
+        <div class="type-links">
+          <a href="/letters" class="type-link">
+            <h3>Letters</h3>
+            <p>Personal correspondence that reveals intimate thoughts and relationships</p>
+          </a>
+          <a href="/speeches" class="type-link">
+            <h3>Speeches</h3>
+            <p>Historic orations that moved nations and shaped history</p>
+          </a>
+          <a href="/essays" class="type-link">
+            <h3>Essays</h3>
+            <p>Thoughtful reflections on life, society, and human nature</p>
+          </a>
+          <a href="/lectures" class="type-link">
+            <h3>Lectures</h3>
+            <p>Academic and philosophical teachings from great minds</p>
+          </a>
+        </div>
       </section>
 
       <footer class="collections-footer">
@@ -128,46 +138,26 @@ const collections = collectionsData.map(collection => {
     margin: 0 auto;
   }
 
-  .collections-filters {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
-    padding: 1.5rem;
+  .content-types-info {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding: 2rem;
     background: var(--bg-accent);
     border-radius: 12px;
     border: 1px solid var(--border-accent);
   }
 
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .filter-label {
-    font-size: 0.85rem;
+  .content-info {
+    font-size: 1rem;
+    line-height: 1.7;
     color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .content-info strong {
+    color: var(--accent-secondary);
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .filter-select {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-secondary);
-    border-radius: 8px;
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-
-  .filter-select:focus {
-    outline: none;
-    border-color: var(--accent-primary);
   }
 
   .collections-grid {
@@ -247,12 +237,45 @@ const collections = collectionsData.map(collection => {
     opacity: 0.8;
   }
 
-  .coming-soon {
-    text-align: center;
-    padding: 3rem 2rem;
-    background: var(--bg-accent);
-    border-radius: 12px;
+  .browse-types {
     margin-bottom: 4rem;
+  }
+
+  .type-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .type-link {
+    display: block;
+    padding: 2rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .type-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--drop-shadow);
+    border-color: var(--accent-primary);
+  }
+
+  .type-link h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .type-link p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
   }
 
   .section-title {
@@ -291,16 +314,13 @@ const collections = collectionsData.map(collection => {
       font-size: 2.5rem;
     }
 
-    .collections-filters {
-      flex-direction: column;
-      gap: 1rem;
-      padding: 1rem;
+    .content-types-info {
+      padding: 1.5rem;
+      margin-bottom: 3rem;
     }
 
-    .filter-group {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
+    .content-info {
+      font-size: 0.95rem;
     }
 
     .collections-grid {
@@ -312,8 +332,13 @@ const collections = collectionsData.map(collection => {
       padding: 1.5rem;
     }
 
-    .coming-soon {
-      padding: 2rem 1rem;
+    .type-links {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .type-link {
+      padding: 1.5rem;
     }
   }
 
@@ -332,30 +357,3 @@ const collections = collectionsData.map(collection => {
   }
 </style>
 
-<script>
-  // Filter collections by content type
-  function filterCollections() {
-    const contentTypeFilter = document.getElementById('content-type-filter') as HTMLSelectElement;
-    const collections = document.querySelectorAll('.collection-card');
-    
-    if (!contentTypeFilter) return;
-    
-    const selectedType = contentTypeFilter.value;
-    
-    collections.forEach((card) => {
-      const contentTypes = (card as HTMLElement).dataset.contentTypes?.split(',') || [];
-      
-      if (selectedType === 'all' || contentTypes.includes(selectedType)) {
-        (card as HTMLElement).style.display = 'block';
-      } else {
-        (card as HTMLElement).style.display = 'none';
-      }
-    });
-  }
-
-  // Add event listener
-  document.addEventListener('DOMContentLoaded', () => {
-    const contentTypeFilter = document.getElementById('content-type-filter');
-    contentTypeFilter?.addEventListener('change', filterCollections);
-  });
-</script>

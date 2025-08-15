@@ -13,6 +13,17 @@ context: "Published in The Modern Review, Volume 38, Number 6, December 1925. In
 source: "The Modern Review, Volume 38, Number 6 (December 1925)"
 source_url: "https://en.wikisource.org/wiki/The_Modern_Review/Volume_38/Number_6/Striving_for_Swaraj"
 drop_cap_color: "#8B4513"
+about:
+  context: "This essay was published in The Modern Review in December 1925, during a period of intense political and social debate in India about the path to independence. Tagore wrote this as a critique of the emphasis on the spinning wheel (charka) as promoted by Gandhi's non-cooperation movement, arguing for a more comprehensive approach to national development."
+  significance: "This essay represents Tagore's philosophical differences with Gandhi regarding the methods of achieving Swaraj (self-rule). While both shared the goal of independence, Tagore believed that true freedom required broader educational, social, and economic reforms rather than focusing primarily on symbolic acts like spinning. The essay demonstrates Tagore's commitment to critical thinking even when opposing popular movements."
+  author_bio: "Rabindranath Tagore (1861-1941) was a Bengali polymath who reshaped Bengali literature and music, as well as Indian art with Contextual Modernism. He became the first non-European to win the Nobel Prize in Literature in 1913. A philosopher, social reformer, and educator, Tagore founded an experimental school that became Visva-Bharati University. He was knighted by the British Crown in 1915 but renounced it in 1919 in protest against the Jallianwala Bagh massacre."
+  links:
+    - title: "Original text on Wikisource"
+      url: "https://en.wikisource.org/wiki/The_Modern_Review/Volume_38/Number_6/Striving_for_Swaraj"
+      description: "Complete text of the essay as preserved in the public domain"
+    - title: "Rabindranath Tagore - Wikipedia"
+      url: "https://en.wikipedia.org/wiki/Rabindranath_Tagore"
+      description: "Biographical information about the Nobel Prize-winning author"
 ---
 
 Our wise men have warned us, in solemn accents of Sanskrit, to talk away as much as we like, but never to write it down. There are proofs, many of them, that I have habitually disregarded this sage advice, following it only when called upon to reply. I have never hesitated to write, whenever I had anything to say, be it in prose or in verse, controversy alone excepted, — for on that my pen has long ceased to function.

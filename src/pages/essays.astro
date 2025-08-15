@@ -96,7 +96,7 @@ const years = [...new Set(sortedEssays.map(essay => essay.data.date.getFullYear(
                   <a href={`/essay/${essay.slug}`}>{essay.data.title}</a>
                 </h2>
                 
-                <p class="essay-context">{essay.data.context}</p>
+                <p class="essay-context">{essay.data.context.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')}</p>
                 
                 {essay.data.excerpt && (
                   <blockquote class="essay-excerpt">

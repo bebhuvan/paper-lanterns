@@ -74,7 +74,7 @@ const relatedContent = [...relatedByAuthor, ...relatedByTags].slice(0, 4);
     <article class="letter">
       <div class="letter-meta">
         <h1 class="author">{letter.data.author.name}</h1>
-        <p class="context">{letter.data.context}</p>
+        <p class="context">{letter.data.context.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')}</p>
         <div class="reading-info">
           <span>{readTime} min read</span>
           {letter.data.location && <span> • {letter.data.location}</span>}

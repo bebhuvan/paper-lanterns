@@ -1,0 +1,112 @@
+{
+  "name": "Paper Lanterns",
+  "short_name": "Paper Lanterns",
+  "description": "A curated collection of historical letters, speeches, essays, and lectures from the public domain",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fefefe",
+  "theme_color": "#d4a574",
+  "orientation": "portrait-primary",
+  "categories": ["education", "books", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "sizes": "512x512", 
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Paper Lanterns homepage on desktop"
+    },
+    {
+      "src": "/screenshots/mobile-1.png", 
+      "sizes": "360x640",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Paper Lanterns homepage on mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse Letters",
+      "short_name": "Letters",
+      "description": "Browse historical letters",
+      "url": "/letters",
+      "icons": [
+        {
+          "src": "/icons/letter-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Browse Speeches",
+      "short_name": "Speeches", 
+      "description": "Browse historical speeches",
+      "url": "/speeches",
+      "icons": [
+        {
+          "src": "/icons/speech-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Browse Essays",
+      "short_name": "Essays",
+      "description": "Browse historical essays", 
+      "url": "/essays",
+      "icons": [
+        {
+          "src": "/icons/essay-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "short_name": "Search",
+      "description": "Search all content",
+      "url": "/search",
+      "icons": [
+        {
+          "src": "/icons/search-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}

@@ -59,10 +59,10 @@ allContent.forEach(item => {
       <header class="header">
         <h1 class="site-title">Paper Lanterns</h1>
         <p class="hero-text">
-          Before emails, before texts, before instant messages—there were letters. 
-          Handwritten, deliberate, and profound. These are the intimate conversations 
-          between history's greatest minds: the love letters that broke hearts, 
-          the confessions that revealed souls, the ideas that sparked revolutions.
+          Before emails, before texts, before instant messages—there were letters, speeches, and essays. 
+          Handwritten, deliberate, and profound. These are the intimate conversations, powerful orations, 
+          and thoughtful reflections from history's greatest minds: the love letters that broke hearts, 
+          the speeches that moved nations, the essays that challenged thinking, and the ideas that sparked revolutions.
         </p>
       </header>
 
@@ -170,7 +170,7 @@ allContent.forEach(item => {
             <div class="content-meta">
               <span class="content-type">{item.contentType === 'letter' ? 'Letter' : item.contentType === 'speech' ? 'Speech' : item.contentType === 'lecture' ? 'Lecture' : 'Essay'}</span>
               <a href={`/${item.contentType}/${item.slug}`} class="author-name">{item.data.author.name}</a>
-              <div class="content-context">{item.data.context}</div>
+              <div class="content-context">{item.data.context.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')}</div>
             </div>
             
             <div class="content-excerpt" style={`--drop-cap-color: ${item.data.drop_cap_color}`}>

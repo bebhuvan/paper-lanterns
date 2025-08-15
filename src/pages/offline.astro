@@ -1,0 +1,200 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+---
+
+<Layout 
+  title="Offline - Paper Lanterns"
+  description="You're currently offline. Some content may not be available."
+>
+  <Navigation />
+  
+  <main class="offline-container">
+    <div class="container">
+      <div class="offline-content">
+        <div class="offline-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9,22 9,12 15,12 15,22"></polyline>
+          </svg>
+        </div>
+        
+        <h1 class="offline-title">You're Offline</h1>
+        
+        <p class="offline-description">
+          It looks like you've lost your internet connection. Don't worry—you can still browse 
+          any letters, speeches, and essays you've previously visited. They've been saved for offline reading.
+        </p>
+        
+        <div class="offline-actions">
+          <button onclick="window.location.reload()" class="retry-button">
+            Try Again
+          </button>
+          
+          <a href="/" class="home-button">
+            Go Home
+          </a>
+        </div>
+        
+        <div class="offline-tips">
+          <h2>While you're offline:</h2>
+          <ul>
+            <li>Previously visited content is available</li>
+            <li>Your reading progress is saved locally</li>
+            <li>New content will sync when you're back online</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .offline-container {
+    padding: 6rem 0 4rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .offline-content {
+    text-align: center;
+    background: var(--bg-accent);
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    border: 1px solid var(--border-accent);
+  }
+
+  .offline-icon {
+    margin-bottom: 2rem;
+    color: var(--accent-primary);
+  }
+
+  .offline-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  .offline-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+  }
+
+  .offline-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .retry-button,
+  .home-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+  }
+
+  .retry-button {
+    background: var(--accent-primary);
+    color: white;
+  }
+
+  .retry-button:hover {
+    background: var(--accent-tertiary);
+    transform: translateY(-2px);
+  }
+
+  .home-button {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-secondary);
+  }
+
+  .home-button:hover {
+    background: var(--bg-secondary);
+    transform: translateY(-2px);
+  }
+
+  .offline-tips {
+    text-align: left;
+    background: var(--bg-primary);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-secondary);
+  }
+
+  .offline-tips h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .offline-tips ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .offline-tips li {
+    padding: 0.5rem 0;
+    color: var(--text-secondary);
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .offline-tips li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent-primary);
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    .offline-container {
+      padding: 4rem 0 2rem;
+    }
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .offline-content {
+      padding: 2rem 1.5rem;
+    }
+
+    .offline-title {
+      font-size: 2rem;
+    }
+
+    .offline-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .retry-button,
+    .home-button {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
+</style>
