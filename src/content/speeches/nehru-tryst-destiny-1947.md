@@ -28,9 +28,9 @@ about:
     - title: "Original text on Wikisource"
       url: "https://en.wikisource.org/wiki/A_Tryst_With_Destiny"
       description: "Complete text of the speech as preserved in the public domain"
-    - title: "Audio recording (Nehru Memorial)"
-      url: "https://www.nehrumemorial.nic.in/"
-      description: "Historical archives with recordings and documents"
+    - title: "Jawaharlal Nehru - Wikipedia"
+      url: "https://en.wikipedia.org/wiki/Jawaharlal_Nehru"
+      description: "Biographical information about India's first Prime Minister"
 ---
 
 Long years ago we made a tryst with destiny, and now the time comes when we shall redeem our pledge, not wholly or in full measure, but very substantially. At the stroke of the midnight hour, when the world sleeps, India will awake to life and freedom. A moment comes, which comes but rarely in history, when we step out from the old to the new, when an age ends, and when the soul of a nation, long suppressed, finds utterance. It is fitting that at this solemn moment we take the pledge of dedication to the service of India and her people and to the still larger cause of humanity.
