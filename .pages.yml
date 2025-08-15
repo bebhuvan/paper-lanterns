@@ -125,10 +125,10 @@ content:
                   type: string
                   label: Description
       - name: body
-        type: rich-text
-        label: Letter Content
+        type: text
+        label: Letter Content (Markdown)
         required: true
-        hint: "Full text of the letter"
+        hint: "Full text of the letter (write in Markdown - supports **bold**, _italic_, [links](url), etc.)"
 
   - name: speeches
     label: 🎤 Speeches
@@ -202,9 +202,10 @@ content:
           labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red"]
         default: "#e07a5f"
       - name: body
-        type: rich-text
-        label: Speech Content
+        type: text
+        label: Speech Content (Markdown)
         required: true
+        hint: "Full text of the speech (write in Markdown - supports **bold**, _italic_, [links](url), etc.)"
 
   - name: garden
     label: 🌱 Garden
@@ -232,7 +233,7 @@ content:
         type: rich-text
         label: Content
         required: false
-        hint: "The main content of this entry (supports rich text formatting)"
+        hint: "The main content of this entry (WYSIWYG rich text editor)"
       - name: description
         type: string
         label: Description
@@ -369,9 +370,10 @@ content:
           labels: ["Coral", "Sage Green", "Golden Yellow", "Lavender", "Soft Red", "Saddle Brown"]
         default: "#e07a5f"
       - name: body
-        type: rich-text
-        label: Essay Content
+        type: text
+        label: Essay Content (Markdown)
         required: true
+        hint: "Full text of the essay (write in Markdown - supports **bold**, _italic_, [links](url), etc.)"
 
   - name: lectures
     label: 🎓 Lectures
@@ -482,9 +484,10 @@ content:
                   type: string
                   label: Description
       - name: body
-        type: rich-text
-        label: Lecture Content
+        type: text
+        label: Lecture Content (Markdown)
         required: true
+        hint: "Full text of the lecture (write in Markdown - supports **bold**, _italic_, [links](url), etc.)"
 
   - name: collections
     label: 🗂️ Collections
@@ -509,6 +512,6 @@ content:
         label: Theme Color
         default: "#d4a574"
       - name: body
-        type: rich-text
+        type: text
         label: Collection Description
-        hint: "Extended description (optional)"
+        hint: "Extended description (supports Markdown formatting)"
