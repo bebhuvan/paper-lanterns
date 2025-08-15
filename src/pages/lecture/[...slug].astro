@@ -63,7 +63,7 @@ const relatedContent = [...relatedByAuthor, ...relatedByTags].slice(0, 4);
 
 <Layout 
   title={`${lecture.data.title} by ${lecture.data.author.name} - Paper Lanterns`}
-  description={lecture.data.excerpt}
+  description={`A ${lecture.data.date.getFullYear()} lecture by ${lecture.data.author.name}${lecture.data.context ? ` ${lecture.data.context.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')}` : ''}. ${lecture.data.excerpt}`}
   author={lecture.data.author.name}
   publishedTime={lecture.data.date.toISOString()}
   image={lecture.data.image || `/og-lecture.png`}

@@ -30,8 +30,8 @@ const nextEssay = currentIndex > 0 ? sortedEssays[currentIndex - 1] : null;
 ---
 
 <Layout 
-  title={`${essay.data.title} - ${essay.data.author.name} | Paper Lanterns`}
-  description={essay.data.context}
+  title={`${essay.data.title} by ${essay.data.author.name} - Paper Lanterns`}
+  description={`A ${essay.data.date.getFullYear()} essay by ${essay.data.author.name}. ${essay.data.context.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')}${essay.data.excerpt ? ` ${essay.data.excerpt}` : ''}`}
   author={essay.data.author.name}
   publishedTime={essay.data.date.toISOString()}
 >

@@ -26,15 +26,15 @@ const nextSpeech = currentIndex < allSpeeches.length - 1 ? allSpeeches[currentIn
 ---
 
 <Layout 
-  title={`${speech.data.author.name} - ${speech.data.title}`}
-  description={speech.data.excerpt}
+  title={`${speech.data.title} by ${speech.data.author.name} - Paper Lanterns`}
+  description={`A ${speech.data.date.getFullYear()} speech by ${speech.data.author.name}${speech.data.context ? ` ${speech.data.context.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')}` : ''}. ${speech.data.excerpt}`}
   author={speech.data.author.name}
   publishedTime={speech.data.date.toISOString()}
 >
   <Navigation />
   
   <main class="reading-container">
-    <a href="/" class="back-link">← Back to Voice from time</a>
+    <a href="/" class="back-link">← Back to Paper Lanterns</a>
     
     <article class="speech">
       <div class="speech-meta">

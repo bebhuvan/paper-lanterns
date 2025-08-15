@@ -98,28 +98,28 @@ content:
             hint: "Background about when/why this was written"
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: significance
             type: markdown
             label: Significance
             hint: "Why this letter is important"
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: author_bio
             type: markdown
             label: About the Author
             hint: "Biographical information"
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: recipient_info
             type: markdown
             label: About the Recipient
             hint: "Information about who received this"
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: links
             type: array
             label: Additional Resources
@@ -143,7 +143,7 @@ content:
         hint: "Full text of the letter"
         editor:
           preview: true
-          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
+          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: speeches
     label: 🎤 Speeches
@@ -222,7 +222,7 @@ content:
         required: true
         editor:
           preview: true
-          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
+          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: garden
     label: 🌱 Garden
@@ -253,7 +253,7 @@ content:
         hint: "The main content of this entry (supports rich text formatting)"
         editor:
           preview: true
-          buttons: ["bold", "italic", "code", "link", "heading-one", "heading-two", "quote", "unordered-list", "ordered-list"]
+          buttons: ["bold", "italic", "code", "link", "heading-one", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table", "strikethrough"]
       - name: description
         type: string
         label: Description
@@ -395,7 +395,7 @@ content:
         required: true
         editor:
           preview: true
-          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
+          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: lectures
     label: 🎓 Lectures
@@ -482,25 +482,25 @@ content:
             label: Historical Context
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: significance
             type: markdown
             label: Significance
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: author_bio
             type: markdown
             label: About the Author
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: series_info
             type: markdown
             label: Series Information
             editor:
               preview: true
-              buttons: ["bold", "italic", "link", "quote"]
+              buttons: ["bold", "italic", "code", "link", "quote", "image"]
           - name: links
             type: array
             label: Additional Resources
@@ -523,7 +523,7 @@ content:
         required: true
         editor:
           preview: true
-          buttons: ["bold", "italic", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list"]
+          buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "unordered-list", "ordered-list", "image", "table"]
 
   - name: collections
     label: 🗂️ Collections
@@ -553,4 +553,4 @@ content:
         hint: "Extended description (optional)"
         editor:
           preview: true
-          buttons: ["bold", "italic", "link", "quote", "unordered-list"]
+          buttons: ["bold", "italic", "code", "link", "quote", "unordered-list", "ordered-list", "image"]
