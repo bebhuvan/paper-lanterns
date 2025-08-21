@@ -21,13 +21,40 @@ const featuredSpeeches = allSpeeches.filter(item => item.data.featured).map(item
 const featuredLectures = allLectures.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'lecture' }));
 const featuredEssays = allEssays.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'essay' }));
 
-// Take the best from each type, then sort by date
+// Define latest additions (recently added content that should be prioritized)
+const latestAdditions = [
+  'bacon-burghley-1592',  // Francis Bacon letter
+  'thoreau-walking-1862'   // Thoreau Walking essay
+];
+
+// Function to check if an item is a latest addition
+const isLatestAddition = (item) => latestAdditions.includes(item.slug);
+
+// Prioritize latest additions in each category, then others
+const prioritizedLetters = [
+  ...featuredLetters.filter(isLatestAddition),
+  ...featuredLetters.filter(item => !isLatestAddition(item)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+];
+
+const prioritizedEssays = [
+  ...featuredEssays.filter(isLatestAddition),
+  ...featuredEssays.filter(item => !isLatestAddition(item)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+];
+
+// Take the best from each type, prioritizing latest additions
 const diverseFeatured = [
   ...featuredLectures.slice(0, 2),  // Up to 2 lectures
-  ...featuredEssays.slice(0, 2),   // Up to 2 essays
-  ...featuredLetters.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 2),  // Up to 2 letters
+  ...prioritizedEssays.slice(0, 2),   // Up to 2 essays (latest additions first)
+  ...prioritizedLetters.slice(0, 2),  // Up to 2 letters (latest additions first)
   ...featuredSpeeches.slice(0, 1)   // Up to 1 speech
-].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+].sort((a, b) => {
+  // Sort by latest additions first, then by date
+  const aIsLatest = isLatestAddition(a);
+  const bIsLatest = isLatestAddition(b);
+  if (aIsLatest && !bIsLatest) return -1;
+  if (!aIsLatest && bIsLatest) return 1;
+  return b.data.date.getTime() - a.data.date.getTime();
+});
 
 // If we need more content, add non-featured items
 const additionalContent = allContent
