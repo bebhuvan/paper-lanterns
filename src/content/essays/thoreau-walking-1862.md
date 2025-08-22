@@ -99,7 +99,7 @@ highway ever since, whatever pretensions they may make to belong to this select
 class. No doubt they were elevated for a moment as by the reminiscence of a
 previous state of existence, when even they were foresters and outlaws.
 
-<div style="text-align: center; font-style: italic; margin: 2em 0;">
+<div class="poem-container" style="text-align: center; font-style: italic; margin: 2em 0;">
 
 "When he came to grene wode,<br/>
 In a mery mornynge,<br/>
@@ -277,7 +277,7 @@ Marlborough Road, which does not go to Marlborough now, methinks, unless that
 is Marlborough where it carries me. I am the bolder to speak of it here,
 because I presume that there are one or two such roads in every town.
 
-<div style="text-align: center; font-style: italic; margin: 2em 0;">
+<div class="poem-container" style="text-align: center; font-style: italic; margin: 2em 0;">
 
 <h5>THE OLD MARLBOROUGH ROAD</h5>
 
