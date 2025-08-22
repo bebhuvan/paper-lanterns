@@ -99,15 +99,20 @@ highway ever since, whatever pretensions they may make to belong to this select
 class. No doubt they were elevated for a moment as by the reminiscence of a
 previous state of existence, when even they were foresters and outlaws.
 
-“When he came to grene wode,
-    In a mery mornynge,
-There he herde the notes small
-    Of byrdes mery syngynge.
+<div style="text-align: center; font-style: italic; margin: 2em 0;">
 
-“It is ferre gone, sayd Robyn,
-    That I was last here;
-Me lyste a lytell for to shote
-    At the donne dere.”
+"When he came to grene wode,<br/>
+In a mery mornynge,<br/>
+There he herde the notes small<br/>
+Of byrdes mery syngynge.<br/>
+<br/>
+"It is ferre gone, sayd Robyn,<br/>
+That I was last here;<br/>
+Me lyste a lytell for to shote<br/>
+At the donne dere."
+
+</div>
+
 
 I think that I cannot preserve my health and spirits, unless I spend four hours
 a day at least,—and it is commonly more than that,—sauntering
@@ -272,73 +277,77 @@ Marlborough Road, which does not go to Marlborough now, methinks, unless that
 is Marlborough where it carries me. I am the bolder to speak of it here,
 because I presume that there are one or two such roads in every town.
 
-##### THE OLD MARLBOROUGH ROAD.
+<div style="text-align: center; font-style: italic; margin: 2em 0;">
 
-    Where they once dug for money,
-    But never found any;
-    Where sometimes Martial Miles
-    Singly files,
-    And Elijah Wood,
-    I fear for no good:
-    No other man,
-    Save Elisha Dugan,—
-    O man of wild habits,
-    Partridges and rabbits,
-    Who hast no cares
-    Only to set snares,
-    Who liv’st all alone,
-    Close to the bone,
-    And where life is sweetest
-    Constantly eatest.
-When the spring stirs my blood
-  With the instinct to travel,
-  I can get enough gravel
-On the Old Marlborough Road.
-    Nobody repairs it,
-    For nobody wears it;
-    It is a living way,
-    As the Christians say.
-Not many there be
-  Who enter therein,
-Only the guests of the
-  Irishman Quin.
-What is it, what is it,
-  But a direction out there,
-And the bare possibility
-  Of going somewhere?
-    Great guide-boards of stone,
-    But travellers none;
-    Cenotaphs of the towns
-    Named on their crowns.
-    It is worth going to see
-    Where you *might* be.
-    What king
-    Did the thing,
-    I am still wondering;
-    Set up how or when,
-    By what selectmen,
-    Gourgas or Lee,
-    Clark or Darby?
-    They’re a great endeavor
-    To be something forever;
-    Blank tablets of stone,
-    Where a traveller might groan,
-    And in one sentence
-    Grave all that is known;
-    Which another might read,
-    In his extreme need.
-    I know one or two
-    Lines that would do,
-    Literature that might stand
-    All over the land,
-    Which a man could remember
-    Till next December,
-    And read again in the spring,
-    After the thawing.
-If with fancy unfurled
-  You leave your abode,
-You may go round the world
-  By the Old Marlborough Road.
+<h5>THE OLD MARLBOROUGH ROAD</h5>
+
+    Where they once dug for money,<br/>
+    But never found any;<br/>
+    Where sometimes Martial Miles<br/>
+    Singly files,<br/>
+    And Elijah Wood,<br/>
+    I fear for no good:<br/>
+    No other man,<br/>
+    Save Elisha Dugan,—<br/>
+    O man of wild habits,<br/>
+    Partridges and rabbits,<br/>
+    Who hast no cares<br/>
+    Only to set snares,<br/>
+    Who liv’st all alone,<br/>
+    Close to the bone,<br/>
+    And where life is sweetest<br/>
+    Constantly eatest.<br/>
+When the spring stirs my blood<br/>
+  With the instinct to travel,<br/>
+  I can get enough gravel<br/>
+On the Old Marlborough Road.<br/>
+    Nobody repairs it,<br/>
+    For nobody wears it;<br/>
+    It is a living way,<br/>
+    As the Christians say.<br/>
+Not many there be<br/>
+  Who enter therein,<br/>
+Only the guests of the<br/>
+  Irishman Quin.<br/>
+What is it, what is it,<br/>
+  But a direction out there,<br/>
+And the bare possibility<br/>
+  Of going somewhere?<br/>
+    Great guide-boards of stone,<br/>
+    But travellers none;<br/>
+    Cenotaphs of the towns<br/>
+    Named on their crowns.<br/>
+    It is worth going to see<br/>
+    Where you *might* be.<br/>
+    What king<br/>
+    Did the thing,<br/>
+    I am still wondering;<br/>
+    Set up how or when,<br/>
+    By what selectmen,<br/>
+    Gourgas or Lee,<br/>
+    Clark or Darby?<br/>
+    They’re a great endeavor<br/>
+    To be something forever;<br/>
+    Blank tablets of stone,<br/>
+    Where a traveller might groan,<br/>
+    And in one sentence<br/>
+    Grave all that is known;<br/>
+    Which another might read,<br/>
+    In his extreme need.<br/>
+    I know one or two<br/>
+    Lines that would do,<br/>
+    Literature that might stand<br/>
+    All over the land,<br/>
+    Which a man could remember<br/>
+    Till next December,<br/>
+    And read again in the spring,<br/>
+    After the thawing.<br/>
+If with fancy unfurled<br/>
+  You leave your abode,<br/>
+You may go round the world<br/>
+  By the Old Marlborough Road.<br/>
+
+</div>
 
 At present, in this vicinity, the best part of the land is not private
 property; the landscape is not owned, and the walker enjoys comparative
