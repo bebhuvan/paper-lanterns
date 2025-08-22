@@ -258,7 +258,7 @@ const nextEssay = currentIndex > 0 ? sortedEssays[currentIndex - 1] : null;
     line-height: 1.7;
   }
 
-  .essay-content :global(p:first-of-type::first-letter) {
+  .essay-content > :global(p:first-of-type::first-letter) {
     font-family: 'EB Garamond', serif;
     font-size: 4rem;
     font-weight: 500;
@@ -269,13 +269,14 @@ const nextEssay = currentIndex > 0 ? sortedEssays[currentIndex - 1] : null;
   }
 
   /* Prevent dropcaps in poem containers */
-  .essay-content :global(.poem-container p:first-of-type::first-letter) {
-    font-size: inherit;
-    font-weight: inherit;
-    float: none;
-    margin: 0;
-    color: inherit;
-    font-family: inherit;
+  .essay-content :global(.poem-container *::first-letter) {
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    float: none !important;
+    margin: 0 !important;
+    color: inherit !important;
+    font-family: inherit !important;
+    line-height: inherit !important;
   }
 
   .essay-content :global(h2),
@@ -655,15 +656,9 @@ const nextEssay = currentIndex > 0 ? sortedEssays[currentIndex - 1] : null;
       font-size: 1.15rem;
     }
 
-    .essay-content :global(p:first-of-type::first-letter) {
+    .essay-content > :global(p:first-of-type::first-letter) {
       font-size: 3.5rem; /* Slightly larger drop cap */
       margin-right: 0.35rem;
-    }
-
-    /* Prevent dropcaps in poem containers on mobile */
-    .essay-content :global(.poem-container p:first-of-type::first-letter) {
-      font-size: inherit;
-      margin-right: 0;
     }
 
     .tags {
