@@ -239,12 +239,13 @@ const nextSpeech = currentIndex < allSpeeches.length - 1 ? allSpeeches[currentIn
 
   .speech-content :global(p:first-of-type::first-letter) {
     font-family: 'EB Garamond', serif;
-    font-size: 5.5rem;
-    line-height: 0.75;
+    font-size: 3.2rem;
+    line-height: 0.8;
     float: left;
-    margin: 0.05rem 0.6rem 0.1rem 0;
-    color: var(--drop-cap-color);
-    font-weight: 600;
+    margin: 0.05rem 0.4rem -0.1rem 0;
+    color: var(--text-primary);
+    font-weight: 400;
+    opacity: 0.85;
   }
 
   .speech-content :global(p) {
@@ -528,8 +529,9 @@ const nextSpeech = currentIndex < allSpeeches.length - 1 ? allSpeeches[currentIn
     }
 
     .speech-content :global(p:first-of-type::first-letter) {
-      font-size: 4.5rem;
-      margin-right: 0.5rem;
+      font-size: 2.8rem;
+      margin: 0.05rem 0.3rem -0.05rem 0;
+      line-height: 0.85;
     }
 
     .speech-nav {
