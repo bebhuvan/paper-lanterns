@@ -1,5 +1,7 @@
-const CACHE_NAME = 'paper-lanterns-v1';
+const CACHE_NAME = 'paper-lanterns-v2';
 const OFFLINE_URL = '/offline.html';
+const STATIC_CACHE = 'static-v1';
+const DYNAMIC_CACHE = 'dynamic-v1';
 
 // Assets to cache for offline functionality
 const STATIC_ASSETS = [

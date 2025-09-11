@@ -30,17 +30,7 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     <meta name="generator" content={Astro.generator} />
     
     <!-- Critical theme initialization to prevent flicker -->
-    <script is:inline>
-      (function() {
-        try {
-          const theme = localStorage.getItem('theme') || 'light';
-          document.documentElement.setAttribute('data-theme', theme);
-        } catch (e) {
-          // Fallback to light mode if any error
-          document.documentElement.setAttribute('data-theme', 'light');
-        }
-      })();
-    </script>
+    <script src="/js/theme-init.js" is:inline></script>
     
     <!-- Primary Meta Tags -->
     <title>{title}</title>
@@ -93,8 +83,53 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
+    <!-- Critical inline CSS for above-the-fold content -->
+    <style>
+      /* Critical CSS - inline to prevent render blocking */
+      :root {
+        --bg-primary: #fffef9;
+        --bg-secondary: rgba(255, 254, 249, 0.95);
+        --bg-accent: rgba(255, 254, 249, 0.6);
+        --text-primary: #2a2a2a;
+        --text-secondary: #444;
+        --text-tertiary: #666;
+        --accent-primary: #d4a574;
+        --border-secondary: #f0ede8;
+        --border-accent: rgba(212, 165, 116, 0.15);
+      }
+      [data-theme="dark"] {
+        --bg-primary: #1a1815;
+        --bg-secondary: rgba(26, 24, 21, 0.95);
+        --bg-accent: rgba(32, 30, 26, 0.8);
+        --text-primary: #f0ead9;
+        --text-secondary: #e0dbc8;
+        --text-tertiary: #c5c0b3;
+        --accent-primary: #daa76e;
+        --border-secondary: #2d2a25;
+        --border-accent: rgba(212, 165, 116, 0.25);
+      }
+      body {
+        font-family: 'Times New Roman', serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Times New Roman', serif;
+        font-weight: 500;
+        line-height: 1.2;
+        color: var(--text-primary);
+      }
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+    
     <!-- Fonts - optimized loading with font-display swap for better performance -->
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     </noscript>
@@ -102,6 +137,17 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     <!-- Resource hints for better performance -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//static.cloudflareinsights.com">
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml">
+    <link rel="modulepreload" href="/sw.js">
+    
+    <!-- Prefetch important pages for faster navigation -->
+    <link rel="prefetch" href="/letters">
+    <link rel="prefetch" href="/essays">
+    <link rel="prefetch" href="/speeches">
+    <link rel="prefetch" href="/api/random-content.json">
     
     <!-- Additional SEO meta tags -->
     <meta name="robots" content="index, follow" />
@@ -130,35 +176,7 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     <slot />
     
     <!-- Service Worker Registration -->
-    <script is:inline>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              console.log('SW registered: ', registration);
-              
-              // Check for updates every 24 hours
-              setInterval(() => {
-                registration.update();
-              }, 24 * 60 * 60 * 1000);
-            })
-            .catch((registrationError) => {
-              console.log('SW registration failed: ', registrationError);
-            });
-        });
-        
-        // Listen for service worker updates
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-          // Optionally show a notification about app update
-          if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('Paper Lanterns Updated', {
-              body: 'The app has been updated with new features!',
-              icon: '/icons/icon-192.png'
-            });
-          }
-        });
-      }
-    </script>
+    <script src="/js/sw-register.js" is:inline></script>
   </body>
 </html>
 
