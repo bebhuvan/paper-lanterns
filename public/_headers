@@ -47,8 +47,9 @@
   cache-control: public, max-age=300, stale-while-revalidate=86400
   
   # Security Headers
-  # Content Security Policy - Enhanced XSS protection with comprehensive hashes
-  content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'sha256-NlOh8mKOi0ZfZdNIw2VQbsRzfa/SYMkXxot2r+/G7oo=' 'sha256-f1Ie1t+BupzzEDbVtpNK4T3WCTRPqU7ETFVhCG+G8x8=' 'sha256-9Cfh/ONgSmT2kgwo9DOuxGPxE/LYOmNb6cPOoQrJqwE=' 'sha256-UTJMpSEnseLn8hIYIDFHqS+uVIbeJrzZizX+JrEM6fI=' 'sha256-tZ0KHg506WthKQBhoMXaGGeQ5l+h8zZSWq3rl72iRAY=' 'sha256-f7s3bP4zoEDg9oicD54byV714bN6oqdMcqdrq+uEY8M=' 'sha256-uER4Uwf06YokLHrwW/b9IQP7x/NYKmLz2W4KAFl4HVo=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'; require-trusted-types-for 'script'
+  # Note: CSP is now handled via meta tag with dynamic nonce for enhanced XSS protection
+  # Fallback CSP for older browsers or when meta CSP fails
+  content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'
   
   # HSTS - Force HTTPS connections
   strict-transport-security: max-age=31536000; includeSubDomains; preload

@@ -20,6 +20,10 @@ const {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteName = "Paper Lanterns";
 const siteUrl = Astro.site || "https://paperlanterns.com";
+
+// Generate cryptographically secure nonce for CSP
+const nonce = crypto.getRandomValues(new Uint8Array(16))
+  .reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 ---
 
 <!DOCTYPE html>
@@ -29,8 +33,11 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
     
+    <!-- Content Security Policy with nonce -->
+    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'nonce-${nonce}' 'strict-dynamic' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'; require-trusted-types-for 'script'`} />
+    
     <!-- Critical theme initialization to prevent flicker -->
-    <script is:inline>
+    <script is:inline nonce={nonce}>
       (function() {
         try {
           const theme = localStorage.getItem('theme') || 'light';
@@ -184,11 +191,33 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
   <body>
     <slot />
     
-    <!-- Deferred JavaScript for better performance -->
-    <script src="/js/font-loader.js" defer></script>
-    <script src="/js/utils.js" defer></script>
-    <script src="/js/random-letter.js" defer></script>
-    <script src="/js/sw-register.js" defer></script>
+    <!-- Dynamic script loader for strict CSP compliance -->
+    <script nonce={nonce}>
+      // Dynamically load external scripts to comply with strict-dynamic CSP
+      const scripts = [
+        '/js/font-loader.js',
+        '/js/utils.js', 
+        '/js/random-letter.js',
+        '/js/sw-register.js'
+      ];
+      
+      // Load scripts after DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadScripts);
+      } else {
+        loadScripts();
+      }
+      
+      function loadScripts() {
+        scripts.forEach((src, index) => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.defer = true;
+          // Add slight delay to preserve original loading order
+          setTimeout(() => document.head.appendChild(script), index * 10);
+        });
+      }
+    </script>
   </body>
 </html>
 
