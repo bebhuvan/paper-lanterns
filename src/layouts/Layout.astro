@@ -34,7 +34,7 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
     <meta name="generator" content={Astro.generator} />
     
     <!-- Content Security Policy with nonce -->
-    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'nonce-${nonce}' 'strict-dynamic' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'; require-trusted-types-for 'script'`} />
+    <meta http-equiv="Content-Security-Policy" content={`default-src 'self'; script-src 'nonce-${nonce}' 'strict-dynamic' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'; require-trusted-types-for 'script'`} />
     
     <!-- Critical theme initialization to prevent flicker -->
     <script is:inline nonce={nonce}>
@@ -201,6 +201,14 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
         '/js/sw-register.js'
       ];
       
+      // Create Trusted Types policy for script URLs
+      let trustedPolicy = null;
+      if (window.trustedTypes && trustedTypes.createPolicy) {
+        trustedPolicy = trustedTypes.createPolicy('script-loader', {
+          createScriptURL: (url) => url
+        });
+      }
+      
       // Load scripts after DOM is ready
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', loadScripts);
@@ -211,7 +219,14 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
       function loadScripts() {
         scripts.forEach((src, index) => {
           const script = document.createElement('script');
-          script.src = src;
+          
+          // Use TrustedScriptURL if available
+          if (trustedPolicy) {
+            script.src = trustedPolicy.createScriptURL(src);
+          } else {
+            script.src = src;
+          }
+          
           script.defer = true;
           // Add slight delay to preserve original loading order
           setTimeout(() => document.head.appendChild(script), index * 10);
