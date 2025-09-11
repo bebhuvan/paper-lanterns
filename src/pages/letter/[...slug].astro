@@ -162,9 +162,9 @@ const relatedContent = [...relatedByAuthor, ...relatedByTags].slice(0, 4);
       )}
 
       <div class="letter-actions">
-        <button onclick="shareContent()" class="action-btn">Share</button>
-        <button onclick="copyLink()" class="action-btn">Copy Link</button>
-        <button onclick="copyText()" class="action-btn">Copy Text</button>
+        <button data-action="share" class="action-btn">Share</button>
+        <button data-action="copy-link" class="action-btn">Copy Link</button>
+        <button data-action="copy-text" class="action-btn">Copy Text</button>
       </div>
     </article>
 

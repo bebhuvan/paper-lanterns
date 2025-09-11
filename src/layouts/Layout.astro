@@ -129,7 +129,7 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     </style>
     
     <!-- Fonts - optimized loading with font-display swap for better performance -->
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
+    <link id="fonts-link" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" media="print">
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     </noscript>
@@ -175,8 +175,10 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
   <body>
     <slot />
     
-    <!-- Service Worker Registration -->
-    <script src="/js/sw-register.js" is:inline></script>
+    <!-- Deferred JavaScript for better performance -->
+    <script src="/js/utils.js" defer></script>
+    <script src="/js/random-letter.js" defer></script>
+    <script src="/js/sw-register.js" defer></script>
   </body>
 </html>
 

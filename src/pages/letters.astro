@@ -1,0 +1,360 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+
+// Get all letters, sorted by date (newest first)
+const letters = await getCollection('letters');
+const sortedLetters = letters.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Group letters by author for better organization
+const lettersByAuthor = sortedLetters.reduce((acc, letter) => {
+  const authorName = letter.data.author.name;
+  if (!acc[authorName]) {
+    acc[authorName] = [];
+  }
+  acc[authorName].push(letter);
+  return acc;
+}, {} as Record<string, typeof letters>);
+
+const authors = Object.keys(lettersByAuthor).sort();
+
+// Get unique years for filtering
+const years = [...new Set(sortedLetters.map(letter => letter.data.date.getFullYear()))].sort((a, b) => b - a);
+---
+
+<Layout title="Letters - Paper Lanterns">
+  <Navigation />
+  
+  <main>
+    <div class="container">
+      <header class="letters-header">
+        <h1 class="letters-title">Letters</h1>
+        <p class="letters-description">
+          {letters.length > 0 ? (
+            `Discover ${letters.length} historical letters from remarkable individuals, spanning ${years[years.length - 1]} to ${years[0]}.`
+          ) : (
+            "We're currently curating authentic letters from verified historical sources."
+          )}
+        </p>
+      </header>
+
+      {letters.length > 0 ? (
+        <>
+          <div class="letters-filters">
+            <div class="filter-group">
+              <label for="author-filter" class="filter-label">Author:</label>
+              <select id="author-filter" class="filter-select">
+                <option value="all">All Authors</option>
+                {authors.map(author => (
+                  <option value={author}>{author}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div class="filter-group">
+              <label for="year-filter" class="filter-label">Year:</label>
+              <select id="year-filter" class="filter-select">
+                <option value="all">All Years</option>
+                {years.map(year => (
+                  <option value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div class="letters-grid" id="letters-container">
+            {authors.map(authorName => (
+              <div class="author-section" data-author={authorName}>
+                <h2 class="author-name">{authorName}</h2>
+                <p class="author-count">{lettersByAuthor[authorName].length} {lettersByAuthor[authorName].length === 1 ? 'letter' : 'letters'}</p>
+                
+                <div class="author-letters">
+                  {lettersByAuthor[authorName].map(letter => (
+                    <article class="letter-card" data-year={letter.data.date.getFullYear()}>
+                      <a href={`/letter/${letter.slug}`} class="letter-link">
+                        <div class="letter-meta">
+                          <span class="letter-date">
+                            {letter.data.date.toLocaleDateString('en-US', { 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })}
+                          </span>
+                          {letter.data.recipient && (
+                            <span class="letter-recipient">
+                              to {letter.data.recipient.name}
+                            </span>
+                          )}
+                        </div>
+                        
+                        <h3 class="letter-title">{letter.data.title}</h3>
+                        
+                        <div class="letter-context">
+                          {letter.data.context}
+                        </div>
+                        
+                        <div class="letter-excerpt">
+                          {letter.data.excerpt || letter.body.slice(0, 150) + '...'}
+                        </div>
+                      </a>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div class="empty-state">
+          <h2>No letters available yet</h2>
+          <p>We're working on adding historically significant letters to our collection.</p>
+          <a href="/collections" class="primary-button">Browse Collections</a>
+        </div>
+      )}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 8rem 2rem 4rem;
+  }
+
+  .letters-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .letters-title {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .letters-description {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .letters-filters {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+
+  .filter-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-secondary);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: inherit;
+  }
+
+  .author-section {
+    margin-bottom: 4rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .author-section:last-child {
+    border-bottom: none;
+  }
+
+  .author-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .author-count {
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  .author-letters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .letter-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+
+  .letter-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px var(--drop-shadow);
+    border-color: var(--accent-primary);
+  }
+
+  .letter-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .letter-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+  }
+
+  .letter-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .letter-context {
+    font-size: 0.9rem;
+    color: var(--accent-secondary);
+    font-style: italic;
+    margin-bottom: 1rem;
+  }
+
+  .letter-excerpt {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .empty-state h2 {
+    font-family: 'EB Garamond', serif;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .primary-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--accent-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .primary-button:hover {
+    background: var(--accent-tertiary);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 6rem 1rem 2rem;
+    }
+    
+    .author-letters {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    .letters-filters {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Filter functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const authorFilter = document.getElementById('author-filter') as HTMLSelectElement;
+    const yearFilter = document.getElementById('year-filter') as HTMLSelectElement;
+    const lettersContainer = document.getElementById('letters-container');
+
+    function filterLetters() {
+      const selectedAuthor = authorFilter?.value || 'all';
+      const selectedYear = yearFilter?.value || 'all';
+
+      if (!lettersContainer) return;
+
+      const authorSections = lettersContainer.querySelectorAll('.author-section');
+      
+      authorSections.forEach(section => {
+        const authorElement = section as HTMLElement;
+        const author = authorElement.dataset.author || '';
+        let hasVisibleLetters = false;
+
+        if (selectedAuthor === 'all' || selectedAuthor === author) {
+          const letterCards = section.querySelectorAll('.letter-card');
+          
+          letterCards.forEach(card => {
+            const cardElement = card as HTMLElement;
+            const year = cardElement.dataset.year || '';
+            
+            if (selectedYear === 'all' || selectedYear === year) {
+              cardElement.style.display = 'block';
+              hasVisibleLetters = true;
+            } else {
+              cardElement.style.display = 'none';
+            }
+          });
+          
+          authorElement.style.display = hasVisibleLetters ? 'block' : 'none';
+        } else {
+          authorElement.style.display = 'none';
+        }
+      });
+    }
+
+    authorFilter?.addEventListener('change', filterLetters);
+    yearFilter?.addEventListener('change', filterLetters);
+  });
+</script>
