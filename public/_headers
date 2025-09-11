@@ -48,7 +48,7 @@
   
   # Security Headers
   # Content Security Policy - Strict XSS protection with script hashes
-  content-security-policy: default-src 'self'; script-src 'self' 'sha256-gaSr2SRnUQG+9/RjwBjQUe6aKgwT3nItlMFIVbt4M88=' 'sha256-tfoJsq9hWXweY/ofA4+Pb83eKiBXiE/o2d7aiyHHRYg=' 'sha256-9Cfh/ONgSmT2kgwo9DOuxGPxE/LYOmNb6cPOoQrJqwE=' 'sha256-UTJMpSEnseLn8hIYIDFHqS+uVIbeJrzZizX+JrEM6fI=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'; require-trusted-types-for 'script'
+  content-security-policy: default-src 'self'; script-src 'self' 'sha256-NlOh8mKOi0ZfZdNIw2VQbsRzfa/SYMkXxot2r+/G7oo=' 'sha256-f1Ie1t+BupzzEDbVtpNK4T3WCTRPqU7ETFVhCG+G8x8=' 'sha256-9Cfh/ONgSmT2kgwo9DOuxGPxE/LYOmNb6cPOoQrJqwE=' 'sha256-UTJMpSEnseLn8hIYIDFHqS+uVIbeJrzZizX+JrEM6fI=' 'sha256-tZ0KHg506WthKQBhoMXaGGeQ5l+h8zZSWq3rl72iRAY=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'
   
   # HSTS - Force HTTPS connections
   strict-transport-security: max-age=31536000; includeSubDomains; preload

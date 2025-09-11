@@ -1,6 +1,14 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    // Use TrustedScriptURL if available for CSP compliance
+    let swUrl = '/sw.js';
+    if (window.trustedTypes && trustedTypes.createPolicy) {
+      const policy = trustedTypes.createPolicy('sw-register', {
+        createScriptURL: (url) => url
+      });
+      swUrl = policy.createScriptURL(swUrl);
+    }
+    navigator.serviceWorker.register(swUrl)
       .then((registration) => {
         console.log('SW registered: ', registration);
         

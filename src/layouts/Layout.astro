@@ -30,7 +30,16 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     <meta name="generator" content={Astro.generator} />
     
     <!-- Critical theme initialization to prevent flicker -->
-    <script src="/js/theme-init.js" is:inline></script>
+    <script is:inline>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme') || 'light';
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
     
     <!-- Primary Meta Tags -->
     <title>{title}</title>
@@ -176,6 +185,7 @@ const siteUrl = Astro.site || "https://paperlanterns.com";
     <slot />
     
     <!-- Deferred JavaScript for better performance -->
+    <script src="/js/font-loader.js" defer></script>
     <script src="/js/utils.js" defer></script>
     <script src="/js/random-letter.js" defer></script>
     <script src="/js/sw-register.js" defer></script>
