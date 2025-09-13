@@ -219,3 +219,25 @@ import ThemeToggle from './ThemeToggle.astro';
   }
 </style>
 
+<script>
+  // Mobile menu toggle functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (mobileMenuBtn && navMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('mobile-open');
+      });
+      
+      // Close mobile menu when clicking on a link
+      const navLinks = navMenu.querySelectorAll('.nav-links a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('mobile-open');
+        });
+      });
+    }
+  });
+</script>
+

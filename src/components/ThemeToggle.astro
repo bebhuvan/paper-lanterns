@@ -83,23 +83,3 @@
   }
 </style>
 
-<script>
-  // Theme toggle functionality - optimized to prevent forced reflows
-  const toggle = document.getElementById('theme-toggle');
-  
-  if (toggle) {
-    // Cache the current theme to avoid DOM queries
-    let currentTheme = document.documentElement.dataset.theme || 'light';
-    
-    toggle.addEventListener('click', () => {
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      
-      // Use dataset property instead of setAttribute to reduce reflows
-      document.documentElement.dataset.theme = newTheme;
-      localStorage.setItem('theme', newTheme);
-      
-      // Update cached value
-      currentTheme = newTheme;
-    });
-  }
-</script>

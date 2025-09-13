@@ -195,6 +195,7 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
     <script nonce={nonce}>
       // Dynamically load external scripts to comply with strict-dynamic CSP
       const scripts = [
+        '/js/theme-toggle.js',
         '/js/font-loader.js',
         '/js/utils.js', 
         '/js/random-letter.js',
