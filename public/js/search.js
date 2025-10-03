@@ -33,7 +33,13 @@ async function loadSearchData() {
 
 // Search functionality
 function performSearch(query, data) {
-  const dataset = Array.isArray(data) ? data : [];
+  // Ensure data is always an array
+  if (!data || !Array.isArray(data)) {
+    console.warn('[Search] Invalid data provided to performSearch', data);
+    return [];
+  }
+
+  const dataset = data;
   const searchTerm = query.toLowerCase().trim();
 
   if (!searchTerm) return [];
@@ -48,30 +54,32 @@ function performSearch(query, data) {
   const era = eraMap[searchTerm];
   if (era) {
     return dataset.filter(item => {
+      if (!item || !item.date) return false;
       const year = new Date(item.date).getFullYear();
       return year >= era.start && year < era.end;
     }).sort((a, b) => b.date - a.date);
   }
 
   return dataset.filter(item => {
+    if (!item) return false;
     const searchableText = [
-      item.title,
-      item.author,
-      item.recipient,
-      item.context,
-      item.excerpt,
-      item.body,
-      ...item.tags,
-      ...item.collections
+      item.title || '',
+      item.author || '',
+      item.recipient || '',
+      item.context || '',
+      item.excerpt || '',
+      item.body || '',
+      ...(Array.isArray(item.tags) ? item.tags : []),
+      ...(Array.isArray(item.collections) ? item.collections : [])
     ].join(' ').toLowerCase();
 
     return searchableText.includes(searchTerm);
   }).sort((a, b) => {
     // Prioritize title matches, then author matches, then content matches
-    const aTitle = a.title.toLowerCase().includes(searchTerm);
-    const bTitle = b.title.toLowerCase().includes(searchTerm);
-    const aAuthor = a.author.toLowerCase().includes(searchTerm);
-    const bAuthor = b.author.toLowerCase().includes(searchTerm);
+    const aTitle = (a.title || '').toLowerCase().includes(searchTerm);
+    const bTitle = (b.title || '').toLowerCase().includes(searchTerm);
+    const aAuthor = (a.author || '').toLowerCase().includes(searchTerm);
+    const bAuthor = (b.author || '').toLowerCase().includes(searchTerm);
 
     if (aTitle && !bTitle) return -1;
     if (bTitle && !aTitle) return 1;
@@ -165,7 +173,6 @@ function displayResults(results, query) {
   }
 
   subtitle.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
-  subtitle.style.display = 'block';
 
   // Show results with smooth transition
   setTimeout(() => {
@@ -188,7 +195,7 @@ async function handleSearch(query) {
   if (!trimmedQuery) {
     resultsSection.classList.remove('visible');
     resultsSection.classList.add('hidden');
-    subtitle.style.display = 'none';
+    subtitle.textContent = '';
 
     setTimeout(() => {
       if (token !== latestSearchToken) return;
@@ -228,7 +235,6 @@ async function handleSearch(query) {
     resultsList.innerHTML = '';
 
     subtitle.textContent = 'Search temporarily unavailable';
-    subtitle.style.display = 'block';
 
     resultsSection.classList.remove('hidden');
     resultsSection.classList.add('visible');

@@ -1,6 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+
+// Generate nonce for inline scripts
+const nonce = crypto.getRandomValues(new Uint8Array(16))
+  .reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 ---
 
 <Layout 
@@ -13,7 +17,7 @@ import Navigation from '../components/Navigation.astro';
     <div class="container">
       <header class="search-header">
         <h1 class="search-title">Search</h1>
-        <p class="search-subtitle" id="search-subtitle" style="display: none;"></p>
+        <p class="search-subtitle" id="search-subtitle"></p>
       </header>
 
       <div class="search-form">
@@ -80,7 +84,7 @@ import Navigation from '../components/Navigation.astro';
   </main>
 
   <!-- External search functionality script -->
-  <script src="/js/search.js" defer></script>
+  <script src="/js/search.js" nonce={nonce} defer></script>
 </Layout>
 
 <style>
@@ -98,6 +102,10 @@ import Navigation from '../components/Navigation.astro';
   .search-header {
     text-align: center;
     margin-bottom: 3rem;
+    min-height: 120px; /* Fixed height to prevent shift */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .search-title {
@@ -111,10 +119,18 @@ import Navigation from '../components/Navigation.astro';
   .search-subtitle {
     font-size: 1.1rem;
     color: var(--text-tertiary);
+    min-height: 1.65rem; /* Reserve space to prevent layout shift */
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  .search-subtitle:empty {
+    opacity: 0;
   }
 
   .search-form {
     margin-bottom: 3rem;
+    min-height: 100px; /* Fixed height to prevent shift */
   }
 
   .search-form-inner {
@@ -345,7 +361,7 @@ import Navigation from '../components/Navigation.astro';
     top: 0;
     left: 0;
     right: 0;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition: opacity 0.25s ease;
     overflow-y: auto;
     max-height: 100%;
   }
@@ -353,14 +369,12 @@ import Navigation from '../components/Navigation.astro';
   .search-results.hidden,
   .search-suggestions.hidden {
     opacity: 0;
-    transform: translateY(20px);
     pointer-events: none;
   }
 
   .search-results.visible,
   .search-suggestions.visible {
     opacity: 1;
-    transform: translateY(0);
     pointer-events: auto;
   }
 

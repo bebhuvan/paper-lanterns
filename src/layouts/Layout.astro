@@ -153,7 +153,6 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
     <link rel="dns-prefetch" href="//static.cloudflareinsights.com">
     
     <!-- Preload critical assets -->
-    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml">
     <link rel="modulepreload" href="/sw.js">
     
     <!-- Prefetch important pages for faster navigation -->
@@ -194,8 +193,9 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
       const scripts = [
         '/js/theme-toggle.js',
         '/js/font-loader.js',
-        '/js/utils.js', 
+        '/js/utils.js',
         '/js/random-letter.js',
+        '/js/mobile-menu.js',
         '/js/sw-register.js'
       ];
       

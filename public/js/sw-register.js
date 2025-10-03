@@ -10,7 +10,7 @@ if ('serviceWorker' in navigator) {
     }
     navigator.serviceWorker.register(swUrl)
       .then((registration) => {
-        console.log('SW registered: ', registration);
+        // Service worker registered successfully
         
         // Check for updates every 24 hours
         setInterval(() => {
@@ -18,7 +18,7 @@ if ('serviceWorker' in navigator) {
         }, 24 * 60 * 60 * 1000);
       })
       .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
+        console.warn('SW registration failed: ', registrationError);
       });
   });
   
