@@ -168,25 +168,48 @@ const relatedContent = [...relatedByAuthor, ...relatedByTags].slice(0, 4);
       </div>
     </article>
 
-    {relatedContent.length > 0 && (
+    {relatedByAuthor.length > 0 && (
       <section class="related-content">
-        <h2 class="related-title">
-          {relatedByAuthor.length > 0 ? `More from ${letter.data.author.name}` : 'Related Content'}
-        </h2>
+        <h2 class="related-title">More from {letter.data.author.name}</h2>
         <div class="related-grid">
-          {relatedContent.map(item => (
+          {relatedByAuthor.map(item => (
             <article class="related-item">
               <div class="related-meta">
                 <span class="related-type">{item.contentType === 'letter' ? 'Letter' : 'Speech'}</span>
                 <time class="related-date">{item.data.date.getFullYear()}</time>
               </div>
-              
+
               <h3 class="related-item-title">
                 <a href={`/${item.contentType}/${item.slug}`}>
                   {item.data.title}
                 </a>
               </h3>
-              
+
+              <p class="related-author">{item.data.author.name}</p>
+              <p class="related-excerpt">{item.data.excerpt.slice(0, 120)}...</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {relatedByTags.length > 0 && (
+      <section class="related-content">
+        <h2 class="related-title">Related Content</h2>
+        <div class="related-grid">
+          {relatedByTags.map(item => (
+            <article class="related-item">
+              <div class="related-meta">
+                <span class="related-type">{item.contentType === 'letter' ? 'Letter' : 'Speech'}</span>
+                <time class="related-date">{item.data.date.getFullYear()}</time>
+              </div>
+
+              <h3 class="related-item-title">
+                <a href={`/${item.contentType}/${item.slug}`}>
+                  {item.data.title}
+                </a>
+              </h3>
+
               <p class="related-author">{item.data.author.name}</p>
               <p class="related-excerpt">{item.data.excerpt.slice(0, 120)}...</p>
             </article>
