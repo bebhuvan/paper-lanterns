@@ -6,6 +6,14 @@ let searchDataPromise = null;
 let defaultNoResultsMarkup = '';
 let latestSearchToken = 0;
 
+// Create Trusted Types policy for setting HTML
+let trustedPolicy = null;
+if (window.trustedTypes && trustedTypes.createPolicy) {
+  trustedPolicy = trustedTypes.createPolicy('search-html', {
+    createHTML: (html) => html
+  });
+}
+
 async function loadSearchData() {
   if (searchDataCache) return searchDataCache;
 
@@ -133,7 +141,7 @@ function displayResults(results, query) {
   suggestions.classList.add('hidden');
 
   if (defaultNoResultsMarkup) {
-    noResults.innerHTML = defaultNoResultsMarkup;
+    noResults.innerHTML = trustedPolicy ? trustedPolicy.createHTML(defaultNoResultsMarkup) : defaultNoResultsMarkup;
   }
 
   // Update content
@@ -142,7 +150,7 @@ function displayResults(results, query) {
     resultsList.innerHTML = '';
   } else {
     noResults.style.display = 'none';
-    resultsList.innerHTML = results.map(item => `
+    const htmlContent = results.map(item => `
       <article class="result-item">
         <div class="result-meta">
           <span class="result-type">${item.contentType === 'letter' ? 'Letter' : 'Speech'}</span>
@@ -170,6 +178,7 @@ function displayResults(results, query) {
         ` : ''}
       </article>
     `).join('');
+    resultsList.innerHTML = trustedPolicy ? trustedPolicy.createHTML(htmlContent) : htmlContent;
   }
 
   subtitle.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
@@ -202,7 +211,7 @@ async function handleSearch(query) {
       suggestions.classList.remove('hidden');
       suggestions.classList.add('visible');
       if (defaultNoResultsMarkup) {
-        noResults.innerHTML = defaultNoResultsMarkup;
+        noResults.innerHTML = trustedPolicy ? trustedPolicy.createHTML(defaultNoResultsMarkup) : defaultNoResultsMarkup;
       }
       noResults.style.display = 'none';
       resultsList.innerHTML = '';
@@ -227,10 +236,11 @@ async function handleSearch(query) {
     suggestions.classList.remove('visible');
     suggestions.classList.add('hidden');
 
-    noResults.innerHTML = `
+    const errorHTML = `
       <h2>Search temporarily unavailable</h2>
       <p>We couldn't load the search index. Please refresh or try again later.</p>
     `;
+    noResults.innerHTML = trustedPolicy ? trustedPolicy.createHTML(errorHTML) : errorHTML;
     noResults.style.display = 'block';
     resultsList.innerHTML = '';
 
