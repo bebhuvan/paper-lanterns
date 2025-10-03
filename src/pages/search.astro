@@ -241,26 +241,28 @@ const searchData = allContent.map(item => ({
     gap: 2rem;
   }
 
-  .result-item {
+  /* Global styles for dynamically inserted results */
+  :global(.result-item) {
     padding: 2rem 0;
     border-bottom: 1px solid var(--border-secondary);
+    transition: all 0.2s ease;
   }
 
-  .result-item:hover {
+  :global(.result-item:hover) {
     background: var(--bg-accent);
     margin: 0 -1rem;
     padding: 2rem 1rem;
     border-radius: 8px;
   }
 
-  .result-meta {
+  :global(.result-meta) {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-bottom: 0.5rem;
   }
 
-  .result-type {
+  :global(.result-type) {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -270,16 +272,16 @@ const searchData = allContent.map(item => ({
     border-radius: 12px;
   }
 
-  .result-date {
+  :global(.result-date) {
     font-size: 0.85rem;
     color: var(--accent-secondary);
   }
 
-  .result-title {
+  :global(.result-title) {
     margin-bottom: 0.5rem;
   }
 
-  .result-title a {
+  :global(.result-title a) {
     font-family: 'EB Garamond', serif;
     font-size: 1.3rem;
     font-weight: 500;
@@ -288,11 +290,11 @@ const searchData = allContent.map(item => ({
     transition: color 0.2s ease;
   }
 
-  .result-title a:hover {
+  :global(.result-title a:hover) {
     color: var(--accent-primary);
   }
 
-  .result-details {
+  :global(.result-details) {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -300,40 +302,40 @@ const searchData = allContent.map(item => ({
     font-size: 0.9rem;
   }
 
-  .author-name {
+  :global(.author-name) {
     font-weight: 500;
     color: var(--text-primary);
   }
 
-  .separator {
+  :global(.separator) {
     color: var(--text-light);
   }
 
-  .recipient {
+  :global(.recipient) {
     color: var(--accent-secondary);
     font-style: italic;
   }
 
-  .result-excerpt {
+  :global(.result-excerpt) {
     color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: 1rem;
   }
 
-  .result-excerpt :global(mark) {
+  :global(.result-excerpt mark) {
     background: var(--accent-primary);
     color: white;
     padding: 0.1em 0.2em;
     border-radius: 3px;
   }
 
-  .result-tags {
+  :global(.result-tags) {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
   }
 
-  .tag {
+  :global(.tag) {
     font-size: 0.75rem;
     color: var(--accent-secondary);
     background: var(--bg-accent);
@@ -496,7 +498,7 @@ const searchData = allContent.map(item => ({
   }
 </style>
 
-<script>
+<script is:inline>
   // Search functionality
   function performSearch(query) {
     const searchTerm = query.toLowerCase().trim();
@@ -700,7 +702,7 @@ const searchData = allContent.map(item => ({
   });
 </script>
 
-<script define:vars={{searchData}}>
+<script is:inline define:vars={{searchData}}>
   // Make search data available to the main script
   window.searchData = searchData;
 </script>
