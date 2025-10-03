@@ -4,16 +4,17 @@ import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <nav class="top-nav">
+  <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu">
   <div class="nav-container">
     <div class="nav-left">
       <a href="/" class="logo">Paper Lanterns</a>
-      <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+      <label for="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
-      </button>
+      </label>
     </div>
     <div class="nav-right" id="navMenu">
       <ul class="nav-links">
@@ -128,7 +129,11 @@ import ThemeToggle from './ThemeToggle.astro';
     }
   }
 
-  /* Mobile menu button for small screens */
+  /* Mobile menu toggle (CSS-only) */
+  .mobile-menu-toggle {
+    display: none;
+  }
+
   .mobile-menu-btn {
     display: none;
     background: none;
@@ -179,8 +184,9 @@ import ThemeToggle from './ThemeToggle.astro';
       backdrop-filter: blur(20px);
     }
 
-    .nav-right.mobile-open {
-      display: flex;
+    /* Show menu when checkbox is checked */
+    .mobile-menu-toggle:checked ~ .nav-container .nav-right {
+      display: flex !important;
       flex-direction: column;
       gap: 1.5rem;
     }
@@ -218,60 +224,3 @@ import ThemeToggle from './ThemeToggle.astro';
     }
   }
 </style>
-
-<script>
-// Mobile menu toggle functionality
-(function() {
-  'use strict';
-
-  function initMobileMenu() {
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const navMenu = document.getElementById('navMenu');
-
-    if (!menuBtn || !navMenu) {
-      return;
-    }
-
-    // Toggle menu on button click
-    menuBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const isOpen = navMenu.classList.contains('mobile-open');
-
-      if (isOpen) {
-        navMenu.classList.remove('mobile-open');
-        menuBtn.setAttribute('aria-expanded', 'false');
-      } else {
-        navMenu.classList.add('mobile-open');
-        menuBtn.setAttribute('aria-expanded', 'true');
-      }
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-      const isClickInsideNav = event.target.closest('.nav-container');
-      const isOpen = navMenu.classList.contains('mobile-open');
-
-      if (!isClickInsideNav && isOpen) {
-        navMenu.classList.remove('mobile-open');
-        menuBtn.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    // Close menu when clicking on a link
-    const navLinks = navMenu.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        navMenu.classList.remove('mobile-open');
-        menuBtn.setAttribute('aria-expanded', 'false');
-      });
-    });
-  }
-
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMobileMenu);
-  } else {
-    initMobileMenu();
-  }
-})();
-</script>
