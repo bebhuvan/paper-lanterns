@@ -50,9 +50,9 @@
   # Content Security Policy with hash-based allowlisting for XSS and injection protection
   # SHA-256 hashes for inline scripts:
   # - Theme initialization (Layout.astro)
-  # - Search data injection (search.astro)
+  # - Deferred script loader (Layout.astro)
   # unsafe-inline is fallback for browsers that don't support hashes (ignored by modern browsers)
-  content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'sha256-HCrQ8MRsoIB6iRrrhLu5acia7/4qaCtXdnIJHapfIZA=' 'sha256-j7QCFpdfq5XrB4pHkp/PJsGe/fCpjtHCF6jlt+M5aPk=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'; upgrade-insecure-requests
+  content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'sha256-WtQ2lEKDRBSog25pdBOa6WJdo10E4pXVgNXK9omPvaA=' 'sha256-3MJ4Mnl3tPQC4oQawyEO2JH/plmrR9b8srlUItAXcH8=' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://static.cloudflareinsights.com; manifest-src 'self'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; media-src 'self'; child-src 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'
   
   # HSTS - Force HTTPS connections
   strict-transport-security: max-age=31536000; includeSubDomains; preload

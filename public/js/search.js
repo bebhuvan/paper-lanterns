@@ -1,8 +1,39 @@
 // Search functionality for Paper Lanterns
 // This file is loaded on the search page to enable client-side search
 
+let searchDataCache = null;
+let searchDataPromise = null;
+let defaultNoResultsMarkup = '';
+let latestSearchToken = 0;
+
+async function loadSearchData() {
+  if (searchDataCache) return searchDataCache;
+
+  if (!searchDataPromise) {
+    searchDataPromise = fetch('/search-data.json', { cache: 'force-cache' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to load search data: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        searchDataCache = Array.isArray(data) ? data : [];
+        return searchDataCache;
+      })
+      .catch((error) => {
+        searchDataPromise = null;
+        console.error('[Paper Lanterns] Unable to load search index', error);
+        throw error;
+      });
+  }
+
+  return searchDataPromise;
+}
+
 // Search functionality
-function performSearch(query) {
+function performSearch(query, data) {
+  const dataset = Array.isArray(data) ? data : [];
   const searchTerm = query.toLowerCase().trim();
 
   if (!searchTerm) return [];
@@ -16,13 +47,13 @@ function performSearch(query) {
 
   const era = eraMap[searchTerm];
   if (era) {
-    return window.searchData.filter(item => {
+    return dataset.filter(item => {
       const year = new Date(item.date).getFullYear();
       return year >= era.start && year < era.end;
     }).sort((a, b) => b.date - a.date);
   }
 
-  return window.searchData.filter(item => {
+  return dataset.filter(item => {
     const searchableText = [
       item.title,
       item.author,
@@ -54,23 +85,27 @@ function performSearch(query) {
 
 // Highlight search terms
 function highlightText(text, searchTerm, maxLength = 150) {
-  if (!searchTerm || !text) return text.substring(0, maxLength) + (text.length > maxLength ? '...' : '');
+  const content = typeof text === 'string' ? text : '';
 
-  const lowerText = text.toLowerCase();
+  if (!searchTerm || !content) {
+    return content.substring(0, maxLength) + (content.length > maxLength ? '...' : '');
+  }
+
+  const lowerText = content.toLowerCase();
   const lowerTerm = searchTerm.toLowerCase();
   const index = lowerText.indexOf(lowerTerm);
 
   if (index === -1) {
-    return text.substring(0, maxLength) + (text.length > maxLength ? '...' : '');
+    return content.substring(0, maxLength) + (content.length > maxLength ? '...' : '');
   }
 
   // Try to center the match in the excerpt
   const start = Math.max(0, index - Math.floor((maxLength - searchTerm.length) / 2));
-  const end = Math.min(text.length, start + maxLength);
+  const end = Math.min(content.length, start + maxLength);
 
-  let excerpt = text.substring(start, end);
+  let excerpt = content.substring(start, end);
   if (start > 0) excerpt = '...' + excerpt;
-  if (end < text.length) excerpt = excerpt + '...';
+  if (end < content.length) excerpt = excerpt + '...';
 
   // Highlight the search term
   const regex = new RegExp(`(${searchTerm})`, 'gi');
@@ -88,6 +123,10 @@ function displayResults(results, query) {
   // Hide suggestions first
   suggestions.classList.remove('visible');
   suggestions.classList.add('hidden');
+
+  if (defaultNoResultsMarkup) {
+    noResults.innerHTML = defaultNoResultsMarkup;
+  }
 
   // Update content
   if (results.length === 0) {
@@ -136,37 +175,80 @@ function displayResults(results, query) {
 }
 
 // Handle search with smooth transitions using classes
-function handleSearch(query) {
-  if (!query.trim()) {
-    const resultsSection = document.getElementById('search-results');
-    const suggestions = document.getElementById('search-suggestions');
-    const subtitle = document.getElementById('search-subtitle');
+async function handleSearch(query) {
+  const trimmedQuery = query.trim();
+  const resultsSection = document.getElementById('search-results');
+  const resultsList = document.getElementById('results-list');
+  const suggestions = document.getElementById('search-suggestions');
+  const subtitle = document.getElementById('search-subtitle');
+  const noResults = document.getElementById('no-results');
 
-    // Hide results and show suggestions
+  const token = ++latestSearchToken;
+
+  if (!trimmedQuery) {
     resultsSection.classList.remove('visible');
     resultsSection.classList.add('hidden');
     subtitle.style.display = 'none';
 
     setTimeout(() => {
+      if (token !== latestSearchToken) return;
       suggestions.classList.remove('hidden');
       suggestions.classList.add('visible');
+      if (defaultNoResultsMarkup) {
+        noResults.innerHTML = defaultNoResultsMarkup;
+      }
+      noResults.style.display = 'none';
+      resultsList.innerHTML = '';
     }, 100);
     return;
   }
 
-  const results = performSearch(query);
-  displayResults(results, query);
+  try {
+    const data = await loadSearchData();
+    if (token !== latestSearchToken) return;
 
-  // Update URL without page reload
-  const url = new URL(window.location);
-  url.searchParams.set('q', query);
-  window.history.pushState({}, '', url);
+    const results = performSearch(trimmedQuery, data);
+    displayResults(results, trimmedQuery);
+
+    // Update URL without page reload
+    const url = new URL(window.location);
+    url.searchParams.set('q', trimmedQuery);
+    window.history.pushState({}, '', url);
+  } catch (error) {
+    if (token !== latestSearchToken) return;
+
+    suggestions.classList.remove('visible');
+    suggestions.classList.add('hidden');
+
+    noResults.innerHTML = `
+      <h2>Search temporarily unavailable</h2>
+      <p>We couldn't load the search index. Please refresh or try again later.</p>
+    `;
+    noResults.style.display = 'block';
+    resultsList.innerHTML = '';
+
+    subtitle.textContent = 'Search temporarily unavailable';
+    subtitle.style.display = 'block';
+
+    resultsSection.classList.remove('hidden');
+    resultsSection.classList.add('visible');
+  }
 }
 
 // Initialize search page
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('search-input');
   const searchForm = document.getElementById('search-form');
+  const noResults = document.getElementById('no-results');
+
+  if (noResults) {
+    defaultNoResultsMarkup = noResults.innerHTML;
+  }
+
+  // Warm up the search index in the background for faster first query
+  loadSearchData().catch(() => {
+    // The error will be surfaced when a search is attempted
+  });
 
   // Check for query parameter on load
   const urlParams = new URLSearchParams(window.location.search);

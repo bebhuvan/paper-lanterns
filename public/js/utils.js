@@ -97,15 +97,39 @@
     }, 3000);
   }
 
-  // Initialize event listeners when DOM is ready
-  document.addEventListener('DOMContentLoaded', function() {
+  function initializeUiBindings() {
     // Mobile menu toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    if (mobileMenuBtn) {
-      mobileMenuBtn.addEventListener('click', function() {
-        const menu = this.parentElement.nextElementSibling;
-        if (menu) {
-          menu.classList.toggle('mobile-open');
+    const navMenu = document.getElementById('navMenu');
+
+    if (mobileMenuBtn && navMenu) {
+      const toggleMenu = (forceState) => {
+        const shouldOpen = typeof forceState === 'boolean' ? forceState : !navMenu.classList.contains('mobile-open');
+        navMenu.classList.toggle('mobile-open', shouldOpen);
+        mobileMenuBtn.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+      };
+
+      mobileMenuBtn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        toggleMenu();
+      });
+
+      navMenu.addEventListener('click', (event) => {
+        if (event.target.closest('.nav-links a')) {
+          toggleMenu(false);
+        }
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!navMenu.classList.contains('mobile-open')) return;
+        if (!event.target.closest('.top-nav')) {
+          toggleMenu(false);
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && navMenu.classList.contains('mobile-open')) {
+          toggleMenu(false);
         }
       });
     }
@@ -161,5 +185,11 @@
         sharePost(this);
       });
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeUiBindings, { once: true });
+  } else {
+    initializeUiBindings();
+  }
 })();
