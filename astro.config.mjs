@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://paperlanterns.com',
+  site: 'https://paperlanterns.ink',
   integrations: [sitemap()],
   compressHTML: true,
   build: {

@@ -24,7 +24,16 @@ import ThemeToggle from './ThemeToggle.astro';
         <li><a href="/collections">Collections</a></li>
         <li><a href="/about">About</a></li>
       </ul>
-      <ThemeToggle />
+      <div class="nav-actions">
+        <a href="/rss.xml" class="rss-link" aria-label="RSS Feed" title="Subscribe via RSS">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 11a9 9 0 0 1 9 9"></path>
+            <path d="M4 4a16 16 0 0 1 16 16"></path>
+            <circle cx="5" cy="19" r="1"></circle>
+          </svg>
+        </a>
+        <ThemeToggle />
+      </div>
     </div>
   </div>
 </nav>
@@ -60,6 +69,12 @@ import ThemeToggle from './ThemeToggle.astro';
     display: flex;
     align-items: center;
     gap: 2rem;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .logo {
@@ -112,6 +127,31 @@ import ThemeToggle from './ThemeToggle.astro';
 
   .nav-links a:hover::after {
     width: 100%;
+  }
+
+  .rss-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--border-accent);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-tertiary);
+    text-decoration: none;
+  }
+
+  .rss-link:hover {
+    background: var(--bg-accent);
+    border-color: var(--accent-secondary);
+    color: var(--accent-primary);
+  }
+
+  .rss-link:active {
+    transform: scale(0.95);
   }
 
   @media (max-width: 768px) {
@@ -190,7 +230,7 @@ import ThemeToggle from './ThemeToggle.astro';
       flex-direction: column;
       gap: 1.5rem;
     }
-    
+
     .nav-links {
       flex-direction: column;
       gap: 0;
@@ -207,6 +247,22 @@ import ThemeToggle from './ThemeToggle.astro';
       display: block;
       width: 100%;
       border-bottom: 1px solid var(--border-secondary);
+    }
+
+    .nav-actions {
+      width: 100%;
+      justify-content: center;
+      padding-top: 0.5rem;
+    }
+
+    .rss-link {
+      width: 34px;
+      height: 34px;
+    }
+
+    .rss-link svg {
+      width: 18px;
+      height: 18px;
     }
 
     .random-letter-btn {
