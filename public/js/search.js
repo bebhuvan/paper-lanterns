@@ -7,9 +7,9 @@ let defaultNoResultsMarkup = '';
 let latestSearchToken = 0;
 
 // Create Trusted Types policy for setting HTML
-let trustedPolicy = null;
+let searchTrustedPolicy = null;
 if (window.trustedTypes && trustedTypes.createPolicy) {
-  trustedPolicy = trustedTypes.createPolicy('search-html', {
+  searchTrustedPolicy = trustedTypes.createPolicy('search-html', {
     createHTML: (html) => html
   });
 }
@@ -141,7 +141,7 @@ function displayResults(results, query) {
   suggestions.classList.add('hidden');
 
   if (defaultNoResultsMarkup) {
-    noResults.innerHTML = trustedPolicy ? trustedPolicy.createHTML(defaultNoResultsMarkup) : defaultNoResultsMarkup;
+    noResults.innerHTML = searchTrustedPolicy ? searchTrustedPolicy.createHTML(defaultNoResultsMarkup) : defaultNoResultsMarkup;
   }
 
   // Update content
@@ -178,7 +178,7 @@ function displayResults(results, query) {
         ` : ''}
       </article>
     `).join('');
-    resultsList.innerHTML = trustedPolicy ? trustedPolicy.createHTML(htmlContent) : htmlContent;
+    resultsList.innerHTML = searchTrustedPolicy ? searchTrustedPolicy.createHTML(htmlContent) : htmlContent;
   }
 
   subtitle.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
@@ -211,7 +211,7 @@ async function handleSearch(query) {
       suggestions.classList.remove('hidden');
       suggestions.classList.add('visible');
       if (defaultNoResultsMarkup) {
-        noResults.innerHTML = trustedPolicy ? trustedPolicy.createHTML(defaultNoResultsMarkup) : defaultNoResultsMarkup;
+        noResults.innerHTML = searchTrustedPolicy ? searchTrustedPolicy.createHTML(defaultNoResultsMarkup) : defaultNoResultsMarkup;
       }
       noResults.style.display = 'none';
       resultsList.innerHTML = '';
@@ -240,7 +240,7 @@ async function handleSearch(query) {
       <h2>Search temporarily unavailable</h2>
       <p>We couldn't load the search index. Please refresh or try again later.</p>
     `;
-    noResults.innerHTML = trustedPolicy ? trustedPolicy.createHTML(errorHTML) : errorHTML;
+    noResults.innerHTML = searchTrustedPolicy ? searchTrustedPolicy.createHTML(errorHTML) : errorHTML;
     noResults.style.display = 'block';
     resultsList.innerHTML = '';
 
