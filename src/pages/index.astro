@@ -1,25 +1,17 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+import { getAllContentItems } from '../lib/data-layer';
+import type { ContentItem } from '../lib/types';
 
-// Get featured letters, speeches, lectures, and essays from content collections
-const allLetters = await getCollection('letters');
-const allSpeeches = await getCollection('speeches');
-const allLectures = await getCollection('lectures');
-const allEssays = await getCollection('essays');
-const allContent = [
-  ...allLetters.map(item => ({ ...item, contentType: 'letter' })),
-  ...allSpeeches.map(item => ({ ...item, contentType: 'speech' })),
-  ...allLectures.map(item => ({ ...item, contentType: 'lecture' })),
-  ...allEssays.map(item => ({ ...item, contentType: 'essay' }))
-];
+// Get all content from data layer (cached)
+const allContent = await getAllContentItems();
 
 // Get featured content with diversity across content types
-const featuredLetters = allLetters.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'letter' }));
-const featuredSpeeches = allSpeeches.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'speech' }));
-const featuredLectures = allLectures.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'lecture' }));
-const featuredEssays = allEssays.filter(item => item.data.featured).map(item => ({ ...item, contentType: 'essay' }));
+const featuredLetters = allContent.filter(item => item.contentType === 'letter' && item.data.featured);
+const featuredSpeeches = allContent.filter(item => item.contentType === 'speech' && item.data.featured);
+const featuredLectures = allContent.filter(item => item.contentType === 'lecture' && item.data.featured);
+const featuredEssays = allContent.filter(item => item.contentType === 'essay' && item.data.featured);
 
 // Define latest additions (recently added content that should be prioritized)
 const latestAdditions = [
@@ -56,6 +48,9 @@ const diverseFeatured = [
   return b.data.date.getTime() - a.data.date.getTime();
 });
 
+// Get 2 featured items for elegant layout
+const multipleFeatured = diverseFeatured.slice(0, 2);
+
 // If we need more content, add non-featured items
 const additionalContent = allContent
   .filter(item => !item.data.featured)
@@ -80,477 +75,553 @@ allContent.forEach(item => {
 
 <Layout title="Paper Lanterns">
   <Navigation />
-  
+
   <main>
-    <div class="container">
-      <header class="header">
-        <h1 class="site-title">Paper Lanterns</h1>
-        <p class="hero-text">
-          Before emails, before texts, before instant messages—there were letters, speeches, and essays. 
-          Handwritten, deliberate, and profound. These are the intimate conversations, powerful orations, 
-          and thoughtful reflections from history's greatest minds: the love letters that broke hearts, 
-          the speeches that moved nations, the essays that challenged thinking, and the ideas that sparked revolutions.
-        </p>
-      </header>
-
-      <nav class="navigation">
-        <p class="intro-text">Explore our collection</p>
-      </nav>
-
-      <section class="browse-options">
-        <div class="stats-overview">
-          <a href="/archive?filter=letter" class="stat-item stat-link">
-            <span class="stat-number">{allLetters.length}</span>
-            <span class="stat-label">Letters</span>
-          </a>
-          <a href="/speeches" class="stat-item stat-link">
-            <span class="stat-number">{allSpeeches.length}</span>
-            <span class="stat-label">Speeches</span>
-          </a>
-          <a href="/lectures" class="stat-item stat-link">
-            <span class="stat-number">{allLectures.length}</span>
-            <span class="stat-label">Lectures</span>
-          </a>
-          <a href="/essays" class="stat-item stat-link">
-            <span class="stat-number">{allEssays.length}</span>
-            <span class="stat-label">Essays</span>
-          </a>
-          <a href="/archive" class="stat-item stat-link">
-            <span class="stat-number">{eras.filter(e => e.items.length > 0).length}</span>
-            <span class="stat-label">Eras</span>
-          </a>
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span>Words that</span>
+          <span>changed</span>
+          <span class="accent">hearts</span>
+        </h1>
+        <div class="hero-intro">
+          <p class="hero-tagline">
+            Timeless words from history's greatest minds. Letters, speeches, essays, and lectures
+            that reveal raw moments of human vulnerability, brilliance, and connection.
+          </p>
         </div>
+      </div>
+    </section>
 
-        <div class="browse-by-era">
-          <h3>Browse by Era</h3>
-          <div class="era-links">
-            {eras.filter(era => era.items.length > 0).map(era => (
-              <a href={`/search?q=${era.name.replace(/\s+/g, '-').toLowerCase()}`} class="era-link">
-                <span class="era-name">{era.name}</span>
-                <span class="era-count">{era.items.length}</span>
-              </a>
+    <!-- REFINED: Minimal browse navigation -->
+    <nav class="main-browse">
+      <a href="/letters" class="browse-link">✍ Letters</a>
+      <a href="/essays" class="browse-link">◆ Essays</a>
+      <a href="/speeches" class="browse-link">◉ Speeches</a>
+      <a href="/lectures" class="browse-link">⋆ Lectures</a>
+    </nav>
+
+    <!-- REFINED: Elegant featured section -->
+    <section class="featured">
+      <div class="featured-content">
+        {multipleFeatured.length > 0 && (
+          <>
+            <div class="featured-label">Featured</div>
+            {multipleFeatured.map((item) => (
+              <article class="featured-item">
+                <a href={`/${item.contentType}/${item.slug}`} class="featured-link">
+                  <div class="featured-meta">
+                    <span class="featured-type">{item.contentType}</span>
+                    <span class="featured-separator">·</span>
+                    <span class="featured-year">{item.data.date.getFullYear()}</span>
+                    {item.data.location && (
+                      <>
+                        <span class="featured-separator">·</span>
+                        <span class="featured-location">{item.data.location}</span>
+                      </>
+                    )}
+                  </div>
+                  <h2 class="featured-title">{item.data.title}</h2>
+                  <div class="featured-author">{item.data.author.name}</div>
+                  <p class="featured-excerpt">{item.data.excerpt}</p>
+                  <span class="featured-cta">Read this {item.contentType} →</span>
+                </a>
+              </article>
             ))}
+          </>
+        )}
+      </div>
+    </section>
+
+    <div class="container">
+
+      <section class="letters-section">
+        <div class="letters-header">
+          <div class="letters-header-left">
+            <h2>Recent Additions</h2>
+            <p class="letters-subtitle">The latest letters, essays, speeches, and lectures added to our collection</p>
           </div>
+          <div class="letters-count">{displayContent.length} Items</div>
         </div>
 
-        <div class="browse-by-type">
-          <h3>Browse by Type</h3>
-          <div class="type-cards">
-            <a href="/letters" class="type-card">
-              <div class="type-icon">📝</div>
-              <div class="type-info">
-                <span class="type-name">Letters</span>
-                <span class="type-count">{allLetters.length} items</span>
-              </div>
-              <div class="type-description">Personal correspondence and intimate exchanges</div>
-            </a>
-            
-            <a href="/essays" class="type-card">
-              <div class="type-icon">📚</div>
-              <div class="type-info">
-                <span class="type-name">Essays</span>
-                <span class="type-count">{allEssays.length} items</span>
-              </div>
-              <div class="type-description">Thoughtful reflections and philosophical discourse</div>
-            </a>
-            
-            
-            <a href="/speeches" class="type-card">
-              <div class="type-icon">🎤</div>
-              <div class="type-info">
-                <span class="type-name">Speeches</span>
-                <span class="type-count">{allSpeeches.length} items</span>
-              </div>
-              <div class="type-description">Historic orations that moved nations</div>
-            </a>
-            
-            <a href="/lectures" class="type-card">
-              <div class="type-icon">🏛️</div>
-              <div class="type-info">
-                <span class="type-name">Lectures</span>
-                <span class="type-count">{allLectures.length} items</span>
-              </div>
-              <div class="type-description">Academic addresses advancing knowledge</div>
-            </a>
-          </div>
-        </div>
-
-        <div class="random-section">
-          <button class="random-letter-btn-large">
-            <svg class="shuffle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="16,3 21,3 21,8"></polyline>
-              <line x1="4" y1="20" x2="21" y2="3"></line>
-              <polyline points="21,16 21,21 16,21"></polyline>
-              <line x1="15" y1="15" x2="21" y2="21"></line>
-              <line x1="4" y1="4" x2="9" y2="9"></line>
-            </svg>
-            <span>Surprise Me</span>
-          </button>
-          <p class="random-description">Feeling adventurous? Let serendipity guide you to a hidden gem.</p>
+        <div class="letters-grid">
+          {displayContent.map((item, index) => {
+            const yearsAgo = new Date().getFullYear() - item.data.date.getFullYear();
+            const readTime = Math.ceil(item.body.split(/\s+/).length / 200);
+            return (
+              <article class="letter-card">
+                <a href={`/${item.contentType}/${item.slug}`} class="letter-link">
+                  <div class="card-header">
+                    <span class="letter-year">{item.data.date.getFullYear()}</span>
+                    <span class="meta-dot">·</span>
+                    <span class="read-time">{readTime} min read</span>
+                  </div>
+                  <div class="card-title-row">
+                    <h3>{item.data.title}</h3>
+                    <span class="content-type-badge">{item.contentType}</span>
+                  </div>
+                  <div class="letter-author">{item.data.author.name}</div>
+                  <p class="letter-excerpt">
+                    {item.data.excerpt}
+                  </p>
+                  <div class="letter-age">Written {yearsAgo} years ago</div>
+                </a>
+              </article>
+            );
+          })}
         </div>
       </section>
 
-      <section class="featured-content">
-        <h2 class="section-title">Featured Content</h2>
-        {displayContent.map((item, index) => (
-          <article class="content-preview" data-number={String(index + 1).padStart(2, '0')}>
-            <div class="content-meta">
-              <span class="content-type">{item.contentType === 'letter' ? 'Letter' : item.contentType === 'speech' ? 'Speech' : item.contentType === 'lecture' ? 'Lecture' : 'Essay'}</span>
-              <a href={`/${item.contentType}/${item.slug}`} class="author-name">{item.data.author.name}</a>
-              <div class="content-context">{item.data.context.replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')}</div>
-            </div>
-            
-            <div class="content-excerpt" style={`--drop-cap-color: ${item.data.drop_cap_color}`}>
-              {item.data.excerpt}
-            </div>
-
-            <div class="continue-reading">
-              <a href={`/${item.contentType}/${item.slug}`}>Continue reading</a>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <footer class="footer">
-        <p>All letters are in the public domain</p>
-      </footer>
     </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a href="/letters">Letters</a>
+          <a href="/essays">Essays</a>
+          <a href="/speeches">Speeches</a>
+          <a href="/lectures">Lectures</a>
+          <a href="/collections">Collections</a>
+          <a href="/archive">Archive</a>
+          <a href="/about">About</a>
+        </div>
+        <div class="footer-copy">
+          © 2025 Paper Lanterns
+        </div>
+      </div>
+    </footer>
   </main>
 </Layout>
 
 <style>
-  .container {
-    max-width: 720px;
+  /* Hero section - more impactful single column with integrated nav */
+  .hero {
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 0 3rem;
-  }
-
-  .header {
-    padding: 16rem 0 8rem;
-    text-align: center;
+    padding: 12vh 6vw 8vh;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .site-title {
-    font-family: 'EB Garamond', serif;
-    font-size: clamp(4rem, 12vw, 7rem);
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 2rem;
-    letter-spacing: -0.02em;
-    line-height: 0.9;
-  }
-
-  .hero-text {
-    font-size: 1.3rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    font-weight: 400;
-    margin-bottom: 8rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .navigation {
-    text-align: center;
-    margin-bottom: 6rem;
+  .hero-content {
     position: relative;
+    max-width: 1100px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .navigation::before {
-    content: '✦';
-    position: absolute;
-    top: -4rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--accent-gold);
-    font-size: 1.5rem;
-    opacity: 0.6;
-  }
-
-  .intro-text {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    margin-bottom: 3rem;
+  .hero-title {
+    font-size: clamp(4rem, 10vw, 9rem);
     font-weight: 300;
-  }
-
-  .browse-options {
-    margin-bottom: 6rem;
-    text-align: center;
-  }
-
-  .stats-overview {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
     margin-bottom: 4rem;
-    padding: 2rem 0;
-    border-top: 1px solid var(--border-secondary);
-    border-bottom: 1px solid var(--border-secondary);
-  }
-
-  .stat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .stat-link {
-    text-decoration: none;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
-  }
-
-  .stat-link:hover {
-    background: var(--bg-accent);
-    border-color: var(--border-accent);
-    transform: translateY(-2px);
-  }
-
-  .stat-number {
-    font-family: 'EB Garamond', serif;
-    font-size: 2.2rem;
-    font-weight: 500;
-    color: var(--accent-primary);
-    transition: color 0.2s ease;
-  }
-
-  .stat-link:hover .stat-number {
-    color: var(--accent-tertiary);
-  }
-
-  .stat-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    transition: color 0.2s ease;
-  }
-
-  .stat-link:hover .stat-label {
-    color: var(--text-secondary);
-  }
-
-  .browse-by-era h3 {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.2rem;
     color: var(--text-primary);
-    margin-bottom: 1.5rem;
   }
 
-  .era-links {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+  .hero-title span {
+    display: block;
   }
 
-  .era-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem 1.5rem;
-    background: var(--bg-accent);
-    border: 1px solid var(--border-accent);
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    min-width: 120px;
-  }
-
-  .era-link:hover {
-    border-color: var(--accent-primary);
-    background: rgba(212, 165, 116, 0.05);
-  }
-
-  .era-name {
-    font-size: 0.9rem;
-    color: var(--text-primary);
-    font-weight: 500;
-    margin-bottom: 0.25rem;
-  }
-
-  .era-count {
-    font-size: 0.75rem;
-    color: var(--accent-secondary);
-  }
-
-  .browse-by-type {
-    margin-top: 3rem;
-    margin-bottom: 2rem;
-  }
-
-  .browse-by-type h3 {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.2rem;
-    color: var(--text-primary);
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-
-  .type-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  .type-card {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-secondary);
-    border-radius: 12px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .type-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px var(--drop-shadow);
-    border-color: var(--accent-primary);
-  }
-
-  .type-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
-
-  .type-card:hover::before {
-    transform: scaleX(1);
-  }
-
-  .type-icon {
-    font-size: 2rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .type-info {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0.5rem;
-  }
-
-  .type-name {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  .type-count {
-    font-size: 0.8rem;
-    color: var(--accent-secondary);
-    font-weight: 500;
-  }
-
-  .type-description {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    line-height: 1.4;
-  }
-
-  .random-section {
-    margin-top: 3rem;
-    text-align: center;
-    padding: 2rem 0;
-  }
-
-  .random-letter-btn-large {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 2rem;
-    background: var(--accent-primary);
-    color: white;
-    border: none;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: inherit;
-    box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
-  }
-
-  .random-letter-btn-large:hover {
-    background: var(--accent-tertiary);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
-  }
-
-  .random-letter-btn-large .shuffle-icon {
-    transition: transform 0.3s ease;
-  }
-
-  .random-letter-btn-large:hover .shuffle-icon {
-    transform: rotate(180deg);
-  }
-
-  .random-description {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-top: 1rem;
+  .hero-title .accent {
     font-style: italic;
-  }
-
-  .section-title {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    text-align: center;
-    margin-bottom: 4rem;
     position: relative;
+    display: inline-block;
+    color: var(--accent-secondary);
   }
 
-  .section-title::after {
-    content: '✦';
-    position: absolute;
-    bottom: -1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--accent-gold);
-    font-size: 1rem;
-    opacity: 0.6;
+  .hero-intro {
+    margin-bottom: 0;
+    max-width: 680px;
+  }
+
+  .hero-tagline {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    font-weight: 300;
+    text-align: center;
+  }
+
+  /* REFINED: Minimal browse navigation */
+  .main-browse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 6vh 6vw;
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  .browse-link {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 0.25rem;
+    transition: all 0.2s ease;
+  }
+
+  .browse-link:hover {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent-tertiary);
+  }
+
+  /* REFINED: Elegant featured section with 2 items - compact version */
+  .featured {
+    padding: 8vh 6vw 10vh;
+    margin: 0;
   }
 
   .featured-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .featured-label {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    font-family: 'Crimson Pro', 'Georgia', serif;
+    color: var(--text-primary);
+    margin-bottom: 4rem;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    text-align: center;
+  }
+
+  .featured-item {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .featured-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .featured-link {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 3rem;
+    padding: 2.5rem 3rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-left: 3px solid var(--featured-accent, rgba(180, 150, 200, 0.35));
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    align-items: center;
+  }
+
+  .featured-link:hover {
+    transform: translateX(6px);
+    box-shadow: -6px 6px 24px var(--drop-shadow);
+    background: var(--bg-accent);
+    border-left-width: 4px;
+  }
+
+  .featured-item:nth-child(even) .featured-link {
+    grid-template-columns: 1fr 140px;
+    border-left: 1px solid var(--border-subtle);
+    border-right: 3px solid var(--featured-accent, rgba(180, 150, 200, 0.35));
+  }
+
+  .featured-item:nth-child(even) .featured-link:hover {
+    transform: translateX(-6px);
+    box-shadow: 6px 6px 24px var(--drop-shadow-hover);
+    border-right-width: 4px;
+  }
+
+  /* Soft color variations for featured items */
+  .featured-item:nth-child(odd) .featured-link {
+    --featured-accent: rgba(200, 160, 180, 0.4);
+  }
+
+  .featured-item:nth-child(even) .featured-link {
+    --featured-accent: rgba(160, 180, 200, 0.4);
+  }
+
+  .featured-item:nth-child(even) .featured-meta {
+    order: 2;
+  }
+
+  .featured-meta {
     display: flex;
     flex-direction: column;
-    gap: 5rem;
+    gap: 0.375rem;
+    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--featured-accent, rgba(180, 150, 200, 0.2));
+    border-bottom: 1px solid var(--featured-accent, rgba(180, 150, 200, 0.2));
   }
 
-  .content-preview {
-    position: relative;
+  .featured-type {
+    font-size: 0.5625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text-muted);
+    font-weight: 500;
   }
 
-  .content-preview::before {
-    content: attr(data-number);
-    position: absolute;
-    left: -6rem;
-    top: -1rem;
-    font-size: 1.2rem;
-    color: var(--text-light);
+  .featured-year {
+    font-size: 1.5rem;
     font-weight: 300;
-    opacity: 0.5;
+    color: var(--text-secondary);
+    letter-spacing: -0.02em;
+    font-family: 'Crimson Pro', 'Georgia', serif;
+  }
+
+  .featured-location {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.125rem;
+  }
+
+  .featured-separator {
+    display: none;
+  }
+
+  .featured-title {
+    font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .featured-author {
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.01em;
+  }
+
+  .featured-excerpt {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .featured-cta {
+    font-size: 0.5625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, sans-serif;
+    border-bottom: 1px solid var(--border-medium);
+    padding-bottom: 0.25rem;
+    display: inline-block;
+    transition: all 0.2s ease;
+  }
+
+  .featured-link:hover .featured-cta {
+    color: var(--text-secondary);
+    border-bottom-color: var(--border-strong);
+  }
+
+  .container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 6vw;
+  }
+
+  /* Letters section - better visual rhythm with asymmetric grid */
+  .letters-section {
+    margin: 12vh 0 8vh;
+  }
+
+  .letters-header {
+    margin-bottom: 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  .letters-header-left h2 {
+    font-size: clamp(2.5rem, 4.5vw, 3.75rem);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  .letters-subtitle {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+  }
+
+  .letters-count {
+    font-size: 0.625rem;
+    font-weight: 500;
+    color: rgba(166, 143, 113, 0.7);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 0.625rem 1.25rem;
+    background: rgba(166, 143, 113, 0.06);
+    border: 1px solid rgba(166, 143, 113, 0.12);
+    border-radius: 2px;
+  }
+
+  .letters-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 2rem;
+  }
+
+  .letter-card {
+    position: relative;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-top: 3px solid var(--card-color, rgba(180, 150, 200, 0.4));
+    transition: all 0.25s ease;
+  }
+
+  .letter-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px var(--drop-shadow);
+    background: var(--bg-accent);
+    border-top-width: 4px;
+  }
+
+  /* Soft muted color variations */
+  .letter-card:nth-child(6n+1) {
+    --card-color: rgba(180, 150, 200, 0.4);
+  }
+
+  .letter-card:nth-child(6n+2) {
+    --card-color: rgba(220, 160, 180, 0.4);
+  }
+
+  .letter-card:nth-child(6n+3) {
+    --card-color: rgba(160, 190, 210, 0.4);
+  }
+
+  .letter-card:nth-child(6n+4) {
+    --card-color: rgba(200, 180, 140, 0.4);
+  }
+
+  .letter-card:nth-child(6n+5) {
+    --card-color: rgba(190, 170, 200, 0.4);
+  }
+
+  .letter-card:nth-child(6n+6) {
+    --card-color: rgba(210, 160, 180, 0.4);
+  }
+
+  .letter-link {
+    display: block;
+    padding: 2.25rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  .letter-year {
+    font-size: 1.25rem;
+    font-weight: 300;
+    color: var(--card-color, rgba(180, 150, 200, 0.8));
+    font-family: 'Crimson Pro', 'Georgia', serif;
+    letter-spacing: -0.02em;
+  }
+
+  .meta-dot {
+    display: none;
+  }
+
+  .read-time {
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    color: var(--text-light);
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, sans-serif;
+    text-transform: uppercase;
+  }
+
+  .card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .letter-card h3 {
+    font-size: 1.375rem;
+    font-weight: 300;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    flex: 1;
+  }
+
+  /* REFINED: Content type badge - minimal and subtle */
+  .content-type-badge {
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-light);
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 0.25rem 0.625rem;
+    background: var(--border-subtle);
+    border-radius: 2px;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 0.25rem;
+  }
+
+  .letter-author {
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.25rem;
+  }
+
+  .letter-excerpt {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    font-weight: 300;
+    letter-spacing: 0.002em;
+    margin-bottom: 1.5rem;
+  }
+
+  .letter-age {
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+    font-weight: 400;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-style: italic;
   }
 
   .content-meta {
@@ -589,12 +660,7 @@ allContent.forEach(item => {
     letter-spacing: 0.02em;
     font-variant: small-caps;
     text-decoration: none;
-    transition: color 0.2s ease;
     cursor: pointer;
-  }
-
-  .author-name:hover {
-    color: var(--accent-secondary);
   }
 
   .content-context {
@@ -649,7 +715,6 @@ allContent.forEach(item => {
     font-size: 0.9rem;
     font-weight: 400;
     letter-spacing: 0.02em;
-    transition: all 0.2s ease;
     padding: 0.5rem 1.2rem;
     border: 1px solid var(--border-accent);
     border-radius: 25px;
@@ -662,158 +727,131 @@ allContent.forEach(item => {
 
   .continue-reading a::after {
     content: '→';
-    transition: transform 0.2s ease;
     font-size: 0.8rem;
   }
 
-  .continue-reading a:hover {
-    color: var(--text-primary);
-    border-color: var(--accent-secondary);
-    background: var(--bg-accent);
-    transform: translateY(-1px);
-  }
-
-  .continue-reading a:hover::after {
-    transform: translateX(2px);
-  }
-
+  /* Footer - minimal and clean */
   .footer {
-    text-align: center;
-    padding: 8rem 0 4rem;
+    border-top: 3px solid var(--border-primary);
+    padding: 6vh 6vw;
+    margin-top: 15vh;
+  }
+
+  .footer-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer-links a {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    font-family: 'Inter', -apple-system, sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-copy {
+    font-size: 0.6875rem;
     color: var(--text-light);
-    font-size: 0.8rem;
-    font-weight: 300;
+    font-family: 'Inter', -apple-system, sans-serif;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 1024px) {
+    .letters-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
   }
 
   @media (max-width: 768px) {
     .container {
-      padding: 5rem 1.5rem 2rem; /* More top padding for fixed nav */
+      padding: 0 5vw;
       max-width: 100%;
     }
 
-    .header {
-      padding: 6rem 0 4rem; /* Reduced for mobile screens */
+    .hero {
+      padding: 10vh 5vw 8vh;
     }
 
-    .site-title {
-      font-size: clamp(3rem, 15vw, 5rem);
+    .hero-title {
+      margin-bottom: 3rem;
     }
 
-    .hero-text {
-      font-size: 1.15rem; /* Slightly larger for readability */
-      line-height: 1.75;
-      padding: 0 0.5rem; /* Add some padding */
+    .hero-browse {
+      gap: 1.25rem;
+      margin: 3rem 0 0;
     }
 
-    .intro-text {
-      font-size: 1rem;
+    .featured {
+      padding: 8vh 5vw;
     }
 
-    .stats-overview {
+    .featured-link {
+      grid-template-columns: 1fr !important;
+      gap: 2rem;
+      padding: 2.5rem 2rem;
+    }
+
+    .featured-link:hover {
+      transform: translateY(-3px) !important;
+      box-shadow: 0 6px 20px var(--border-secondary) !important;
+    }
+
+    .featured-item:nth-child(even) .featured-meta {
+      order: 0;
+    }
+
+    .featured-meta {
+      padding: 1rem 0;
+    }
+
+    .featured-title {
+      font-size: clamp(1.25rem, 5vw, 1.75rem);
+    }
+
+    .featured-excerpt {
+      font-size: 0.9375rem;
+    }
+
+    .letters-section {
+      margin: 10vh 0;
+    }
+
+    .letters-header {
+      flex-direction: column;
+      align-items: flex-start;
       gap: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
+      margin-bottom: 4rem;
     }
 
-    .stat-item {
-      flex-direction: column;
-      min-width: 80px;
+    .letter-card {
+      padding: 2.5rem;
     }
 
-    .stat-number {
-      font-size: 1.8rem;
+    .footer {
+      padding: 6vh 5vw;
     }
 
-    .stat-label {
-      font-size: 0.85rem;
+    .footer-links {
+      gap: 2rem;
     }
 
-    .browse-by-type h3 {
-      font-size: 1.3rem;
-    }
-
-    .type-cards {
-      grid-template-columns: 1fr;
+    .hero-browse {
       gap: 1rem;
-    }
-
-    .type-card {
-      padding: 1.5rem; /* More padding for touch */
-      min-height: 120px; /* Ensure minimum height */
-    }
-
-    .type-name {
-      font-size: 1.2rem;
-    }
-
-    .type-count {
-      font-size: 0.85rem;
-    }
-
-    .type-description {
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-
-    .era-links {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .era-link {
-      min-width: auto;
-      flex-direction: row;
-      justify-content: space-between;
-      padding: 1.25rem 1.5rem; /* More padding for touch targets */
-      min-height: 56px; /* Ensure good touch target size */
-    }
-
-    .era-name {
-      font-size: 1rem;
-    }
-
-    .era-count {
-      font-size: 0.8rem;
-    }
-
-    .random-letter-btn-large {
-      font-size: 1.1rem;
-      padding: 1.25rem 2.5rem;
-    }
-
-    .random-description {
-      font-size: 1rem;
-      margin-top: 1.25rem;
-    }
-
-    .section-title {
-      font-size: 1.8rem;
-    }
-
-    .featured-content {
-      gap: 4rem;
-    }
-
-    .content-preview::before {
-      display: none;
-    }
-
-    .content-excerpt {
-      font-size: 1rem;
-      line-height: 1.7;
-    }
-
-    .content-excerpt::first-letter {
-      font-size: 5rem;
-      margin: 0.1rem 0.8rem 0.2rem 0;
-    }
-
-    .content-meta {
-      font-size: 0.9rem;
-    }
-
-    .continue-reading a {
-      font-size: 0.95rem;
+      margin: 2.5rem 0 0;
     }
   }
 </style>

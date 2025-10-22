@@ -1,11 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+import { getLetters } from '../lib/data-layer';
+import { sortByDate } from '../lib/data-layer';
 
-// Get all letters, sorted by date (newest first)
-const letters = await getCollection('letters');
-const sortedLetters = letters.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+// Get all letters from data layer (cached), sorted by date (newest first)
+const letters = await getLetters();
+const sortedLetters = sortByDate(letters, 'desc');
 
 // Group letters by author for better organization
 const lettersByAuthor = sortedLetters.reduce((acc, letter) => {

@@ -1,0 +1,66 @@
+---
+/**
+ * ArticleHeader - Reusable header for article pages
+ * Used in: letter, speech, essay, lecture detail pages
+ */
+
+import type { Author } from '../lib/types';
+
+interface Props {
+  title: string;
+  author: Author;
+  date: Date;
+  location?: string;
+  readTime: number;
+  category: string;
+}
+
+const { title, author, date, location, readTime, category } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric'
+});
+
+// Calculate timeline position if we have birth/death years
+const timelinePosition = author.birth_year && author.death_year
+  ? ((date.getFullYear() - author.birth_year) / (author.death_year - author.birth_year)) * 100
+  : null;
+---
+
+<div class="article-header">
+  <div class="article-meta">
+    <span class="article-category">{category}</span>
+    <span class="meta-separator">·</span>
+    <span class="article-date">{formattedDate}</span>
+    <span class="meta-separator">·</span>
+    <span class="read-time">{readTime} min read</span>
+  </div>
+
+  <h1>{title}</h1>
+
+  <div class="article-author">{author.name}</div>
+
+  {timelinePosition !== null && (
+    <div class="author-timeline">
+      <div class="timeline-label">Author Lifespan</div>
+      <div class="timeline-bar">
+        <span class="timeline-birth">{author.birth_year}</span>
+        <div class="timeline-line">
+          <div class="timeline-marker" style={`left: ${timelinePosition}%`}>
+            <span class="timeline-marker-year">{date.getFullYear()}</span>
+          </div>
+        </div>
+        <span class="timeline-death">{author.death_year}</span>
+      </div>
+    </div>
+  )}
+
+  {location && <div class="article-location">{location}</div>}
+</div>
+
+<style>
+  /* Import shared article styles */
+  @import '../styles/article-content.css';
+</style>

@@ -1,50 +1,24 @@
-import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
+import { getAllContentItems } from '../../lib/data-layer';
 
 export const GET: APIRoute = async () => {
   try {
-    // Get all letters, speeches, lectures, and essays
-    const letters = await getCollection('letters');
-    const speeches = await getCollection('speeches');
-    const lectures = await getCollection('lectures');
-    const essays = await getCollection('essays');
-    
-    // Combine and map to simple objects for the API
-    const allContent = [
-      ...letters.map(item => ({
-        slug: item.slug,
-        collection: 'letter', // Use singular route name
-        title: item.data.title,
-        author: item.data.author.name,
-        date: item.data.date.toISOString(),
-      })),
-      ...speeches.map(item => ({
-        slug: item.slug,
-        collection: 'speech', // Use singular route name
-        title: item.data.title,
-        author: item.data.author.name,
-        date: item.data.date.toISOString(),
-      })),
-      ...lectures.map(item => ({
-        slug: item.slug,
-        collection: 'lecture', // Use singular route name
-        title: item.data.title,
-        author: item.data.author.name,
-        date: item.data.date.toISOString(),
-      })),
-      ...essays.map(item => ({
-        slug: item.slug,
-        collection: 'essay', // Use singular route name
-        title: item.data.title,
-        author: item.data.author.name,
-        date: item.data.date.toISOString(),
-      }))
-    ];
+    // Get all content from data layer (cached)
+    const allContent = await getAllContentItems();
+
+    // Map to simple objects for the API
+    const apiContent = allContent.map(item => ({
+      slug: item.slug,
+      collection: item.contentType, // 'letter', 'speech', 'lecture', 'essay'
+      title: item.data.title,
+      author: item.data.author.name,
+      date: item.data.date.toISOString(),
+    }));
 
     return new Response(
       JSON.stringify({
-        content: allContent,
-        total: allContent.length
+        content: apiContent,
+        total: apiContent.length
       }),
       {
         status: 200,

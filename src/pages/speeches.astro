@@ -1,432 +1,485 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+import { getSpeeches, sortByDate } from '../lib/data-layer';
 
-const speeches = await getCollection('speeches');
-const sortedSpeeches = speeches.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const speeches = await getSpeeches();
+const sortedSpeeches = sortByDate(speeches, 'desc');
 
-// Group by author
-const speechesByAuthor = sortedSpeeches.reduce((acc, speech) => {
-  const author = speech.data.author.name;
-  if (!acc[author]) {
-    acc[author] = [];
-  }
-  acc[author].push(speech);
-  return acc;
-}, {} as Record<string, typeof speeches>);
-
-const authors = Object.keys(speechesByAuthor).sort();
+const totalCount = speeches.length;
 ---
 
-<Layout title="Speeches - Voice from Time" description="Historic speeches that moved nations and changed the world. Powerful orations that shaped history and inspired generations.">
+<Layout
+  title="Speeches - Paper Lanterns"
+  description="Historic speeches that moved nations and changed the world."
+>
   <Navigation />
-  
-  <main class="speeches-container">
-    <div class="container">
-      <header class="speeches-header">
-        <h1 class="speeches-title">Speeches</h1>
-        <p class="speeches-description">
-          Historic orations that moved nations and changed the world. These powerful speeches capture 
-          pivotal moments in history when words had the power to inspire, unite, and transform humanity.
-        </p>
-      </header>
 
-      <div class="speeches-stats">
-        <div class="stat">
-          <span class="stat-number">{speeches.length}</span>
-          <span class="stat-label">Speeches</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{authors.length}</span>
-          <span class="stat-label">Orators</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{new Set(speeches.map(s => s.data.date.getFullYear())).size}</span>
-          <span class="stat-label">Years Covered</span>
-        </div>
+  <main>
+    <section class="archive-header">
+      <h1>Speeches</h1>
+      <p class="archive-subtitle">
+        Historic orations that moved nations and changed the world.
+      </p>
+    </section>
+
+    <nav class="filter-nav">
+      <div class="filter-nav-content">
+        <a href="/letters" class="filter-link">Letters</a>
+        <a href="/essays" class="filter-link">Essays</a>
+        <a href="#" class="filter-link active" data-filter="all">All</a>
+        <a href="/lectures" class="filter-link">Lectures</a>
       </div>
+    </nav>
 
-      {speeches.length > 1 && (
-        <div class="speeches-filters">
-          <div class="filter-group">
-            <label for="author-filter" class="filter-label">Speaker:</label>
-            <select id="author-filter" class="filter-select">
-              <option value="all">All Speakers</option>
-              {authors.map(author => (
-                <option value={author}>{author}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div class="filter-group">
-            <label for="year-filter" class="filter-label">Year:</label>
-            <select id="year-filter" class="filter-select">
-              <option value="all">All Years</option>
-              {[...new Set(speeches.map(s => s.data.date.getFullYear()))].sort((a, b) => b - a).map(year => (
-                <option value={year}>{year}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
-
-      <div class="speeches-grid" id="speeches-grid">
-        {sortedSpeeches.map(speech => (
-          <article class="speech-card" data-author={speech.data.author.name} data-year={speech.data.date.getFullYear()}>
-            <div class="speech-meta">
-              <time class="speech-date">
-                {speech.data.date.toLocaleDateString('en-US', { 
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
-              <span class="speech-author">{speech.data.author.name}</span>
+    <section class="archive-container">
+      <div class="archive-grid">
+        {sortedSpeeches.map((speech, index) => (
+          <a href={`/speech/${speech.slug}`} class="archive-item" data-type="speech">
+            <div class="archive-meta">
+              <span class="archive-category">Speech</span>
+              <span class="meta-separator">·</span>
+              <span class="archive-date">
+                {speech.data.date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </span>
             </div>
-            
-            <h2 class="speech-title">
-              <a href={`/speech/${speech.slug}`}>
-                {speech.data.title}
-              </a>
-            </h2>
-            
-            <p class="speech-excerpt">{speech.data.excerpt}</p>
-            
-            <div class="speech-details">
-              {speech.data.location && (
-                <span class="speech-location">📍 {speech.data.location}</span>
-              )}
-              {speech.data.occasion && (
-                <span class="speech-occasion">🎤 {speech.data.occasion}</span>
-              )}
-            </div>
-            
-            {speech.data.tags.length > 0 && (
-              <div class="speech-tags">
-                {speech.data.tags.slice(0, 4).map(tag => (
-                  <span class="tag">{tag}</span>
-                ))}
-              </div>
-            )}
-          </article>
+            <h3>{speech.data.title}</h3>
+            <div class="archive-author">{speech.data.author.name}</div>
+            <p class="archive-excerpt">
+              {speech.data.excerpt.slice(0, 150)}...
+            </p>
+          </a>
         ))}
       </div>
+    </section>
 
-      <section class="coming-soon">
-        <h2 class="section-title">More Historic Speeches Coming Soon</h2>
-        <p class="section-description">
-          We're continuously adding more powerful orations that shaped history. Future additions will include 
-          speeches by Churchill, Gandhi, Martin Luther King Jr., Susan B. Anthony, and other great orators.
-        </p>
-      </section>
+    <section class="archive-stats">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{totalCount}</div>
+          <div class="stat-label">Total Speeches</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{new Set(speeches.map(s => s.data.author.name)).size}</div>
+          <div class="stat-label">Orators</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{new Set(speeches.map(s => s.data.date.getFullYear())).size}</div>
+          <div class="stat-label">Years Covered</div>
+        </div>
+      </div>
+    </section>
 
-      <footer class="speeches-footer">
-        <p>All speeches are in the public domain</p>
-      </footer>
-    </div>
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3>Paper Lanterns</h3>
+          <p>
+            A modern anthology of history's most profound correspondence—preserving words
+            that shaped hearts, minds, and the human condition.
+          </p>
+        </div>
+        <div class="footer-section">
+          <h4>Browse</h4>
+          <ul>
+            <li><a href="/letters">All Letters</a></li>
+            <li><a href="/archive">By Era</a></li>
+            <li><a href="/collections">Collections</a></li>
+            <li><a href="/search">Search</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/garden">Garden</a></li>
+            <li><a href="/rss.xml">RSS Feed</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2025 Paper Lanterns · All Rights Reserved
+      </div>
+    </footer>
   </main>
 </Layout>
 
 <style>
-  .speeches-container {
-    padding: 6rem 0 4rem;
-    min-height: 100vh;
-  }
-
-  .container {
-    max-width: 1000px;
+  /* Archive header */
+  .archive-header {
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 10vh 6vw 4vh;
   }
 
-  .speeches-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .speeches-title {
-    font-family: 'EB Garamond', serif;
-    font-size: 3rem;
-    font-weight: 500;
+  .archive-header h1 {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 300;
+    letter-spacing: -0.035em;
+    margin-bottom: 1.5rem;
     color: var(--text-primary);
-    margin-bottom: 1rem;
   }
 
-  .speeches-description {
-    font-size: 1.1rem;
+  .archive-subtitle {
+    font-size: 1.125rem;
     color: var(--text-tertiary);
-    line-height: 1.6;
-    max-width: 700px;
-    margin: 0 auto;
+    font-weight: 300;
+    max-width: 600px;
   }
 
-  .speeches-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 3rem;
-    padding: 2rem 0;
-    border-top: 1px solid var(--border-secondary);
+  /* Filter navigation */
+  .filter-nav {
+    max-width: 1600px;
+    margin: 0 auto 6vh;
+    padding: 0 6vw;
     border-bottom: 1px solid var(--border-secondary);
   }
 
-  .stat {
+  .filter-nav-content {
+    display: flex;
+    justify-content: flex-start;
+    gap: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .filter-nav a {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    position: relative;
+    padding-bottom: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .filter-nav a.active {
+    color: var(--text-primary);
+  }
+
+  .filter-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2rem;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      rgba(239, 127, 96, 0.6) 0%,
+      rgba(239, 127, 96, 0.2) 100%
+    );
+  }
+
+  /* Archive grid */
+  .archive-container {
+    max-width: 1600px;
+    margin: 0 auto 12vh;
+    padding: 0 6vw;
+  }
+
+  .archive-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .archive-item {
+    position: relative;
+    padding: 3.5rem 3rem;
+    border-right: 1px solid var(--border-secondary);
+    border-bottom: 1px solid var(--border-secondary);
+    text-decoration: none;
+    display: block;
+    background: var(--bg-primary);
+    transition: background 0.2s ease;
+  }
+
+  .archive-item:hover {
+    background: var(--bg-secondary);
+  }
+
+  .archive-item:nth-child(3n) {
+    border-right: none;
+  }
+
+  /* Color variations */
+  .archive-item:nth-child(6n+1) {
+    border-left: 3px solid rgba(147, 112, 219, 0.25);
+  }
+
+  .archive-item:nth-child(6n+2) {
+    border-left: 3px solid rgba(192, 132, 151, 0.25);
+  }
+
+  .archive-item:nth-child(6n+3) {
+    border-left: 3px solid rgba(134, 168, 182, 0.25);
+  }
+
+  .archive-item:nth-child(6n+4) {
+    border-left: 3px solid rgba(166, 143, 113, 0.25);
+  }
+
+  .archive-item:nth-child(6n+5) {
+    border-left: 3px solid rgba(156, 148, 171, 0.25);
+  }
+
+  .archive-item:nth-child(6n+6) {
+    border-left: 3px solid rgba(175, 139, 156, 0.25);
+  }
+
+  .archive-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    font-size: 0.75rem;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  .archive-category {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+  }
+
+  .archive-item:nth-child(6n+1) .archive-category {
+    color: rgba(147, 112, 219, 0.7);
+  }
+
+  .archive-item:nth-child(6n+2) .archive-category {
+    color: rgba(192, 132, 151, 0.7);
+  }
+
+  .archive-item:nth-child(6n+3) .archive-category {
+    color: rgba(134, 168, 182, 0.7);
+  }
+
+  .archive-item:nth-child(6n+4) .archive-category {
+    color: rgba(166, 143, 113, 0.7);
+  }
+
+  .archive-item:nth-child(6n+5) .archive-category {
+    color: rgba(156, 148, 171, 0.7);
+  }
+
+  .archive-item:nth-child(6n+6) .archive-category {
+    color: rgba(175, 139, 156, 0.7);
+  }
+
+  .archive-date {
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .meta-separator {
+    color: rgba(23, 23, 23, 0.2);
+  }
+
+  .archive-item h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+  }
+
+  .archive-author {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    font-weight: 400;
+  }
+
+  .archive-excerpt {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: rgba(23, 23, 23, 0.55);
+    font-weight: 300;
+  }
+
+  /* Stats section */
+  .archive-stats {
+    max-width: 1600px;
+    margin: 12vh auto;
+    padding: 8vh 6vw;
+    background: var(--bg-accent);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+  }
+
+  .stat-item {
     text-align: center;
   }
 
   .stat-number {
-    display: block;
-    font-family: 'EB Garamond', serif;
-    font-size: 2rem;
-    font-weight: 500;
-    color: var(--accent-primary);
-    margin-bottom: 0.25rem;
+    font-size: 3.5rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    color: rgba(239, 127, 96, 0.8);
   }
 
   .stat-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: 0.8125rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, sans-serif;
   }
 
-  .speeches-filters {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
-    padding: 1.5rem;
+  /* Footer */
+  .footer {
     background: var(--bg-accent);
-    border-radius: 12px;
-    border: 1px solid var(--border-accent);
-  }
-
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .filter-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .filter-select {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-secondary);
-    border-radius: 8px;
-    background: var(--bg-primary);
+    border-top: 1px solid var(--border-secondary);
     color: var(--text-primary);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: border-color 0.2s ease;
+    padding: 10vh 6vw 5vh;
+    margin-top: 0;
   }
 
-  .filter-select:focus {
-    outline: none;
-    border-color: var(--accent-primary);
-  }
-
-  .speeches-grid {
+  .footer-content {
+    max-width: 1600px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 8vw;
+    padding-bottom: 5vh;
+    border-bottom: 1px solid var(--border-secondary);
   }
 
-  .speech-card {
-    background: var(--bg-primary);
-    border-radius: 12px;
-    padding: 2rem;
-    border: 1px solid var(--border-secondary);
-    transition: all 0.3s ease;
-  }
-
-  .speech-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px var(--drop-shadow);
-  }
-
-  .speech-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-  }
-
-  .speech-date {
-    color: var(--accent-secondary);
-  }
-
-  .speech-author {
+  .footer-brand h3 {
+    font-size: 0.9375rem;
     font-weight: 500;
-    color: var(--text-secondary);
-  }
-
-  .speech-title {
-    margin-bottom: 1rem;
-  }
-
-  .speech-title a {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.4rem;
-    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
     color: var(--text-primary);
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  .footer-brand p {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: var(--text-tertiary);
+    font-weight: 300;
+  }
+
+  .footer-section h4 {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  .footer-section ul {
+    list-style: none;
+  }
+
+  .footer-section li {
+    margin-bottom: 0.625rem;
+  }
+
+  .footer-section a {
+    color: var(--text-tertiary);
     text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 300;
     transition: color 0.2s ease;
   }
 
-  .speech-title a:hover {
-    color: var(--accent-primary);
-  }
-
-  .speech-excerpt {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-  }
-
-  .speech-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    color: var(--text-tertiary);
-  }
-
-  .speech-location,
-  .speech-occasion {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .speech-tags {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-size: 0.75rem;
-    color: var(--accent-secondary);
-    background: rgba(139, 115, 85, 0.1);
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-  }
-
-  .coming-soon {
-    text-align: center;
-    padding: 3rem 2rem;
-    background: var(--bg-accent);
-    border-radius: 12px;
-    margin-bottom: 4rem;
-  }
-
-  .section-title {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 500;
+  .footer-section a:hover {
     color: var(--text-primary);
-    margin-bottom: 1rem;
   }
 
-  .section-description {
-    color: var(--text-tertiary);
-    line-height: 1.6;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .speeches-footer {
+  .footer-bottom {
+    margin-top: 5vh;
     text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border-secondary);
+    font-size: 0.6875rem;
     color: var(--text-light);
-    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    font-family: 'Inter', -apple-system, sans-serif;
   }
 
-  @media (max-width: 768px) {
-    .speeches-container {
-      padding: 4rem 0 2rem;
+  @media (max-width: 1024px) {
+    .archive-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .container {
-      padding: 0 1rem;
+    .archive-item:nth-child(2n) {
+      border-right: none;
     }
 
-    .speeches-title {
-      font-size: 2.5rem;
+    .archive-item:nth-child(3n) {
+      border-right: 1px solid var(--border-secondary);
     }
 
-    .speeches-filters {
-      flex-direction: column;
-      gap: 1rem;
-      padding: 1rem;
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
     }
 
-    .filter-group {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .speeches-grid {
+    .footer-content {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .archive-header {
+      padding: 8vh 5vw 4vh;
     }
 
-    .speeches-stats {
-      gap: 1.5rem;
-      flex-wrap: wrap;
+    .filter-nav {
+      padding: 0 5vw;
+    }
+
+    .filter-nav-content {
+      gap: 2rem;
+      overflow-x: auto;
+    }
+
+    .filter-nav a {
+      white-space: nowrap;
+      font-size: 0.875rem;
+    }
+
+    .archive-container {
+      padding: 0 5vw;
+    }
+
+    .archive-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .archive-item {
+      padding: 3rem 2rem;
+      border-right: none;
+    }
+
+    .archive-item:nth-child(n) {
+      border-right: none;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
     }
 
     .stat-number {
-      font-size: 1.5rem;
+      font-size: 2.5rem;
     }
 
-    .coming-soon {
-      padding: 2rem 1rem;
+    .footer {
+      padding: 8vh 5vw 4vh;
     }
   }
 </style>
-
-<script>
-  // Speech filtering functionality
-  document.addEventListener('DOMContentLoaded', () => {
-    const authorFilter = document.getElementById('author-filter') as HTMLSelectElement;
-    const yearFilter = document.getElementById('year-filter') as HTMLSelectElement;
-    const speechCards = document.querySelectorAll('.speech-card');
-
-    function filterSpeeches() {
-      const selectedAuthor = authorFilter?.value;
-      const selectedYear = yearFilter?.value;
-
-      speechCards.forEach(card => {
-        const cardAuthor = (card as HTMLElement).dataset.author;
-        const cardYear = (card as HTMLElement).dataset.year;
-
-        const authorMatch = selectedAuthor === 'all' || cardAuthor === selectedAuthor;
-        const yearMatch = selectedYear === 'all' || cardYear === selectedYear;
-
-        if (authorMatch && yearMatch) {
-          (card as HTMLElement).style.display = 'block';
-        } else {
-          (card as HTMLElement).style.display = 'none';
-        }
-      });
-    }
-
-    authorFilter?.addEventListener('change', filterSpeeches);
-    yearFilter?.addEventListener('change', filterSpeeches);
-  });
-</script>

@@ -1,0 +1,149 @@
+---
+interface Props {
+  placeholder?: string;
+  autofocus?: boolean;
+  id?: string;
+}
+
+const {
+  placeholder = "Search letters, speeches, essays...",
+  autofocus = false,
+  id = "search-input"
+} = Astro.props;
+---
+
+<div class="search-box">
+  <label for={id} class="search-label">Search content</label>
+  <div class="search-input-wrapper">
+    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.35-4.35"></path>
+    </svg>
+    <input
+      type="search"
+      id={id}
+      class="search-input"
+      placeholder={placeholder}
+      autocomplete="off"
+      spellcheck="false"
+      autofocus={autofocus}
+      aria-label="Search content"
+    />
+    <button type="button" class="search-clear" aria-label="Clear search" style="display: none;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .search-box {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .search-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--text-muted);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 3.5rem;
+    font-size: 1rem;
+    font-family: 'Crimson Pro', Georgia, serif;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 4px;
+    color: var(--text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(239, 127, 96, 0.1);
+  }
+
+  .search-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 1rem;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+  }
+
+  .search-clear:hover {
+    color: var(--text-primary);
+  }
+
+  .search-clear:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .search-input {
+      font-size: 16px; /* Prevent zoom on iOS */
+    }
+  }
+</style>
+
+<script>
+  // Show/hide clear button
+  const searchInputs = document.querySelectorAll('.search-input');
+
+  searchInputs.forEach(input => {
+    const wrapper = input.closest('.search-input-wrapper');
+    if (!wrapper) return;
+
+    const clearBtn = wrapper.querySelector('.search-clear');
+    if (!clearBtn) return;
+
+    input.addEventListener('input', () => {
+      clearBtn.style.display = input.value ? 'flex' : 'none';
+    });
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      clearBtn.style.display = 'none';
+      input.focus();
+      // Trigger input event for any listeners
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  });
+</script>

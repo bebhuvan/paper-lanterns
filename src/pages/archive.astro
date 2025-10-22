@@ -1,461 +1,627 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+import SearchBox from '../components/SearchBox.astro';
+import ContentCard from '../components/ContentCard.astro';
+import { getAllContentItems, sortByDate, filterContent } from '../lib/data-layer';
 
-// Get all content types, sorted by date (newest first)
-const letters = await getCollection('letters');
-const speeches = await getCollection('speeches');
-const lectures = await getCollection('lectures');
-const essays = await getCollection('essays');
-const allContent = [
-  ...letters.map(item => ({ ...item, contentType: 'letter' })),
-  ...speeches.map(item => ({ ...item, contentType: 'speech' })),
-  ...lectures.map(item => ({ ...item, contentType: 'lecture' })),
-  ...essays.map(item => ({ ...item, contentType: 'essay' }))
-].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+// Get all content from data layer (cached and sorted)
+const allContent = sortByDate(await getAllContentItems(), 'desc');
 
-// Group by year for better organization
-const contentByYear = allContent.reduce((acc, item) => {
-  const year = item.data.date.getFullYear();
-  if (!acc[year]) {
-    acc[year] = [];
-  }
-  acc[year].push(item);
-  return acc;
-}, {} as Record<number, typeof allContent>);
+// Get counts by type
+const letters = filterContent(allContent, { contentType: 'letter' });
+const speeches = filterContent(allContent, { contentType: 'speech' });
+const lectures = filterContent(allContent, { contentType: 'lecture' });
+const essays = filterContent(allContent, { contentType: 'essay' });
 
-const years = Object.keys(contentByYear).map(Number).sort((a, b) => b - a);
+const totalCount = allContent.length;
 ---
 
-<Layout title="Archive - Voice from time" description="Browse our complete collection of historical letters and speeches, organized chronologically.">
+<Layout
+  title="Archive - Paper Lanterns"
+  description="A complete collection of historic letters, essays, speeches, and lectures that shaped humanity."
+>
   <Navigation />
-  
-  <main class="archive-container">
-    <div class="container">
-      <header class="archive-header">
-        <h1 class="archive-title">Archive</h1>
-        <p class="archive-description">
-          Browse our complete collection of {allContent.length} letters, speeches, lectures, and essays, 
-          organized chronologically from {years[0]} to {years[years.length - 1]}.
-        </p>
-      </header>
 
-      <div class="archive-filters">
-        <div class="filter-group">
-          <label for="content-type-filter" class="filter-label">Show:</label>
-          <select id="content-type-filter" class="filter-select">
-            <option value="all">All Content</option>
-            <option value="letter">Letters Only</option>
-            <option value="speech">Speeches Only</option>
-            <option value="lecture">Lectures Only</option>
-            <option value="essay">Essays Only</option>
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label for="year-filter" class="filter-label">Year:</label>
-          <select id="year-filter" class="filter-select">
-            <option value="all">All Years</option>
-            {years.map(year => (
-              <option value={year}>{year}</option>
-            ))}
-          </select>
-        </div>
+  <main>
+    <section class="archive-header">
+      <h1>Archive</h1>
+      <p class="archive-subtitle">
+        A complete collection of historic letters, essays, speeches, and lectures that shaped humanity.
+      </p>
+      <div class="archive-search">
+        <SearchBox placeholder="Search archive by title, author, or content..." id="archive-search" />
       </div>
+    </section>
 
-      <div class="content-stats">
-        <div class="stat">
-          <span class="stat-number">{letters.length}</span>
-          <span class="stat-label">Letters</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{speeches.length}</span>
-          <span class="stat-label">Speeches</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{lectures.length}</span>
-          <span class="stat-label">Lectures</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{essays.length}</span>
-          <span class="stat-label">Essays</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">{years.length}</span>
-          <span class="stat-label">Years Covered</span>
-        </div>
+    <nav class="filter-nav">
+      <div class="filter-nav-content">
+        <a href="#" class="filter-link active" data-filter="all">All (<span class="count" data-count="all">{totalCount}</span>)</a>
+        <a href="#" class="filter-link" data-filter="letter">Letters (<span class="count" data-count="letter">{letters.length}</span>)</a>
+        <a href="#" class="filter-link" data-filter="essay">Essays (<span class="count" data-count="essay">{essays.length}</span>)</a>
+        <a href="#" class="filter-link" data-filter="speech">Speeches (<span class="count" data-count="speech">{speeches.length}</span>)</a>
+        <a href="#" class="filter-link" data-filter="lecture">Lectures (<span class="count" data-count="lecture">{lectures.length}</span>)</a>
       </div>
+    </nav>
 
-      {years.map(year => (
-        <section class="year-section">
-          <h2 class="year-title">{year}</h2>
-          <div class="year-content">
-            {contentByYear[year].map(item => (
-              <article class="content-item">
-                <div class="item-meta">
-                  <span class="item-type">{item.contentType === 'letter' ? 'Letter' : item.contentType === 'speech' ? 'Speech' : item.contentType === 'lecture' ? 'Lecture' : 'Essay'}</span>
-                  <time class="item-date">
-                    {item.data.date.toLocaleDateString('en-US', { 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
-                  </time>
-                </div>
-                
-                <h3 class="item-title">
-                  <a href={`/${item.contentType}/${item.slug}`}>
-                    {item.data.title}
-                  </a>
-                </h3>
-                
-                <div class="item-details">
-                  <span class="author-name">{item.data.author.name}</span>
-                  {item.contentType === 'letter' && item.data.recipient && (
-                    <>
-                      <span class="separator">→</span>
-                      <span class="recipient">{item.data.recipient}</span>
-                    </>
-                  )}
-                </div>
-                
-                <p class="item-excerpt">{item.data.excerpt}</p>
-                
-                {item.data.tags.length > 0 && (
-                  <div class="item-tags">
-                    {item.data.tags.slice(0, 3).map(tag => (
-                      <span class="tag">{tag}</span>
-                    ))}
-                  </div>
-                )}
-              </article>
-            ))}
+    <section class="archive-container">
+      <div class="archive-grid">
+        {allContent.map((item) => (
+          <div data-type={item.contentType}>
+            <ContentCard item={item} variant="compact" showExcerpt={true} />
           </div>
-        </section>
-      ))}
+        ))}
+      </div>
+    </section>
 
-      <footer class="archive-footer">
-        <p>All content is in the public domain</p>
-      </footer>
-    </div>
+    <section class="archive-stats">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">{totalCount}</div>
+          <div class="stat-label">Total Pieces</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{letters.length}</div>
+          <div class="stat-label">Letters</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{essays.length}</div>
+          <div class="stat-label">Essays</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">{speeches.length}</div>
+          <div class="stat-label">Speeches</div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <h3>Paper Lanterns</h3>
+          <p>
+            A modern anthology of history's most profound correspondence—preserving words
+            that shaped hearts, minds, and the human condition.
+          </p>
+        </div>
+        <div class="footer-section">
+          <h4>Browse</h4>
+          <ul>
+            <li><a href="/letters">All Letters</a></li>
+            <li><a href="/archive">By Era</a></li>
+            <li><a href="/collections">Collections</a></li>
+            <li><a href="/search">Search</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/garden">Garden</a></li>
+            <li><a href="/rss.xml">RSS Feed</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2025 Paper Lanterns · All Rights Reserved
+      </div>
+    </footer>
   </main>
 </Layout>
 
 <style>
-  .archive-container {
-    padding: 6rem 0 4rem;
-    min-height: 100vh;
-  }
-
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
-
+  /* Archive header */
   .archive-header {
-    text-align: center;
-    margin-bottom: 4rem;
-  }
-
-  .archive-title {
-    font-family: 'EB Garamond', serif;
-    font-size: 3rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-  }
-
-  .archive-description {
-    font-size: 1.1rem;
-    color: var(--text-tertiary);
-    line-height: 1.6;
-    max-width: 600px;
+    max-width: 1600px;
     margin: 0 auto;
+    padding: 10vh 6vw 4vh;
   }
 
-  .archive-filters {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 3rem;
-    padding: 1.5rem;
-    background: var(--bg-accent);
-    border-radius: 12px;
-    border: 1px solid var(--border-accent);
-  }
-
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .filter-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .filter-select {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border-secondary);
-    border-radius: 8px;
-    background: var(--bg-primary);
+  .archive-header h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
     color: var(--text-primary);
-    font-size: 0.9rem;
+  }
+
+  .archive-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-tertiary);
+    font-weight: 300;
+    max-width: 600px;
+    margin-bottom: 2rem;
+  }
+
+  .archive-search {
+    max-width: 600px;
+    margin-top: 3rem;
+  }
+
+  /* No results message */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .no-results p {
+    font-size: 1.125rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1.5rem;
+  }
+
+  .clear-search {
+    padding: 0.75rem 1.5rem;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9375rem;
+    font-family: 'Inter', -apple-system, sans-serif;
     cursor: pointer;
-    transition: border-color 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
   }
 
-  .filter-select:focus {
-    outline: none;
-    border-color: var(--accent-primary);
+  .clear-search:hover {
+    background: var(--accent-secondary);
+    transform: translateY(-1px);
   }
 
-  .content-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 4rem;
-    padding: 2rem 0;
-    border-top: 1px solid var(--border-secondary);
+  .clear-search:active {
+    transform: translateY(0);
+  }
+
+  /* Filter navigation */
+  .filter-nav {
+    max-width: 1600px;
+    margin: 0 auto 6vh;
+    padding: 0 6vw;
     border-bottom: 1px solid var(--border-secondary);
   }
 
-  .stat {
+  .filter-nav-content {
+    display: flex;
+    justify-content: flex-start;
+    gap: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .filter-nav a {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+
+  .filter-nav a.active {
+    color: var(--text-primary);
+  }
+
+  .filter-nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2rem;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--accent-gold);
+  }
+
+  /* Archive grid */
+  .archive-container {
+    max-width: 1600px;
+    margin: 0 auto 12vh;
+    padding: 0 6vw;
+  }
+
+  .archive-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .archive-item {
+    position: relative;
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--border-primary);
+    border-bottom: 1px solid var(--border-primary);
+    text-decoration: none;
+    display: block;
+    background: var(--bg-secondary);
+  }
+
+  .archive-item:nth-child(3n) {
+    border-right: none;
+  }
+
+  /* Color variations */
+  .archive-item:nth-child(6n+1) {
+    border-left: 1px solid rgba(147, 112, 219, 0.2);
+  }
+
+  .archive-item:nth-child(6n+2) {
+    border-left: 1px solid rgba(192, 132, 151, 0.2);
+  }
+
+  .archive-item:nth-child(6n+3) {
+    border-left: 1px solid rgba(134, 168, 182, 0.2);
+  }
+
+  .archive-item:nth-child(6n+4) {
+    border-left: 1px solid rgba(166, 143, 113, 0.2);
+  }
+
+  .archive-item:nth-child(6n+5) {
+    border-left: 1px solid rgba(156, 148, 171, 0.2);
+  }
+
+  .archive-item:nth-child(6n+6) {
+    border-left: 1px solid rgba(175, 139, 156, 0.2);
+  }
+
+  .archive-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    font-size: 0.75rem;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  .archive-category {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+  }
+
+  .archive-item:nth-child(6n+1) .archive-category {
+    color: rgba(147, 112, 219, 0.7);
+  }
+
+  .archive-item:nth-child(6n+2) .archive-category {
+    color: rgba(192, 132, 151, 0.7);
+  }
+
+  .archive-item:nth-child(6n+3) .archive-category {
+    color: rgba(134, 168, 182, 0.7);
+  }
+
+  .archive-item:nth-child(6n+4) .archive-category {
+    color: rgba(166, 143, 113, 0.7);
+  }
+
+  .archive-item:nth-child(6n+5) .archive-category {
+    color: rgba(156, 148, 171, 0.7);
+  }
+
+  .archive-item:nth-child(6n+6) .archive-category {
+    color: rgba(175, 139, 156, 0.7);
+  }
+
+  .archive-date {
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .meta-separator {
+    color: var(--text-light);
+  }
+
+  .archive-item h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+  }
+
+  .archive-author {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    font-weight: 400;
+  }
+
+  .archive-excerpt {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    font-weight: 300;
+  }
+
+  /* Stats section - elegant and refined */
+  .archive-stats {
+    max-width: 1600px;
+    margin: 10vh auto;
+    padding: 5vh 6vw;
+    background: var(--bg-accent);
+    border-top: 1px solid var(--border-primary);
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+  }
+
+  .stat-item {
     text-align: center;
   }
 
   .stat-number {
-    display: block;
-    font-family: 'EB Garamond', serif;
-    font-size: 2rem;
-    font-weight: 500;
-    color: var(--accent-primary);
-    margin-bottom: 0.25rem;
+    font-size: 1.875rem;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    margin-bottom: 0.625rem;
+    color: rgba(239, 127, 96, 0.65);
   }
 
   .stat-label {
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: 0.6875rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .year-section {
-    margin-bottom: 4rem;
-  }
-
-  .year-title {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--accent-secondary);
-    margin-bottom: 2rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border-secondary);
-  }
-
-  .year-content {
-    display: grid;
-    gap: 2rem;
-  }
-
-  .content-item {
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--bg-accent);
-    position: relative;
-  }
-
-  .content-item:hover {
-    background: rgba(212, 165, 116, 0.02);
-    margin: 0 -1rem;
-    padding: 1.5rem 1rem;
-    border-radius: 8px;
-  }
-
-  .item-meta {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .item-type {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.12em;
     color: var(--text-muted);
-    background: var(--bg-accent);
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-  }
-
-  .item-date {
-    font-size: 0.85rem;
-    color: var(--accent-secondary);
-  }
-
-  .item-title {
-    margin-bottom: 0.5rem;
-  }
-
-  .item-title a {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.2rem;
     font-weight: 500;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-secondary);
     color: var(--text-primary);
+    padding: 10vh 6vw 5vh;
+    margin-top: 0;
+  }
+
+  .footer-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 8vw;
+    padding-bottom: 5vh;
+    border-bottom: 1px solid var(--border-secondary);
+  }
+
+  .footer-brand h3 {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  .footer-brand p {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: var(--text-tertiary);
+    font-weight: 300;
+  }
+
+  .footer-section h4 {
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, sans-serif;
+  }
+
+  .footer-section ul {
+    list-style: none;
+  }
+
+  .footer-section li {
+    margin-bottom: 0.625rem;
+  }
+
+  .footer-section a {
+    color: var(--text-tertiary);
     text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 300;
     transition: color 0.2s ease;
   }
 
-  .item-title a:hover {
-    color: var(--accent-primary);
-  }
-
-  .item-details {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
-  }
-
-  .author-name {
-    font-weight: 500;
+  .footer-section a:hover {
     color: var(--text-primary);
   }
 
-  .separator {
-    color: var(--text-light);
-  }
-
-  .recipient {
-    color: var(--accent-secondary);
-    font-style: italic;
-  }
-
-  .item-excerpt {
-    color: var(--text-secondary);
-    line-height: 1.5;
-    margin-bottom: 1rem;
-  }
-
-  .item-tags {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    font-size: 0.75rem;
-    color: var(--accent-secondary);
-    background: rgba(139, 115, 85, 0.1);
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-  }
-
-  .archive-footer {
+  .footer-bottom {
+    margin-top: 5vh;
     text-align: center;
-    margin-top: 4rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border-secondary);
+    font-size: 0.6875rem;
     color: var(--text-light);
-    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    font-family: 'Inter', -apple-system, sans-serif;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
+    .archive-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .archive-item:nth-child(2n) {
+      border-right: none;
+    }
+
+    .archive-item:nth-child(3n) {
+      border-right: 1px solid var(--border-secondary);
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
+    }
+
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .archive-header {
+      padding: 8vh 5vw 4vh;
+    }
+
+    .filter-nav {
+      padding: 0 5vw;
+    }
+
+    .filter-nav-content {
+      gap: 2rem;
+      overflow-x: auto;
+    }
+
+    .filter-nav a {
+      white-space: nowrap;
+      font-size: 0.875rem;
+    }
+
     .archive-container {
-      padding: 4rem 0 2rem;
+      padding: 0 5vw;
     }
 
-    .container {
-      padding: 0 1rem;
+    .archive-grid {
+      grid-template-columns: 1fr;
     }
 
-    .archive-title {
-      font-size: 2.5rem;
+    .archive-item {
+      padding: 3rem 2rem;
+      border-right: none;
     }
 
-    .archive-filters {
-      flex-direction: column;
-      gap: 1rem;
-      padding: 1rem;
+    .archive-item:nth-child(n) {
+      border-right: none;
     }
 
-    .filter-group {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .content-stats {
-      gap: 1.5rem;
-      flex-wrap: wrap;
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
     }
 
     .stat-number {
-      font-size: 1.5rem;
+      font-size: 2.5rem;
     }
 
-    .content-item:hover {
-      margin: 0;
-      padding: 1.5rem 0;
-      background: none;
+    .footer {
+      padding: 8vh 5vw 4vh;
     }
   }
 </style>
 
 <script>
-  // Archive filtering functionality
+  // Archive search and filter functionality
   document.addEventListener('DOMContentLoaded', () => {
-    const contentTypeFilter = document.getElementById('content-type-filter') as HTMLSelectElement;
-    const yearFilter = document.getElementById('year-filter') as HTMLSelectElement;
-    const yearSections = document.querySelectorAll('.year-section');
+    const searchInput = document.getElementById('archive-search');
+    const filterLinks = document.querySelectorAll('.filter-link');
+    const archiveItems = document.querySelectorAll('.archive-item');
+    let currentFilter = 'all';
+    let searchQuery = '';
 
-    function filterContent() {
-      const contentType = contentTypeFilter.value;
-      const selectedYear = yearFilter.value;
-
-      yearSections.forEach(section => {
-        const yearTitle = section.querySelector('.year-title')?.textContent;
-        const contentItems = section.querySelectorAll('.content-item');
-        let hasVisibleItems = false;
-
-        // Show/hide year section based on year filter
-        if (selectedYear !== 'all' && yearTitle !== selectedYear) {
-          (section as HTMLElement).style.display = 'none';
-          return;
-        } else {
-          (section as HTMLElement).style.display = 'block';
+    // Update counts
+    function updateCounts() {
+      const counts = {};
+      archiveItems.forEach(item => {
+        if (item.style.display !== 'none') {
+          const type = item.getAttribute('data-type');
+          counts[type] = (counts[type] || 0) + 1;
+          counts['all'] = (counts['all'] || 0) + 1;
         }
+      });
 
-        // Filter content items within the year
-        contentItems.forEach(item => {
-          const itemType = item.querySelector('.item-type')?.textContent?.toLowerCase();
-          const shouldShow = contentType === 'all' || itemType === contentType;
-          
-          if (shouldShow) {
-            (item as HTMLElement).style.display = 'block';
-            hasVisibleItems = true;
-          } else {
-            (item as HTMLElement).style.display = 'none';
-          }
-        });
-
-        // Hide year section if no visible items
-        if (!hasVisibleItems && selectedYear === 'all') {
-          (section as HTMLElement).style.display = 'none';
-        }
+      document.querySelectorAll('.count').forEach(span => {
+        const type = span.getAttribute('data-count');
+        span.textContent = counts[type] || 0;
       });
     }
 
-    // Add event listeners
-    contentTypeFilter.addEventListener('change', filterContent);
-    yearFilter.addEventListener('change', filterContent);
+    // Apply both search and filter
+    function applyFilters() {
+      let visibleCount = 0;
+
+      archiveItems.forEach(item => {
+        const itemType = item.getAttribute('data-type');
+        const title = item.querySelector('h3')?.textContent.toLowerCase() || '';
+        const author = item.querySelector('.archive-author')?.textContent.toLowerCase() || '';
+        const excerpt = item.querySelector('.archive-excerpt')?.textContent.toLowerCase() || '';
+
+        const matchesSearch = !searchQuery ||
+          title.includes(searchQuery) ||
+          author.includes(searchQuery) ||
+          excerpt.includes(searchQuery);
+
+        const matchesFilter = currentFilter === 'all' || itemType === currentFilter;
+
+        if (matchesSearch && matchesFilter) {
+          item.style.display = 'block';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      updateCounts();
+
+      // Show "no results" message if needed
+      const grid = document.querySelector('.archive-grid');
+      let noResults = grid.querySelector('.no-results');
+
+      if (visibleCount === 0) {
+        if (!noResults) {
+          noResults = document.createElement('div');
+          noResults.className = 'no-results';
+          noResults.innerHTML = `
+            <p>No items found${searchQuery ? ` matching "${searchQuery}"` : ''}.</p>
+            <button class="clear-search">Clear search</button>
+          `;
+          grid.appendChild(noResults);
+
+          noResults.querySelector('.clear-search')?.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            applyFilters();
+          });
+        }
+      } else if (noResults) {
+        noResults.remove();
+      }
+    }
+
+    // Search with debounce
+    let searchTimeout;
+    searchInput?.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        searchQuery = e.target.value.toLowerCase().trim();
+        applyFilters();
+      }, 200);
+    });
+
+    // Filter links
+    filterLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        filterLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        currentFilter = link.getAttribute('data-filter');
+        applyFilters();
+      });
+    });
+
+    // Initial count
+    updateCounts();
   });
 </script>

@@ -1,0 +1,62 @@
+---
+/**
+ * ArticleLayout - Optimized for long-form content (letters, speeches, essays, lectures)
+ * Includes article-specific styles and structured data
+ */
+
+import Layout from './Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import StructuredData from '../components/StructuredData.astro';
+import type { BreadcrumbItem } from '../components/Breadcrumb.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  author: string;
+  date: Date;
+  excerpt: string;
+  breadcrumbs: BreadcrumbItem[];
+  tags?: string[];
+  image?: string;
+}
+
+const {
+  title,
+  description,
+  author,
+  date,
+  excerpt,
+  breadcrumbs,
+  tags = [],
+  image
+} = Astro.props;
+---
+
+<Layout
+  title={title}
+  description={description}
+  author={author}
+  publishedTime={date.toISOString()}
+  image={image}
+>
+  <StructuredData
+    type="Article"
+    title={title}
+    description={excerpt}
+    author={author}
+    publishedTime={date.toISOString()}
+    url={Astro.url.href}
+    keywords={tags}
+  />
+
+  <Navigation />
+  <Breadcrumb items={breadcrumbs} />
+
+  <slot />
+
+  <!-- Load article-specific styles -->
+  <style>
+    @import '../styles/article-content.css';
+  </style>
+</Layout>

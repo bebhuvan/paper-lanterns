@@ -11,7 +11,6 @@
       return;
     }
 
-    console.log('[Mobile Menu] Initialized successfully');
 
     // Toggle menu on button click
     menuBtn.addEventListener('click', function(e) {

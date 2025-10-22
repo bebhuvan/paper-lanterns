@@ -7,7 +7,22 @@ import ThemeToggle from './ThemeToggle.astro';
   <input type="checkbox" id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu">
   <div class="nav-container">
     <div class="nav-left">
-      <a href="/" class="logo">Paper Lanterns</a>
+      <a href="/" class="logo">
+        <svg class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C12 2 8 4 8 8V16C8 20 12 22 12 22C12 22 16 20 16 16V8C16 4 12 2 12 2Z" fill="url(#lanternGradient)" opacity="0.9"/>
+          <path d="M12 2C12 2 8 4 8 8V16C8 20 12 22 12 22C12 22 16 20 16 16V8C16 4 12 2 12 2Z" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+          <line x1="8" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
+          <line x1="8" y1="16" x2="16" y2="16" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor" opacity="0.6"/>
+          <defs>
+            <linearGradient id="lanternGradient" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="rgba(239, 127, 96, 0.4)"/>
+              <stop offset="100%" stop-color="rgba(220, 160, 180, 0.3)"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>Paper Lanterns</span>
+      </a>
       <label for="mobile-menu-toggle" class="mobile-menu-btn" aria-label="Toggle menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -18,11 +33,10 @@ import ThemeToggle from './ThemeToggle.astro';
     </div>
     <div class="nav-right" id="navMenu">
       <ul class="nav-links">
-        <li><a href="/search">Search</a></li>
-        <li><a href="/garden">Garden</a></li>
         <li><a href="/archive">Archive</a></li>
         <li><a href="/collections">Collections</a></li>
         <li><a href="/about">About</a></li>
+        <li><a href="/garden">Garden</a></li>
       </ul>
       <div class="nav-actions">
         <a href="/rss.xml" class="rss-link" aria-label="RSS Feed" title="Subscribe via RSS">
@@ -40,24 +54,22 @@ import ThemeToggle from './ThemeToggle.astro';
 
 <style>
   .top-nav {
-    position: fixed;
-    top: 0;
+    position: relative;
     left: 0;
     right: 0;
-    background: var(--bg-secondary);
-    backdrop-filter: blur(20px);
-    padding: 1.5rem 0;
+    background: transparent;
+    padding: 2.5rem 6vw;
     z-index: 100;
-    border-bottom: 1px solid var(--border-primary);
+    border-bottom: none;
   }
 
   .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0;
   }
 
   .nav-left {
@@ -78,55 +90,41 @@ import ThemeToggle from './ThemeToggle.astro';
   }
 
   .logo {
-    font-family: 'EB Garamond', serif;
-    font-size: 1.15rem;
-    font-weight: 500;
+    font-family: 'Crimson Pro', 'Georgia', serif;
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    text-transform: none;
     color: var(--text-primary);
     text-decoration: none;
-    transition: color 0.2s ease;
-    letter-spacing: -0.01em;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .logo:hover {
-    color: var(--accent-primary);
+  .logo-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
   }
 
   .nav-links {
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: center;
   }
 
   .nav-links a {
-    color: var(--text-tertiary);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 400;
-    font-family: 'Crimson Text', serif;
-    letter-spacing: 0.01em;
-    transition: all 0.2s ease;
-    position: relative;
-  }
-
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: var(--accent-primary);
-    transition: width 0.2s ease;
-  }
-
-  .nav-links a:hover {
+    font-size: 0.9375rem;
     color: var(--text-primary);
-  }
-
-  .nav-links a:hover::after {
-    width: 100%;
+    text-decoration: none;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    font-family: 'Inter', -apple-system, sans-serif;
   }
 
   .rss-link {
@@ -139,19 +137,8 @@ import ThemeToggle from './ThemeToggle.astro';
     width: 38px;
     height: 38px;
     cursor: pointer;
-    transition: all 0.3s ease;
     color: var(--text-tertiary);
     text-decoration: none;
-  }
-
-  .rss-link:hover {
-    background: var(--bg-accent);
-    border-color: var(--accent-secondary);
-    color: var(--accent-primary);
-  }
-
-  .rss-link:active {
-    transform: scale(0.95);
   }
 
   @media (max-width: 768px) {
@@ -181,11 +168,6 @@ import ThemeToggle from './ThemeToggle.astro';
     color: var(--text-primary);
     cursor: pointer;
     padding: 0.5rem;
-    transition: color 0.2s ease;
-  }
-
-  .mobile-menu-btn:hover {
-    color: var(--accent-primary);
   }
 
   @media (max-width: 480px) {
@@ -205,7 +187,7 @@ import ThemeToggle from './ThemeToggle.astro';
     }
 
     .logo {
-      font-size: 1.1rem; /* Slightly larger for brand visibility */
+      font-size: 1.125rem;
     }
 
     .mobile-menu-btn {
@@ -219,7 +201,7 @@ import ThemeToggle from './ThemeToggle.astro';
       left: 0;
       right: 0;
       background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-primary);
+      border-bottom: 1px solid var(--border-secondary);
       padding: 1rem;
       backdrop-filter: blur(20px);
     }
@@ -256,8 +238,8 @@ import ThemeToggle from './ThemeToggle.astro';
     }
 
     .rss-link {
-      width: 34px;
-      height: 34px;
+      width: 44px;
+      height: 44px;
     }
 
     .rss-link svg {

@@ -1,0 +1,64 @@
+---
+import { SITE_CONFIG } from '../lib/constants';
+
+interface Props {
+  type: 'Article' | 'WebPage' | 'CollectionPage';
+  title: string;
+  description: string;
+  author?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  image?: string;
+  url: string;
+  keywords?: string[];
+}
+
+const {
+  type = 'WebPage',
+  title,
+  description,
+  author,
+  publishedTime,
+  modifiedTime,
+  image,
+  url,
+  keywords = []
+} = Astro.props;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": type,
+  "headline": title,
+  "description": description,
+  "url": url,
+  "inLanguage": "en-US",
+  "publisher": {
+    "@type": "Organization",
+    "name": SITE_CONFIG.name,
+    "url": SITE_CONFIG.url
+  },
+  ...(author && {
+    "author": {
+      "@type": "Person",
+      "name": author
+    }
+  }),
+  ...(publishedTime && {
+    "datePublished": publishedTime
+  }),
+  ...(modifiedTime && {
+    "dateModified": modifiedTime
+  }),
+  ...(image && {
+    "image": {
+      "@type": "ImageObject",
+      "url": image
+    }
+  }),
+  ...(keywords.length > 0 && {
+    "keywords": keywords.join(", ")
+  })
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

@@ -37,8 +37,15 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
     <script is:inline>
       (function() {
         try {
-          const theme = localStorage.getItem('theme') || 'light';
+          const stored = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored || (prefersDark ? 'dark' : 'light');
           document.documentElement.dataset.theme = theme;
+
+          // Save preference if not set
+          if (!stored) {
+            localStorage.setItem('theme', theme);
+          }
         } catch (e) {
           document.documentElement.dataset.theme = 'light';
         }
@@ -100,42 +107,69 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <!-- Critical inline CSS for above-the-fold content -->
-    <style>
+    <style is:inline>
       /* Critical CSS - inline to prevent render blocking */
       :root {
-        --bg-primary: #fffef9;
-        --bg-secondary: rgba(255, 254, 249, 0.95);
-        --bg-accent: rgba(255, 254, 249, 0.6);
-        --text-primary: #2a2a2a;
-        --text-secondary: #444;
-        --text-tertiary: #666;
-        --accent-primary: #d4a574;
-        --border-secondary: #f0ede8;
-        --border-accent: rgba(212, 165, 116, 0.15);
+        --bg-primary: #fafaf9;
+        --bg-secondary: rgba(250, 250, 249, 0.95);
+        --bg-accent: rgba(255, 255, 255, 0.6);
+        --text-primary: #171717;
+        --text-secondary: rgba(23, 23, 23, 0.70);
+        --text-tertiary: rgba(23, 23, 23, 0.60);
+        --text-muted: rgba(23, 23, 23, 0.55);
+        --text-light: rgba(23, 23, 23, 0.48);
+        --border-primary: rgba(23, 23, 23, 0.10);
+        --border-secondary: rgba(23, 23, 23, 0.12);
+        --border-accent: rgba(23, 23, 23, 0.18);
+        --border-subtle: rgba(23, 23, 23, 0.08);
+        --border-medium: rgba(23, 23, 23, 0.15);
+        --border-strong: rgba(23, 23, 23, 0.35);
+        --accent-primary: rgba(239, 127, 96, 0.7);
+        --accent-secondary: rgba(239, 127, 96, 0.85);
+        --accent-tertiary: rgba(239, 127, 96, 0.6);
+        --accent-gold: rgba(239, 127, 96, 0.4);
+        --drop-shadow: rgba(23, 23, 23, 0.1);
+        --drop-shadow-hover: rgba(23, 23, 23, 0.06);
+        --gradient-1: rgba(147, 112, 219, 0.04);
+        --gradient-2: rgba(192, 132, 151, 0.04);
       }
       [data-theme="dark"] {
-        --bg-primary: #1a1815;
-        --bg-secondary: rgba(26, 24, 21, 0.95);
-        --bg-accent: rgba(32, 30, 26, 0.8);
-        --text-primary: #f0ead9;
-        --text-secondary: #e0dbc8;
-        --text-tertiary: #c5c0b3;
-        --accent-primary: #daa76e;
-        --border-secondary: #2d2a25;
-        --border-accent: rgba(212, 165, 116, 0.25);
+        --bg-primary: #1a1a1a;
+        --bg-secondary: #242424;
+        --bg-accent: #2f2f2f;
+        --text-primary: #efefef;
+        --text-secondary: #c8c8c8;
+        --text-tertiary: #a0a0a0;
+        --text-muted: #888888;
+        --text-light: #757575;
+        --border-primary: rgba(255,255,255,0.14);
+        --border-secondary: rgba(255,255,255,0.18);
+        --border-accent: rgba(239, 127, 96, 0.4);
+        --border-subtle: rgba(255,255,255,0.08);
+        --border-medium: rgba(255,255,255,0.25);
+        --border-strong: rgba(239, 127, 96, 0.6);
+        --accent-primary: rgba(239, 127, 96, 0.95);
+        --accent-secondary: rgba(255, 140, 110, 1);
+        --accent-tertiary: rgba(239, 127, 96, 0.8);
+        --accent-gold: rgba(239, 127, 96, 0.65);
+        --drop-shadow: rgba(0, 0, 0, 0.4);
+        --drop-shadow-hover: rgba(0, 0, 0, 0.5);
+        --gradient-1: rgba(239, 127, 96, 0.08);
+        --gradient-2: rgba(239, 127, 96, 0.05);
       }
       body {
-        font-family: 'Times New Roman', serif;
+        font-family: 'Crimson Pro', 'Georgia', serif;
         background: var(--bg-primary);
         color: var(--text-primary);
-        line-height: 1.6;
+        line-height: 1.7;
         margin: 0;
         padding: 0;
+        overflow-x: hidden;
         transition: background-color 0.3s ease, color 0.3s ease;
       }
       h1, h2, h3, h4, h5, h6 {
-        font-family: 'Times New Roman', serif;
-        font-weight: 500;
+        font-family: 'Crimson Pro', 'Georgia', serif;
+        font-weight: 300;
         line-height: 1.2;
         color: var(--text-primary);
       }
@@ -144,17 +178,20 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
       }
     </style>
     
-    <!-- Fonts - optimized loading with font-display swap for better performance -->
-    <link id="fonts-link" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" media="print">
+    <!-- Fonts - optimized: removed unused weights (500, 600), added italics -->
+    <!-- Preload critical font for faster rendering -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/crimsonpro/v23/q5uUsoa5M_tv7IihmnkabC5XiXCAlXGks1WZzm18OJE.woff2" as="font" type="font/woff2" crossorigin>
+
+    <link id="fonts-link" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" media="print">
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     </noscript>
-    
+
     <!-- Resource hints for better performance -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="dns-prefetch" href="//static.cloudflareinsights.com">
-    
+
     <!-- Preload critical assets -->
     <link rel="modulepreload" href="/sw.js">
     
@@ -194,7 +231,6 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
     <script nonce={nonce}>
       // Dynamically load external scripts to comply with strict-dynamic CSP
       const scripts = [
-        '/js/theme-toggle.js',
         '/js/font-loader.js',
         '/js/utils.js',
         '/js/random-letter.js',
@@ -238,48 +274,58 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
 </html>
 
 <style is:global>
+  @import '../styles/utilities.css';
+
   :root {
-    /* Light mode colors */
-    --bg-primary: #fffef9;
-    --bg-secondary: rgba(255, 254, 249, 0.95);
-    --bg-accent: rgba(255, 254, 249, 0.6);
-    --text-primary: #2a2a2a;
-    --text-secondary: #444;
-    --text-tertiary: #666;
-    --text-muted: #999;
-    --text-light: #ccc;
-    --border-primary: rgba(0,0,0,0.05);
-    --border-secondary: #f0ede8;
-    --border-accent: rgba(212, 165, 116, 0.15);
-    --accent-primary: #d4a574;
-    --accent-secondary: #8b7355;
-    --accent-tertiary: #c4a484;
-    --accent-gold: #f2cc8f;
-    --drop-shadow: rgba(212, 165, 116, 0.15);
-    --gradient-1: rgba(212,165,116,0.03);
-    --gradient-2: rgba(196,164,132,0.03);
+    /* Light mode colors - WCAG AA compliant */
+    --bg-primary: #fafaf9;
+    --bg-secondary: rgba(250, 250, 249, 0.95);
+    --bg-accent: rgba(255, 255, 255, 0.6);
+    --text-primary: #171717;
+    --text-secondary: rgba(23, 23, 23, 0.70);
+    --text-tertiary: rgba(23, 23, 23, 0.60);
+    --text-muted: rgba(23, 23, 23, 0.55);
+    --text-light: rgba(23, 23, 23, 0.48);
+    --border-primary: rgba(23, 23, 23, 0.10);
+    --border-secondary: rgba(23, 23, 23, 0.12);
+    --border-accent: rgba(23, 23, 23, 0.18);
+    --border-subtle: rgba(23, 23, 23, 0.08);
+    --border-medium: rgba(23, 23, 23, 0.15);
+    --border-strong: rgba(23, 23, 23, 0.35);
+    --accent-primary: rgba(239, 127, 96, 0.7);
+    --accent-secondary: rgba(239, 127, 96, 0.85);
+    --accent-tertiary: rgba(239, 127, 96, 0.6);
+    --accent-gold: rgba(239, 127, 96, 0.4);
+    --drop-shadow: rgba(23, 23, 23, 0.1);
+    --drop-shadow-hover: rgba(23, 23, 23, 0.06);
+    --gradient-1: rgba(147, 112, 219, 0.04);
+    --gradient-2: rgba(192, 132, 151, 0.04);
   }
 
   [data-theme="dark"] {
-    /* Dark mode colors - optimized for readability and comfort */
-    --bg-primary: #1a1815;
-    --bg-secondary: rgba(26, 24, 21, 0.95);
-    --bg-accent: rgba(32, 30, 26, 0.8);
-    --text-primary: #f0ead9;
-    --text-secondary: #e0dbc8;
-    --text-tertiary: #c5c0b3;
-    --text-muted: #a59d90;
-    --text-light: #7a7368;
-    --border-primary: rgba(255,255,255,0.08);
-    --border-secondary: #2d2a25;
-    --border-accent: rgba(212, 165, 116, 0.25);
-    --accent-primary: #daa76e;
-    --accent-secondary: #c4976a;
-    --accent-tertiary: #b08968;
-    --accent-gold: #e6c490;
-    --drop-shadow: rgba(212, 165, 116, 0.1);
-    --gradient-1: rgba(212,165,116,0.05);
-    --gradient-2: rgba(196,164,132,0.05);
+    /* Dark mode colors - WCAG AA compliant, high contrast */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #242424;
+    --bg-accent: #2f2f2f;
+    --text-primary: #efefef;
+    --text-secondary: #c8c8c8;
+    --text-tertiary: #a0a0a0;
+    --text-muted: #888888;
+    --text-light: #757575;
+    --border-primary: rgba(255,255,255,0.14);
+    --border-secondary: rgba(255,255,255,0.18);
+    --border-accent: rgba(239, 127, 96, 0.4);
+    --border-subtle: rgba(255,255,255,0.08);
+    --border-medium: rgba(255,255,255,0.25);
+    --border-strong: rgba(239, 127, 96, 0.6);
+    --accent-primary: rgba(239, 127, 96, 0.95);
+    --accent-secondary: rgba(255, 140, 110, 1);
+    --accent-tertiary: rgba(239, 127, 96, 0.8);
+    --accent-gold: rgba(239, 127, 96, 0.65);
+    --drop-shadow: rgba(0, 0, 0, 0.4);
+    --drop-shadow-hover: rgba(0, 0, 0, 0.5);
+    --gradient-1: rgba(239, 127, 96, 0.08);
+    --gradient-2: rgba(239, 127, 96, 0.05);
   }
 
   * {
@@ -289,13 +335,15 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
   }
 
   body {
-    font-family: 'Crimson Text', serif;
+    font-family: 'Crimson Pro', 'Georgia', serif;
     background: var(--bg-primary);
     color: var(--text-primary);
-    line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    line-height: 1.7;
+    overflow-x: hidden;
+    position: relative;
   }
 
+  /* REFINED: Subtle paper texture overlay */
   body::before {
     content: '';
     position: fixed;
@@ -303,17 +351,16 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: 
-      radial-gradient(circle at 20% 80%, var(--gradient-1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, var(--gradient-2) 0%, transparent 50%);
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
     pointer-events: none;
     z-index: -1;
+    opacity: 0.5;
   }
 
   /* Typography */
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'EB Garamond', serif;
-    font-weight: 500;
+    font-family: 'Crimson Pro', 'Georgia', serif;
+    font-weight: 300;
     line-height: 1.2;
     color: var(--text-primary);
   }
@@ -356,7 +403,7 @@ const nonce = crypto.getRandomValues(new Uint8Array(16))
 
   @media (max-width: 480px) {
     body {
-      font-size: 0.95rem; /* Increased from 0.85rem */
+      font-size: 1rem; /* Increased from 0.85rem */
       line-height: 1.8;
     }
     

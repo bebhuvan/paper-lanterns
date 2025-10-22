@@ -1,0 +1,107 @@
+---
+/**
+ * ListingLayout - Optimized for archive/listing pages
+ * Includes grid layouts, filtering, and search functionality
+ */
+
+import Layout from './Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import StructuredData from '../components/StructuredData.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  pageType?: 'archive' | 'collection' | 'category';
+}
+
+const {
+  title,
+  description,
+  pageType = 'archive'
+} = Astro.props;
+---
+
+<Layout
+  title={title}
+  description={description}
+>
+  <StructuredData
+    type={pageType === 'collection' ? 'CollectionPage' : 'WebPage'}
+    title={title}
+    description={description}
+    url={Astro.url.href}
+  />
+
+  <Navigation />
+
+  <slot />
+
+  <!-- Load listing-specific styles -->
+  <style>
+    /* Grid & Filter Styles */
+    .listing-container {
+      max-width: var(--container-xl);
+      margin: 0 auto;
+      padding: 0 6vw 8vh;
+    }
+
+    .listing-header {
+      max-width: var(--container-md);
+      margin: 0 auto 6vh;
+      text-align: center;
+      padding: 10vh 0 4vh;
+    }
+
+    .listing-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .listing-description {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius-sm);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 6vh;
+    }
+
+    @media (max-width: 768px) {
+      .listing-container {
+        padding: 0 5vw 6vh;
+      }
+
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+    }
+  </style>
+</Layout>

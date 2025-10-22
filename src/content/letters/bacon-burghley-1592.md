@@ -15,7 +15,6 @@ source: "Archive.org Digital Library of India (Public Domain)"
 collections: ["scientific-correspondence", "political-correspondence", "intellectual-awakening"]
 tags: ["knowledge", "science", "philosophy", "patronage", "intellectual-ambition", "scientific-method"]
 featured: true
-drop_cap_color: "#8b5a2b"
 about:
   context: "This letter was written by the 31-year-old Francis Bacon to his uncle, Lord Burghley (William Cecil), Queen Elizabeth I's chief minister. Bacon was seeking patronage and governmental position while articulating his grand intellectual vision that would later define the Scientific Revolution."
   significance: "This letter contains one of the most famous declarations in the history of science and philosophy: 'I have taken all knowledge to be my province.' It reveals Bacon's revolutionary vision to systematically reform human knowledge through empirical observation and inductive reasoning, laying the groundwork for modern scientific methodology."

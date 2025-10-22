@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
+import StructuredData from '../../components/StructuredData.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 
 export async function getStaticPaths() {
   const collections = await getCollection('collections');
@@ -37,22 +39,25 @@ const collectionItems = allContent
 const itemCount = collectionItems.length;
 ---
 
-<Layout 
-  title={`${collection.data.name} - Voice from time`}
+<Layout
+  title={`${collection.data.name} - Paper Lanterns`}
   description={`Explore ${itemCount} letters and speeches in our ${collection.data.name} collection: ${collection.data.description}`}
 >
+  <StructuredData
+    type="CollectionPage"
+    title={collection.data.name}
+    description={collection.data.description}
+    url={Astro.url.href}
+  />
   <Navigation />
-  
+  <Breadcrumb items={[
+    { label: 'Collections', url: '/collections' },
+    { label: collection.data.name }
+  ]} />
+
   <main class="collection-container">
     <div class="container">
       <header class="collection-header">
-        <nav class="breadcrumb">
-          <a href="/">Home</a>
-          <span class="separator">→</span>
-          <a href="/collections">Collections</a>
-          <span class="separator">→</span>
-          <span class="current">{collection.data.name}</span>
-        </nav>
         
         <div class="collection-title-section">
           <h1 class="collection-title" style={`color: ${collection.data.color}`}>

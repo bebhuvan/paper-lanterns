@@ -60,20 +60,20 @@
     transform: rotate(-90deg);
   }
 
-  [data-theme="dark"] .sun-icon {
+  :global([data-theme="dark"]) .sun-icon {
     opacity: 0;
     transform: rotate(90deg);
   }
 
-  [data-theme="dark"] .moon-icon {
+  :global([data-theme="dark"]) .moon-icon {
     opacity: 1;
     transform: rotate(0deg);
   }
 
   @media (max-width: 480px) {
     .theme-toggle {
-      width: 34px;
-      height: 34px;
+      width: 44px;
+      height: 44px;
     }
 
     .sun-icon, .moon-icon {
@@ -83,3 +83,34 @@
   }
 </style>
 
+<script>
+  // Wait for DOM to be ready
+  function initThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+
+    if (!themeToggle) {
+      console.error('Theme toggle button not found');
+      return;
+    }
+
+
+    themeToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+  }
+
+  // Run when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle);
+  } else {
+    initThemeToggle();
+  }
+</script>

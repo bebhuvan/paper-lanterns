@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://voicefromtime.com/sitemap-index.xml
+Sitemap: https://paperlanterns.ink/sitemap-index.xml
