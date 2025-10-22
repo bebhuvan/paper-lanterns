@@ -350,23 +350,30 @@
 }
 
 .action-btn {
-  background: transparent;
+  background: var(--bg-accent);
   border: 1px solid var(--border-primary);
   padding: 0.75rem 1.75rem;
   border-radius: 2px;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
   font-size: 0.75rem;
   cursor: pointer;
   font-family: 'Inter', -apple-system, sans-serif;
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  box-shadow: none;
 }
 
 .action-btn:hover {
+  background: var(--bg-secondary);
   border-color: var(--border-accent);
   color: var(--text-primary);
+}
+
+.action-btn:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 3px;
 }
 
 /* About/Context section */
@@ -444,50 +451,51 @@
 /* Resource links */
 .resource-links {
   display: grid;
-  gap: 0.875rem;
-  margin-top: 0;
+  gap: 1rem;
+  margin-top: 1.25rem;
 }
 
 .resource-card {
   display: block;
-  padding: 1.25rem 1.5rem;
-  background: var(--bg-accent);
+  padding: 1.5rem 1.75rem;
+  background: color-mix(in srgb, var(--bg-accent) 92%, transparent);
   border: 1px solid var(--border-primary);
-  border-left: 2px solid var(--border-accent);
+  border-left: 3px solid var(--accent-primary);
   text-decoration: none;
-  color: inherit;
-  transition: all 0.2s ease;
-  opacity: 0.25;
+  color: var(--text-primary);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  opacity: 1;
 }
 
 .resource-card:hover {
-  transform: translateX(3px);
-  border-left-color: var(--accent-primary);
+  transform: translateX(4px);
+  border-color: var(--border-accent);
+  border-left-color: var(--accent-secondary);
   background: var(--bg-secondary);
 }
 
 .resource-link-title {
-  color: var(--text-secondary);
-  font-weight: 400;
-  font-size: 0.9375rem;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.005em;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
 }
 
 .resource-description {
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
   line-height: 1.65;
   font-weight: 300;
-  margin-bottom: 0.625rem;
+  margin-bottom: 0.75rem;
 }
 
 .resource-meta {
-  font-size: 0.6875rem;
-  color: var(--text-light);
+  font-size: 0.75rem;
+  color: var(--text-muted);
   font-family: 'Inter', -apple-system, sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 
 /* Related content section */
